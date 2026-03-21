@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ShoppingCart } from "lucide-react";
 import { useTheme } from "@/hooks/useTheme";
+import { useCart } from "@/contexts/CartContext";
 import { Link, useLocation } from "react-router-dom";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 
@@ -15,6 +16,7 @@ const navLinks = [
 
 export default function Navbar() {
   const { theme } = useTheme();
+  const { cart } = useCart();
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
 
@@ -50,11 +52,35 @@ export default function Navbar() {
                 {link.label}
               </button>
             ))}
+            <button
+              onClick={() => handleNavClick("/#shop")}
+              className="relative p-2 text-muted-foreground hover:text-foreground transition-colors duration-200 rounded-lg hover:bg-secondary/50"
+              aria-label="Shopping Cart"
+            >
+              <ShoppingCart size={20} />
+              {cart.length > 0 && (
+                <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs rounded-full w-5 h-5 flex items-center justify-center font-medium">
+                  {cart.length}
+                </span>
+              )}
+            </button>
             <ThemeSwitcher />
           </div>
 
           {/* Mobile */}
           <div className="flex md:hidden items-center gap-2">
+            <button
+              onClick={() => handleNavClick("/#shop")}
+              className="relative p-2 text-muted-foreground hover:text-foreground transition-colors duration-200 rounded-lg"
+              aria-label="Shopping Cart"
+            >
+              <ShoppingCart size={20} />
+              {cart.length > 0 && (
+                <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs rounded-full w-5 h-5 flex items-center justify-center font-medium">
+                  {cart.length}
+                </span>
+              )}
+            </button>
             <ThemeSwitcher />
             <button onClick={() => setMobileOpen(!mobileOpen)} className="p-2 rounded-lg text-muted-foreground" aria-label="Menu">
               {mobileOpen ? <X size={20} /> : <Menu size={20} />}

@@ -10,21 +10,27 @@ export default function HeroSection() {
       id="hero"
       className="relative min-h-screen flex items-center justify-center overflow-hidden section-padding pt-24"
     >
-      {/* Background gradient orbs */}
+      {/* Animated gradient background */}
+      <div className="absolute inset-0 animated-gradient opacity-60 blur-3xl" />
+      
+      {/* Background gradient orbs with animation */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-1/4 -left-1/4 w-[600px] h-[600px] rounded-full bg-primary/10 blur-[120px]" />
-        <div className="absolute -bottom-1/4 -right-1/4 w-[500px] h-[500px] rounded-full bg-accent/10 blur-[120px]" />
+        <div className="absolute -top-1/4 -left-1/4 w-[600px] h-[600px] rounded-full bg-gradient-to-br from-primary via-secondary to-accent opacity-20 blur-[120px] animate-pulse" />
+        <div className="absolute -bottom-1/4 -right-1/4 w-[500px] h-[500px] rounded-full bg-gradient-to-tl from-accent via-primary to-secondary opacity-20 blur-[120px] animate-pulse" style={{ animationDelay: '1s' }} />
       </div>
+
+      {/* Scan lines overlay */}
+      <div className="absolute inset-0 scan-lines pointer-events-none opacity-30" />
 
       <div className="relative z-10 max-w-4xl mx-auto text-center">
         <p
-          className="text-sm font-medium tracking-widest uppercase text-primary mb-6 opacity-0 animate-fade-up"
+          className="text-sm font-medium tracking-widest uppercase text-primary mb-6 opacity-0 animate-fade-up font-orbitron"
           style={{ animationDelay: "100ms" }}
         >
-          Graphic Designer · Tech Enthusiast
+          ◆ Graphic Designer · Tech Enthusiast ◆
         </p>
         <h1
-          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.05] tracking-tight text-balance mb-6 opacity-0 animate-fade-up"
+          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.05] tracking-tight text-balance mb-6 opacity-0 animate-fade-up font-orbitron glow-text"
           style={{ animationDelay: "200ms" }}
         >
           Crafting Visual
@@ -32,7 +38,7 @@ export default function HeroSection() {
           <span className="gradient-text">Experiences</span>
         </h1>
         <p
-          className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 text-pretty opacity-0 animate-fade-up"
+          className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 text-pretty opacity-0 animate-fade-up font-rajdhani"
           style={{ animationDelay: "350ms" }}
         >
           Blending creative design with cutting-edge technology to build
@@ -44,14 +50,14 @@ export default function HeroSection() {
         >
           <button
             onClick={() => scrollTo("portfolio")}
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-primary-foreground font-medium text-sm shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.97]"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-primary to-secondary text-primary-foreground font-medium text-sm shadow-lg shadow-primary/50 hover:shadow-primary/75 transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.97] font-orbitron btn-neon-glow"
           >
             <ArrowDown size={16} />
             View My Work
           </button>
           <button
             onClick={() => scrollTo("shop")}
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-secondary text-secondary-foreground font-medium text-sm hover:bg-secondary/80 transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.97]"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-secondary to-accent text-accent-foreground font-medium text-sm shadow-lg shadow-secondary/50 hover:shadow-secondary/75 transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.97] font-orbitron btn-neon-glow"
           >
             <ShoppingBag size={16} />
             Shop Tech Gadgets

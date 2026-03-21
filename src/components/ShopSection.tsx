@@ -1,7 +1,10 @@
 import { useState, useEffect } from "react";
-import { ShoppingCart, MessageCircle } from "lucide-react";
+import { ShoppingCart, MessageCircle, ChevronDown, Eye } from "lucide-react";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
-import { supabase } from "@/integrations/supabase/client";
+import { useLazyLoad } from "@/hooks/useLazyLoad";
+import { useCart } from "@/contexts/CartContext";
+import { loadContentWithLiveEditor } from "@/utils/contentLoader";
+import CartSidebar from "./CartSidebar";
 
 interface Product {
   id: string;
@@ -17,43 +20,27 @@ const WHATSAPP_NUMBER = "+233548656980"; // Replace with your number
 export default function ShopSection() {
   const { ref, isVisible } = useScrollReveal();
   const [products, setProducts] = useState<Product[]>([]);
-  const [cart, setCart] = useState<Product[]>([]);
   const [currency, setCurrency] = useState<'USD' | 'GHS'>('GHS');
   const [exchangeRate, setExchangeRate] = useState<number>(11);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const { cart, addToCart, getTotal } = useCart();
+  const { displayedItems, hasMore, loadMore, totalCount, displayedCount } = useLazyLoad(products, {
+    initialCount: 4,
+    incrementCount: 2,
+  });
 
   useEffect(() => {
     const fetchProducts = async () => {
-      try {
-        // Try to load from Supabase first
-        const { data, error } = await supabase
-          .from("products")
-          .select("*")
-          .order("created_at", { ascending: false });
-
-        if (data && data.length > 0) {
-          setProducts(data as Product[]);
-        } else {
-          // Fallback to local JSON file
-          const response = await fetch('/content.json');
-          const content = await response.json();
-          setProducts(content.products || []);
-        }
-      } catch (error) {
-        // Fallback to local JSON file
-        try {
-          const response = await fetch('/content.json');
-          const content = await response.json();
-          setProducts(content.products || []);
-        } catch (fallbackError) {
-          console.error("Error loading products data:", fallbackError);
-          setProducts([]);
-        }
-      }
+      const data = await loadContentWithLiveEditor('products', 'products');
+      setProducts(data as Product[]);
     };
 
     fetchProducts();
 
-    // Simple polling every 30 seconds
+    // Set up live editor update listener
+    // useLiveEditorUpdates(fetchProducts);
+
+    // Simple polling every 30 seconds as backup
     const interval = setInterval(fetchProducts, 30000);
 
     return () => clearInterval(interval);
@@ -83,84 +70,87 @@ export default function ShopSection() {
   ];
 
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const itemsToShow = products.length > 0 ? displayedItems : placeholders;
 
   const convertPrice = (price: number) => (currency === 'USD' ? price : price * exchangeRate);
   const formatPrice = (price: number) => currency === 'USD' ? `$${price.toFixed(2)}` : `GHS ${convertPrice(price).toFixed(2)}`;
 
-  const addToCart = (product: Product) => {
-    setCart((prev) => [...prev, product]);
+  const handleAddToCart = (product: Product) => {
+    addToCart(product);
   };
 
   const checkout = () => {
     const productNames = cart.map((p) => p.title).join(", ");
-    const total = cart.reduce((sum, p) => sum + convertPrice(p.price), 0);
+    const total = getTotal(currency, exchangeRate);
     const message = encodeURIComponent(
       `Hi! I'd like to order: ${productNames}. Total: ${currency === 'USD' ? '$' : 'GHS '}${total.toFixed(2)} (${currency}).`
     );
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`, "_blank");
+    setIsCartOpen(false);
   };
 
   return (
     <section id="shop" className="section-padding bg-secondary/30" ref={ref}>
       <div className="max-w-7xl mx-auto">
         <div className={`text-center mb-12 transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
-          <p className="text-sm font-medium tracking-widest uppercase text-primary mb-3">Shop</p>
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-balance">Tech Gadgets</h2>
-          <div className="mt-4 flex justify-center items-center gap-3 text-sm">
-            <span>Currency:</span>
+          <p className="text-sm font-medium tracking-widest uppercase text-primary mb-3 font-orbitron">◆ Shop ◆</p>
+          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-balance font-orbitron glow-text" style={{ color: "#ff00ff" }}>Tech Gadgets</h2>
+          <div className="mt-4 flex flex-wrap justify-center items-center gap-3 text-sm">
+            <span className="font-rajdhani">Currency:</span>
             <select
               value={currency}
               onChange={(e) => setCurrency(e.target.value as 'USD' | 'GHS')}
-              className="px-3 py-1 rounded-lg border border-border bg-secondary/50"
+              className="px-3 py-1 rounded-lg border border-border bg-secondary/50 font-rajdhani"
             >
               <option value="USD">USD</option>
               <option value="GHS">GHS</option>
             </select>
             {currency === 'GHS' && exchangeRate > 0 && (
-              <span className="text-muted-foreground">1 USD = {exchangeRate.toFixed(2)} GHS</span>
+              <span className="text-muted-foreground font-rajdhani">1 USD = {exchangeRate.toFixed(2)} GHS</span>
             )}
           </div>
+          <p className="text-sm text-muted-foreground mt-2">Showing {displayedCount} of {totalCount} products</p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {placeholders.map((product, i) => (
+          {itemsToShow.map((product, i) => (
             <div
               key={product.id}
-              className={`glass-card-hover overflow-hidden group transition-all duration-700 hover:scale-105 hover:shadow-2xl hover:shadow-accent/20 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
-              style={{ transitionDelay: `${150 + i * 80}ms` }}
+              className={`glass-card-hover overflow-hidden group transition-all duration-700 hover:scale-105 hover:shadow-2xl hover:shadow-accent/20 fade-up-stagger ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
+              style={{ transitionDelay: `${150 + i * 80}ms`, animationDelay: `${150 + i * 80}ms` }}
             >
-              <div className="aspect-square bg-gradient-to-br from-primary/15 to-accent/15 flex items-center justify-center overflow-hidden relative">
+              <div className="aspect-square bg-gradient-to-br from-cyan-500/10 via-purple-500/10 to-pink-500/10 flex items-center justify-center overflow-hidden relative">
                 {product.image_url ? (
                   <img src={product.image_url} alt={product.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                 ) : (
                   <ShoppingCart size={40} className="text-primary/25" />
                 )}
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-300 flex items-center justify-center">
                   <button
-                    onClick={() => addToCart(product)}
-                    className="opacity-0 group-hover:opacity-100 bg-primary text-primary-foreground px-4 py-2 rounded-lg font-medium transition-all duration-300 hover:scale-105"
+                    onClick={() => handleAddToCart(product)}
+                    className="opacity-0 group-hover:opacity-100 bg-gradient-to-r from-primary to-secondary text-primary-foreground px-4 py-2 rounded-lg font-medium transition-all duration-300 hover:scale-105 font-orbitron"
                   >
                     Add to Cart
                   </button>
                 </div>
               </div>
               <div className="p-4">
-                <h3 className="font-semibold text-sm mb-2 line-clamp-2">{product.title}</h3>
+                <h3 className="font-semibold text-sm mb-2 line-clamp-2 font-rajdhani">{product.title}</h3>
                 <p className="text-xs text-muted-foreground mb-3 text-pretty line-clamp-3">{product.description}</p>
                 <div className="flex items-center justify-between">
-                  <span className="text-lg font-bold text-primary tabular-nums">{formatPrice(product.price)}</span>
+                  <span className="text-lg font-bold text-primary tabular-nums font-space-mono">{formatPrice(product.price)}</span>
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => setSelectedProduct(product)}
-                      className="px-3 py-1.5 rounded-lg bg-secondary text-secondary-foreground text-xs font-medium hover:shadow-lg hover:shadow-secondary/25 transition-all duration-300 active:scale-95"
+                      className="px-3 py-1.5 rounded-lg bg-secondary text-secondary-foreground text-xs font-medium hover:shadow-lg hover:shadow-secondary/25 transition-all duration-300 active:scale-95 font-rajdhani"
                     >
-                      View Details
+                      View
                     </button>
                     <button
-                      onClick={() => addToCart(product)}
-                      className="px-3 py-1.5 rounded-lg bg-primary text-primary-foreground text-xs font-medium hover:shadow-lg hover:shadow-primary/25 transition-all duration-300 active:scale-95"
+                      onClick={() => handleAddToCart(product)}
+                      className="px-3 py-1.5 rounded-lg bg-gradient-to-r from-primary to-secondary text-primary-foreground text-xs font-medium hover:shadow-lg hover:shadow-primary/50 transition-all duration-300 active:scale-95 font-rajdhani"
                     >
-                      Add to Cart
+                      Add
                     </button>
                   </div>
                 </div>
@@ -169,14 +159,27 @@ export default function ShopSection() {
           ))}
         </div>
 
+        {/* Load More Button */}
+        {hasMore && (
+          <div className="flex justify-center mt-12">
+            <button
+              onClick={loadMore}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-primary to-accent text-accent-foreground font-medium text-sm shadow-lg shadow-primary/50 hover:shadow-primary/75 transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.97] font-orbitron btn-neon-glow"
+            >
+              Load More
+              <ChevronDown size={16} />
+            </button>
+          </div>
+        )}
+
         {cart.length > 0 && (
           <div className="mt-8 flex justify-center animate-fade-up">
             <button
-              onClick={checkout}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-primary-foreground font-medium shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.97]"
+              onClick={() => setIsCartOpen(true)}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-secondary to-accent text-accent-foreground font-medium shadow-lg shadow-secondary/50 hover:shadow-secondary/75 transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.97] font-orbitron btn-neon-glow"
             >
-              <MessageCircle size={18} />
-              Checkout via WhatsApp ({cart.length} items)
+              <Eye size={18} />
+              View Cart ({cart.length} items)
             </button>
           </div>
         )}
@@ -186,8 +189,8 @@ export default function ShopSection() {
             <div className="glass-card max-w-3xl w-full overflow-hidden">
               <div className="flex justify-between items-start p-4 border-b border-glass-border">
                 <div>
-                  <h3 className="text-xl font-bold">{selectedProduct.title}</h3>
-                  <p className="text-sm text-muted-foreground">${selectedProduct.price.toFixed(2)}</p>
+                  <h3 className="text-xl font-bold font-rajdhani">{selectedProduct.title}</h3>
+                  <p className="text-sm text-muted-foreground font-space-mono">{formatPrice(selectedProduct.price)}</p>
                 </div>
                 <button onClick={() => setSelectedProduct(null)} className="text-muted-foreground hover:text-foreground">✕</button>
               </div>
@@ -206,14 +209,23 @@ export default function ShopSection() {
                 )}
                 <p className="text-xs text-muted-foreground">Add to cart or use WhatsApp checkout to contact us.</p>
                 <div className="mt-4 flex gap-2">
-                  <button onClick={() => {addToCart(selectedProduct); setSelectedProduct(null);}} className="px-3 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/80">Add to Cart</button>
-                  <button onClick={() => {checkout(); setSelectedProduct(null);}} className="px-3 py-2 rounded-lg bg-secondary text-secondary-foreground hover:bg-secondary/80">Checkout via WhatsApp</button>
+                  <button onClick={() => {handleAddToCart(selectedProduct); setSelectedProduct(null);}} className="px-3 py-2 rounded-lg bg-gradient-to-r from-primary to-secondary text-primary-foreground font-rajdhani hover:shadow-lg hover:shadow-primary/50">Add to Cart</button>
+                  <button onClick={() => {checkout(); setSelectedProduct(null);}} className="px-3 py-2 rounded-lg bg-gradient-to-r from-secondary to-accent text-accent-foreground font-rajdhani hover:shadow-lg hover:shadow-secondary/50">Checkout</button>
                 </div>
               </div>
             </div>
           </div>
         )}
       </div>
+
+      {/* Cart Sidebar */}
+      <CartSidebar
+        isOpen={isCartOpen}
+        onClose={() => setIsCartOpen(false)}
+        currency={currency}
+        exchangeRate={exchangeRate}
+        onCheckout={checkout}
+      />
     </section>
   );
 }

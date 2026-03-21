@@ -3,93 +3,138 @@
     {
       "id": "1",
       "title": "HAPPY EID",
-      "description": "Complete brand identity system with logo, typography, and color palette.",
-      "image_url": "/images/portfolio/eid.jpg"
+      "description": "Wishing all muslims a happy Eid-al Fitr celebration ",
+      "image_url": "/images/portfolio/9.jpg"
     },
     {
       "id": "2",
-      "title": "UI Dashboard Concept",
-      "description": "Dark-themed analytics dashboard with glassmorphism elements.",
-      "image_url": "/images/portfolio/1.jpg"
+      "title": "Hi-Res Tech design Represntation ",
+      "description": "Stand out in your selling game",
+      "image_url": "/images/portfolio/5.png"
     },
     {
       "id": "3",
-      "title": "Product Packaging",
-      "description": "Minimal packaging design for a tech startup product line.",
+      "title": "High Quality Designs",
+      "description": "Get premium look as a clothing brand ",
       "image_url": "/images/portfolio/2.jpg"
     },
     {
-      "id": "1774049629804",
-      "title": "dskjjkgkhk",
-      "description": "ajgshh agksfhafh agjshjghfdb isihshgkhjkkhjdf sahgjsdh",
+      "id": "1774119700228",
+      "title": "Petronize Us Now!",
+      "description": "Logos\nFlyers\nBanners\nEdits and many more",
+      "image_url": "/images/portfolio/7.jpg"
+    },
+    {
+      "id": "1774119796676",
+      "title": "Make your Birthdays a Memorable one with Us",
+      "description": "We do all sort of birthday flyers that will make your birthday a memorable one",
+      "image_url": "/images/portfolio/8.png"
+    },
+    {
+      "id": "1774119898227",
+      "title": "Make your Resturant Design feel Premium ",
+      "description": "Resturant Design feel Premium ",
+      "image_url": "/images/portfolio/6.jpg"
+    },
+    {
+      "id": "1774119996975",
+      "title": "Premium Looking Banners ",
+      "description": "Just 4 You",
+      "image_url": "/images/portfolio/10.jpg"
+    },
+    {
+      "id": "1774120040193",
+      "title": "Why won't you work with Us??",
+      "description": "Work with us Today!!",
       "image_url": "/images/portfolio/3.jpg"
     }
   ],
   "products": [
     {
       "id": "1",
-      "title": "Asus Zenbook Pro",
-      "description": "Active noise cancellation with 36-hour battery.",
-      "price": 2000,
-      "image_url": "/images/products/asus.jpg"
+      "title": "True Wireless Headphones",
+      "description": "Active noise cancellation\nBass boost",
+      "price": 400,
+      "image_url": "/images/products/5.png"
     },
     {
       "id": "2",
-      "title": "Mechanical Keyboard",
-      "description": "Hot-swappable switches, RGB backlit, compact 75%.",
-      "price": 129.99,
-      "image_url": "/images/products/1.jpg"
+      "title": "Super Neat Steam Deck OLED ",
+      "description": "Super Neat\n- 512GB SSD\n- 16GB RAM\n- Carrying Case",
+      "price": 450,
+      "image_url": "/images/products/8.jpeg"
     },
     {
       "id": "1774046093090",
-      "title": "hp zenzee",
-      "description": " i am a beeast of all nations",
-      "price": 200,
-      "image_url": "/images/products/2.jpg"
+      "title": "Hp Elitbook 840 G7 ",
+      "description": "- Ryzen 5 4650U (4 0ghz )12CPUs\n- Equivalent to 10th Generation\n- 256gb M.2 Ssd (Upgradeable)\n- 8gb Ddr4 Ram (Upgradable)\n- 14inch Full HD 1080p Ips Display- Antiglare \n- Keyboard Lights \n- Wifi 6\n- Windows 11\n- Bang &Olufson Audio \n- Strong Battery \n- Original Charger\n",
+      "price": 150,
+      "image_url": "/images/products/1.jpg"
     },
     {
       "id": "1774046150300",
-      "title": "dhgdhghdf",
-      "description": "dzvggghhcjgmvnmccvhmh",
-      "price": 344,
+      "title": "Neat Dell Inspirion 3505  ",
+      "description": "- Ryzen 5 3500U (3.7Ghz Turbo) 8CPUs \n- 256Gb Ddr4 Ram (Upgradable)\n- 8gb ddr4 ram (Upgradable)\n- Randeon Vega Graphics 2gb dedicated \n- 15'6inch Full HD 1080p Ips Display\n- Full Keyboard \n- Good Battery \n- Comes with Charger",
+      "price": 280,
       "image_url": "/images/products/3.jpg"
     },
     {
       "id": "1774046175891",
-      "title": "fgjhsyghg",
-      "description": "dfhhhghdhjhjgfhfg  sthh",
-      "price": 2334,
+      "title": "Very Neat Dell 5420  ",
+      "description": "- i5 - 1165G7 (4.70ghz)8CPUs\n- 11th Generation \n- 14inch Micro - Edged HD Display Antiglare\n- 256Gb m.2 ssd (Upgradable) \n- 8gb Ddr4 Ram (Upgradable)\n- Keyboard Lights \n- dts Audio\n- Face ID\n- Windows 11 Pro\n- Excellent Battery Health",
+      "price": 120,
       "image_url": "/images/products/4.jpg"
     },
     {
-      "id": "1774080283230",
-      "title": "Steam Deck OLED 512GB",
-      "description": " - 512GB SSD \n- 16GB RAM \n- Carrying Case  \n",
-      "price": 7999,
-      "image_url": "/images/products/8.jpeg"
+      "id": "1774120580859",
+      "title": "Neat Lenovo IdeaPad 3 81We ",
+      "description": "- i5 - 1035G1 (3.60ghz Turbo)8CPUs\n- 10th Generation \n- 256Gb M.2 Ssd (Upgradeable)\n- 8gb Ddr4 ram (Upgradable)\n- 15inch HD Micro Edged Display\n- Full Keyboard \n- Windows 11\n- Office 21 Pre installed\n- Very Strong Battery\n- Comes with Charger \n",
+      "price": 130,
+      "image_url": "/images/products/5.jpg"
+    },
+    {
+      "id": "1774120937866",
+      "title": "Neat Lenovo IdeaPad 3 81We  ",
+      "description": " - i5 - 1035G1 (3.60ghz Turbo)8CPUs - 10th Generation  - 256Gb M.2 Ssd (Upgradeable) - 8gb Ddr4 ram (Upgradable) - 15inch HD Micro Edged Display - Full Keyboard  - Windows 11 - Office 21 Pre installed - Very Strong Battery - Comes with Charger ",
+      "price": 140,
+      "image_url": "/images/products/10.jpg"
+    },
+    {
+      "id": "1774120995934",
+      "title": "Fairly Used Dell Lattitude 5500   ",
+      "description": "- i7 - 8665U (4.80ghz turbo)8CPUs - Most Powerful 8th Gen U varient (15w) CPU. Super Fast - 15inch Full HD 1080p Ips Display  - ❌No Ssd added - ❌ No Ram added - Keyboard Lights - Excellent Battery - Speakers not loud at all. - No hidden faults",
+      "price": 90,
+      "image_url": "/images/products/6.jpg"
+    },
+    {
+      "id": "1774121402812",
+      "title": "Lenovo IdeaPad Flex 5 x360 with broken Hinge. ",
+      "description": "Touch doesn't work - Screen Works - Fully working board - Ryzen 7 4700U - Equivalent to 11th Gen Core i7-1165G7 - 16Gb Ddr4 Ram 3200mhz - ❌ No Ssd Included - Keyboard Lights  - You can buy the parts, board , fan , battery , etc. Or buy the complete for 👇🏽",
+      "price": 60,
+      "image_url": "/images/products/13.jpg"
     }
   ],
   "updates": [
     {
       "id": "1",
-      "title": "New Design Collection Released",
-      "content": "my name is sakyi jsoeph nelson emahi",
-      "image_url": "/images/liveupdates/news1.jpg",
+      "title": "HAPPY EID",
+      "content": "Wishing all muslims a happy Eid-al Fitr celebration ",
+      "image_url": "/images/liveupdates/1.jpg",
       "created_at": "2026-03-20T10:00:00Z"
     },
     {
       "id": "2",
-      "title": "Tech Gadget Sale — 20% Off",
-      "content": "Limited time offer on select wireless accessories and keyboards.",
-      "image_url": "/images/liveupdates/1.jpg",
+      "title": "SAVE THE KIDS TODAY",
+      "content": "Donate to save the Kids today",
+      "image_url": "/images/liveupdates/2.jpg",
       "created_at": "2026-03-19T10:00:00Z"
     },
     {
-      "id": "1774049705334",
-      "title": "dhgahgtsr",
-      "content": "rshjfsjysrjtgs htr yturyjryjrt jtr j y rryj hjc  fy",
-      "image_url": "/images/liveupdates/2.jpg",
-      "created_at": "2026-03-20T23:35:05.334Z"
+      "id": "1774121735847",
+      "title": "HAPPY BIRTHDAY TO MY LOVELY SISTER",
+      "content": "Happy Birthday to my lovely sister",
+      "image_url": "/images/liveupdates/3.png",
+      "created_at": "2026-03-21T19:35:35.847Z"
     }
   ],
   "videos": [
@@ -98,18 +143,205 @@
       "title": "Design Process Breakdown",
       "url": "https://youtu.be/M0L5Z-1Ymfc?si=U3cY_A9nLmW2TamD",
       "platform": "youtube"
+    }{
+  "portfolio": [
+    {
+      "id": "1",
+      "title": "HAPPY EID",
+      "description": "Wishing all muslims a happy Eid-al Fitr celebration ",
+      "image_url": "/images/portfolio/9.jpg"
     },
     {
-      "id": "1774058473165",
-      "title": " How to upload files and folders to GitHub: GitHub for beginners",
-      "url": "https://youtu.be/tlu5e0TxSzo?si=PATjPiV3XkA5ZnO1",
+      "id": "2",
+      "title": "Hi-Res Tech design Represntation ",
+      "description": "Stand out in your selling game",
+      "image_url": "/images/portfolio/5.png"
+    },
+    {
+      "id": "3",
+      "title": "High Quality Designs",
+      "description": "Get premium look as a clothing brand ",
+      "image_url": "/images/portfolio/2.jpg"
+    },
+    {
+      "id": "1774119700228",
+      "title": "Petronize Us Now!",
+      "description": "Logos\nFlyers\nBanners\nEdits and many more",
+      "image_url": "/images/portfolio/7.jpg"
+    },
+    {
+      "id": "1774119796676",
+      "title": "Make your Birthdays a Memorable one with Us",
+      "description": "We do all sort of birthday flyers that will make your birthday a memorable one",
+      "image_url": "/images/portfolio/8.png"
+    },
+    {
+      "id": "1774119898227",
+      "title": "Make your Resturant Design feel Premium ",
+      "description": "Resturant Design feel Premium ",
+      "image_url": "/images/portfolio/6.jpg"
+    },
+    {
+      "id": "1774119996975",
+      "title": "Premium Looking Banners ",
+      "description": "Just 4 You",
+      "image_url": "/images/portfolio/10.jpg"
+    },
+    {
+      "id": "1774120040193",
+      "title": "Why won't you work with Us??",
+      "description": "Work with us Today!!",
+      "image_url": "/images/portfolio/3.jpg"
+    }
+  ],
+  "products": [
+    {
+      "id": "1",
+      "title": "True Wireless Headphones",
+      "description": "Active noise cancellation\nBass boost",
+      "price": 400,
+      "image_url": "/images/products/5.png"
+    },
+    {
+      "id": "2",
+      "title": "Super Neat Steam Deck OLED ",
+      "description": "Super Neat\n- 512GB SSD\n- 16GB RAM\n- Carrying Case",
+      "price": 450,
+      "image_url": "/images/products/8.jpeg"
+    },
+    {
+      "id": "1774046093090",
+      "title": "Hp Elitbook 840 G7 ",
+      "description": "- Ryzen 5 4650U (4 0ghz )12CPUs\n- Equivalent to 10th Generation\n- 256gb M.2 Ssd (Upgradeable)\n- 8gb Ddr4 Ram (Upgradable)\n- 14inch Full HD 1080p Ips Display- Antiglare \n- Keyboard Lights \n- Wifi 6\n- Windows 11\n- Bang &Olufson Audio \n- Strong Battery \n- Original Charger\n",
+      "price": 150,
+      "image_url": "/images/products/1.jpg"
+    },
+    {
+      "id": "1774046150300",
+      "title": "Neat Dell Inspirion 3505  ",
+      "description": "- Ryzen 5 3500U (3.7Ghz Turbo) 8CPUs \n- 256Gb Ddr4 Ram (Upgradable)\n- 8gb ddr4 ram (Upgradable)\n- Randeon Vega Graphics 2gb dedicated \n- 15'6inch Full HD 1080p Ips Display\n- Full Keyboard \n- Good Battery \n- Comes with Charger",
+      "price": 280,
+      "image_url": "/images/products/3.jpg"
+    },
+    {
+      "id": "1774046175891",
+      "title": "Very Neat Dell 5420  ",
+      "description": "- i5 - 1165G7 (4.70ghz)8CPUs\n- 11th Generation \n- 14inch Micro - Edged HD Display Antiglare\n- 256Gb m.2 ssd (Upgradable) \n- 8gb Ddr4 Ram (Upgradable)\n- Keyboard Lights \n- dts Audio\n- Face ID\n- Windows 11 Pro\n- Excellent Battery Health",
+      "price": 120,
+      "image_url": "/images/products/4.jpg"
+    },
+    {
+      "id": "1774120580859",
+      "title": "Neat Lenovo IdeaPad 3 81We ",
+      "description": "- i5 - 1035G1 (3.60ghz Turbo)8CPUs\n- 10th Generation \n- 256Gb M.2 Ssd (Upgradeable)\n- 8gb Ddr4 ram (Upgradable)\n- 15inch HD Micro Edged Display\n- Full Keyboard \n- Windows 11\n- Office 21 Pre installed\n- Very Strong Battery\n- Comes with Charger \n",
+      "price": 130,
+      "image_url": "/images/products/5.jpg"
+    },
+    {
+      "id": "1774120937866",
+      "title": "Neat Lenovo IdeaPad 3 81We  ",
+      "description": " - i5 - 1035G1 (3.60ghz Turbo)8CPUs - 10th Generation  - 256Gb M.2 Ssd (Upgradeable) - 8gb Ddr4 ram (Upgradable) - 15inch HD Micro Edged Display - Full Keyboard  - Windows 11 - Office 21 Pre installed - Very Strong Battery - Comes with Charger ",
+      "price": 140,
+      "image_url": "/images/products/10.jpg"
+    },
+    {
+      "id": "1774120995934",
+      "title": "Fairly Used Dell Lattitude 5500   ",
+      "description": "- i7 - 8665U (4.80ghz turbo)8CPUs - Most Powerful 8th Gen U varient (15w) CPU. Super Fast - 15inch Full HD 1080p Ips Display  - ❌No Ssd added - ❌ No Ram added - Keyboard Lights - Excellent Battery - Speakers not loud at all. - No hidden faults",
+      "price": 90,
+      "image_url": "/images/products/6.jpg"
+    },
+    {
+      "id": "1774121402812",
+      "title": "Lenovo IdeaPad Flex 5 x360 with broken Hinge. ",
+      "description": "Touch doesn't work - Screen Works - Fully working board - Ryzen 7 4700U - Equivalent to 11th Gen Core i7-1165G7 - 16Gb Ddr4 Ram 3200mhz - ❌ No Ssd Included - Keyboard Lights  - You can buy the parts, board , fan , battery , etc. Or buy the complete for 👇🏽",
+      "price": 60,
+      "image_url": "/images/products/13.jpg"
+    }
+  ],
+  "updates": [
+    {
+      "id": "1",
+      "title": "HAPPY EID",
+      "content": "Wishing all muslims a happy Eid-al Fitr celebration ",
+      "image_url": "/images/liveupdates/1.jpg",
+      "created_at": "2026-03-20T10:00:00Z"
+    },
+    {
+      "id": "2",
+      "title": "SAVE THE KIDS TODAY",
+      "content": "Donate to save the Kids today",
+      "image_url": "/images/liveupdates/2.jpg",
+      "created_at": "2026-03-19T10:00:00Z"
+    },
+    {
+      "id": "1774121735847",
+      "title": "HAPPY BIRTHDAY TO MY LOVELY SISTER",
+      "content": "Happy Birthday to my lovely sister",
+      "image_url": "/images/liveupdates/3.png",
+      "created_at": "2026-03-21T19:35:35.847Z"
+    }
+  ],
+  "videos": [
+    {
+      "id": "1",
+      "title": "YUNO MILES",
+      "url": "https://youtu.be/M0L5Z-1Ymfc?si=U3cY_A9nLmW2TamD",
       "platform": "youtube"
     },
     {
-      "id": "1774058501573",
-      "title": "",
-      "url": "https://www.tiktok.com/@twitch.ep/video/7618322678994193684?is_from_webapp=1&sender_device=pc&web_id=7606507484879341072",
+      "id": "1774128267146",
+      "title": "FOLLOW MY TIKTOK PAGE",
+      "url": "https://www.tiktok.com/@twitch.ep/video/7619799910673648916?is_from_webapp=1&sender_device=pc&web_id=7606507484879341072",
       "platform": "tiktok"
+    },
+    {
+      "id": "1774128301705",
+      "title": "JOIN MY LIVE AND LETS HAVE FUN",
+      "url": "https://www.tiktok.com/@twitch.ep/video/7610532998328503573?is_from_webapp=1&sender_device=pc&web_id=7606507484879341072",
+      "platform": "tiktok"
+    },
+    {
+      "id": "1774128459179",
+      "title": "THIS IS ME",
+      "url": "https://www.tiktok.com/@twitch.ep/video/7609952392376880405?is_from_webapp=1&sender_device=pc&web_id=7606507484879341072",
+      "platform": "tiktok"
+    }
+  ],
+  "announcements": [
+    {
+      "id": "1774087449467",
+      "title": "ADVERTISEMENT",
+      "content": "Work with us Today",
+      "image_url": "/images/announce/ad.jpg",
+      "is_active": true,
+      "start_date": "2026-03-21T21:28:01.821Z",
+      "end_date": "2026-04-20T21:28:01.821Z",
+      "display_duration": 8000,
+      "priority": 10,
+      "target_audience": "all",
+      "max_views_per_user": 5,
+      "created_at": "2026-03-21T10:04:09.467Z",
+      "updated_at": "2026-03-21T21:28:01.821Z"
+    }
+  ]
+}
+  ],
+  "announcements": [
+    {
+      "id": "1774087449467",
+      "title": "ADVERTISEMENT",
+      "content": "Work with us Today",
+      "image_url": "/images/announce/ad.jpg",
+      "is_active": true,
+      "start_date": "2026-03-21T21:12:45.082Z",
+      "end_date": "2026-04-29T06:15:00.000Z",
+      "display_duration": 8000,
+      "priority": 10,
+      "target_audience": "all",
+      "max_views_per_user": 5,
+      "created_at": "2026-03-21T10:04:09.467Z",
+      "updated_at": "2026-03-21T21:13:35.561Z"
     }
   ]
 }

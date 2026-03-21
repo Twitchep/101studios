@@ -194,7 +194,14 @@ function AdminCRUD({ table, fields }: { table: string; fields: string[] }) {
 
   const handleCreate = async () => {
     const insertData: any = { ...newItem };
+    // Type conversions
     if (insertData.price) insertData.price = parseFloat(insertData.price);
+    if (insertData.is_active !== undefined) insertData.is_active = insertData.is_active === "true";
+    if (insertData.display_duration) insertData.display_duration = parseInt(insertData.display_duration);
+    if (insertData.priority) insertData.priority = parseInt(insertData.priority);
+    if (insertData.max_views_per_user) insertData.max_views_per_user = parseInt(insertData.max_views_per_user);
+    if (insertData.start_date) insertData.start_date = insertData.start_date || null;
+    if (insertData.end_date) insertData.end_date = insertData.end_date || null;
     console.log("Creating:", insertData);
     const { error } = await supabase.from(table as any).insert(insertData);
     if (error) {
@@ -209,7 +216,14 @@ function AdminCRUD({ table, fields }: { table: string; fields: string[] }) {
 
   const handleUpdate = async (id: string) => {
     const updateData: any = { ...editData };
+    // Type conversions
     if (updateData.price) updateData.price = parseFloat(updateData.price);
+    if (updateData.is_active !== undefined) updateData.is_active = updateData.is_active === "true";
+    if (updateData.display_duration) updateData.display_duration = parseInt(updateData.display_duration);
+    if (updateData.priority) updateData.priority = parseInt(updateData.priority);
+    if (updateData.max_views_per_user) updateData.max_views_per_user = parseInt(updateData.max_views_per_user);
+    if (updateData.start_date) updateData.start_date = updateData.start_date || null;
+    if (updateData.end_date) updateData.end_date = updateData.end_date || null;
     console.log("Updating:", updateData);
     const { error } = await supabase.from(table as any).update(updateData).eq("id", id);
     if (error) {
@@ -274,12 +288,39 @@ function AdminCRUD({ table, fields }: { table: string; fields: string[] }) {
                     <input type="file" accept="image/*" className="hidden" onChange={(e) => e.target.files?.[0] && handleImageUpload(e.target.files[0], field, "new")} />
                   </label>
                 </div>
-              ) : (
+              ) : field === "is_active" ? (
+                <select
+                  value={newItem[field] || "true"}
+                  onChange={(e) => setNewItem((p) => ({ ...p, [field]: e.target.value }))}
+                  className="w-full px-3 py-2 rounded-lg bg-secondary/50 border border-border text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+                >
+                  <option value="true">Active</option>
+                  <option value="false">Inactive</option>
+                </select>
+              ) : field.includes("date") ? (
                 <input
-                  type={field === "price" ? "number" : "text"}
+                  type="datetime-local"
                   value={newItem[field] || ""}
                   onChange={(e) => setNewItem((p) => ({ ...p, [field]: e.target.value }))}
                   className="w-full px-3 py-2 rounded-lg bg-secondary/50 border border-border text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+                />
+              ) : field === "target_audience" ? (
+                <select
+                  value={newItem[field] || "all"}
+                  onChange={(e) => setNewItem((p) => ({ ...p, [field]: e.target.value }))}
+                  className="w-full px-3 py-2 rounded-lg bg-secondary/50 border border-border text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+                >
+                  <option value="all">All Visitors</option>
+                  <option value="new_visitors">New Visitors</option>
+                  <option value="returning_visitors">Returning Visitors</option>
+                </select>
+              ) : (
+                <input
+                  type={field === "price" || field === "display_duration" || field === "priority" || field === "max_views_per_user" ? "number" : "text"}
+                  value={newItem[field] || ""}
+                  onChange={(e) => setNewItem((p) => ({ ...p, [field]: e.target.value }))}
+                  className="w-full px-3 py-2 rounded-lg bg-secondary/50 border border-border text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  placeholder={field === "display_duration" ? "Duration in milliseconds (5000 = 5 seconds)" : field === "priority" ? "Higher number = higher priority" : field === "max_views_per_user" ? "-1 for unlimited" : ""}
                 />
               )}
             </div>
@@ -316,12 +357,39 @@ function AdminCRUD({ table, fields }: { table: string; fields: string[] }) {
                           <input type="file" accept="image/*" className="hidden" onChange={(e) => e.target.files?.[0] && handleImageUpload(e.target.files[0], field, item.id)} />
                         </label>
                       </div>
+                    ) : field === "is_active" ? (
+                      <select
+                        value={String(editData[field] ?? item[field] ?? true)}
+                        onChange={(e) => setEditData((p) => ({ ...p, [field]: e.target.value }))}
+                        className="w-full px-3 py-2 rounded-lg bg-secondary/50 border border-border text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+                      >
+                        <option value="true">Active</option>
+                        <option value="false">Inactive</option>
+                      </select>
+                    ) : field.includes("date") ? (
+                      <input
+                        type="datetime-local"
+                        value={editData[field] ?? item[field] ? new Date(item[field]).toISOString().slice(0, 16) : ""}
+                        onChange={(e) => setEditData((p) => ({ ...p, [field]: e.target.value }))}
+                        className="w-full px-3 py-2 rounded-lg bg-secondary/50 border border-border text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+                      />
+                    ) : field === "target_audience" ? (
+                      <select
+                        value={editData[field] ?? item[field] ?? "all"}
+                        onChange={(e) => setEditData((p) => ({ ...p, [field]: e.target.value }))}
+                        className="w-full px-3 py-2 rounded-lg bg-secondary/50 border border-border text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+                      >
+                        <option value="all">All Visitors</option>
+                        <option value="new_visitors">New Visitors</option>
+                        <option value="returning_visitors">Returning Visitors</option>
+                      </select>
                     ) : (
                       <input
-                        type={field === "price" ? "number" : "text"}
+                        type={field === "price" || field === "display_duration" || field === "priority" || field === "max_views_per_user" ? "number" : "text"}
                         value={editData[field] ?? item[field] ?? ""}
                         onChange={(e) => setEditData((p) => ({ ...p, [field]: e.target.value }))}
                         className="w-full px-3 py-2 rounded-lg bg-secondary/50 border border-border text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+                        placeholder={field === "display_duration" ? "Duration in milliseconds (5000 = 5 seconds)" : field === "priority" ? "Higher number = higher priority" : field === "max_views_per_user" ? "-1 for unlimited" : ""}
                       />
                     )}
                   </div>

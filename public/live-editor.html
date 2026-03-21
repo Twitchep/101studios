@@ -122,10 +122,66 @@
             color: #155724;
             border: 1px solid #c3e6cb;
         }
-        .status.error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+        .fullscreen-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        .fullscreen-popup.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .popup-content {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            text-align: center;
+            max-width: 500px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+        }
+        .fullscreen-popup.show .popup-content {
+            transform: scale(1);
+        }
+        .popup-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        .popup-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .popup-message {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+        .popup-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .popup-button:hover {
+            background: #0056b3;
         }
     </style>
 </head>
@@ -170,6 +226,13 @@
                 <button class="add-btn" onclick="addVideoItem()">+ Add Video</button>
             </div>
 
+            <div class="section">
+                <h2>📢 Announcements & Popups</h2>
+                <div id="announcements-items"></div>
+                <button class="add-btn" onclick="addAnnouncementItem()">+ Add Announcement</button>
+                <p><small>Configure popup messages that appear on your website with scheduling and targeting options.</small></p>
+            </div>
+
             <button class="save-all" onclick="saveAllChanges()">💾 Save All Changes to Website</button>
             <button class="save-all" onclick="copyJsonToClipboard()" style="background:#1d4ed8">📋 Copy JSON to Clipboard</button>
             <button class="save-all" onclick="clearSavedContent()" style="background:#db2777">🧹 Clear Local Saved Content</button>
@@ -182,7 +245,8 @@
             portfolio: [],
             products: [],
             updates: [],
-            videos: []
+            videos: [],
+            announcements: []
         };
 
         const ADMIN_PASSWORD = 'admin123'; // Change this to your desired password
@@ -201,21 +265,43 @@
         // Load existing content
         async function loadContent() {
             try {
+                // Always try to load from the server first (content.json)
+                const response = await fetch('/content.json');
+                if (response.ok) {
+                    content = await response.json();
+                    console.log('✅ Loaded content from server');
+
+                    // Ensure announcements array exists
+                    if (!content.announcements) {
+                        content.announcements = [];
+                    }
+
+                    // Save to localStorage as backup
+                    localStorage.setItem('liveEditorContent', JSON.stringify(content));
+                    showStatus('✅ Loaded latest content from server.', 'success');
+                } else {
+                    throw new Error('Server content not available');
+                }
+            } catch (error) {
+                console.warn('Could not load from server, trying localStorage:', error);
+
+                // Fallback to localStorage
                 const localData = localStorage.getItem('liveEditorContent');
                 if (localData) {
                     content = JSON.parse(localData);
-                    showStatus('✅ Loaded saved content from localStorage.', 'success');
-                    renderAllItems();
+                    // Ensure announcements array exists
+                    if (!content.announcements) {
+                        content.announcements = [];
+                    }
+                    showStatus('⚠️ Loaded saved content from localStorage (server unavailable).', 'error');
+                } else {
+                    // Last resort: show error
+                    showStatus('❌ Could not load content from server or localStorage. Please check your connection.', 'error');
                     return;
                 }
-
-                const response = await fetch('/content.json');
-                content = await response.json();
-                renderAllItems();
-            } catch (error) {
-                console.error('Error loading content:', error);
-                showStatus('Error loading content. Please check the console.', 'error');
             }
+
+            renderAllItems();
         }
 
         function renderAllItems() {
@@ -223,6 +309,7 @@
             renderProductItems();
             renderUpdateItems();
             renderVideoItems();
+            renderAnnouncementItems();
         }
 
         function renderPortfolioItems() {
@@ -284,6 +371,82 @@
             `).join('');
         }
 
+        function renderAnnouncementItems() {
+            const container = document.getElementById('announcements-items');
+            if (!content.announcements || content.announcements.length === 0) {
+                container.innerHTML = '<p style="color: #999; padding: 20px; text-align: center;">No announcements yet. Click "Add Announcement" to create one.</p>';
+                return;
+            }
+            container.innerHTML = content.announcements.map((item, index) => {
+                const now = new Date().toISOString();
+                const isCurrentlyLive = item.is_active && (!item.start_date || item.start_date <= now) && (!item.end_date || item.end_date >= now);
+                const statusBadge = `<span style="display: inline-block; padding: 4px 8px; border-radius: 3px; font-size: 11px; font-weight: bold; margin-bottom: 10px; ${isCurrentlyLive ? 'background: #28a745; color: white;' : 'background: #6c757d; color: white;'}">${isCurrentlyLive ? '🟢 LIVE' : '⭕ SCHEDULED'}</span>`;
+                
+                return `
+                <div class="item">
+                    ${statusBadge}
+                    <input type="text" placeholder="Announcement Title" value="${item.title || ''}" onchange="updateAnnouncement(${index}, 'title', this.value)">
+                    <textarea placeholder="Message Content" onchange="updateAnnouncement(${index}, 'content', this.value)">${item.content || ''}</textarea>
+                    <label><strong>Image URL (optional):</strong></label>
+                    <input type="url" placeholder="e.g., https://i.ibb.co/xxxxx/popup.jpg" value="${item.image_url || ''}" onchange="updateAnnouncement(${index}, 'image_url', this.value)">
+                    ${item.image_url ? `<img src="${item.image_url}" alt="${item.title}" class="image-preview" onerror="this.style.display='none'">` : ''}
+
+                    <label><strong>Schedule Mode:</strong></label>
+                    <div style="display: flex; gap: 10px; margin: 10px 0;">
+                        <button onclick="setLiveNow(${index})" style="flex: 1; background: #28a745; color: white; padding: 8px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">🚀 Live Now</button>
+                        <button onclick="setScheduledMode(${index})" style="flex: 1; background: #007bff; color: white; padding: 8px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">📅 Scheduled</button>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 10px 0;">
+                        <div>
+                            <label><strong>Start Date:</strong></label>
+                            <input type="datetime-local" value="${item.start_date ? new Date(item.start_date).toISOString().slice(0, 16) : ''}" onchange="updateAnnouncement(${index}, 'start_date', this.value ? new Date(this.value).toISOString() : null)">
+                        </div>
+                        <div>
+                            <label><strong>End Date:</strong></label>
+                            <input type="datetime-local" value="${item.end_date ? new Date(item.end_date).toISOString().slice(0, 16) : ''}" onchange="updateAnnouncement(${index}, 'end_date', this.value ? new Date(this.value).toISOString() : null)">
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 10px 0;">
+                        <div>
+                            <label><strong>Display Duration (ms):</strong></label>
+                            <input type="number" placeholder="5000" value="${item.display_duration || 5000}" onchange="updateAnnouncement(${index}, 'display_duration', parseInt(this.value))">
+                        </div>
+                        <div>
+                            <label><strong>Priority (1-100):</strong></label>
+                            <input type="number" placeholder="10" min="1" max="100" value="${item.priority || 10}" onchange="updateAnnouncement(${index}, 'priority', parseInt(this.value))">
+                        </div>
+                        <div>
+                            <label><strong>Max Views:</strong></label>
+                            <input type="number" placeholder="-1" value="${item.max_views_per_user || -1}" onchange="updateAnnouncement(${index}, 'max_views_per_user', parseInt(this.value))">
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 10px 0;">
+                        <div>
+                            <label><strong>Target Audience:</strong></label>
+                            <select onchange="updateAnnouncement(${index}, 'target_audience', this.value)">
+                                <option value="all" ${item.target_audience === 'all' ? 'selected' : ''}>All Visitors</option>
+                                <option value="new_visitors" ${item.target_audience === 'new_visitors' ? 'selected' : ''}>New Visitors</option>
+                                <option value="returning_visitors" ${item.target_audience === 'returning_visitors' ? 'selected' : ''}>Returning Visitors</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label><strong>Status:</strong></label>
+                            <div style="display: flex; gap: 5px;">
+                                <button onclick="toggleAnnouncementStatus(${index}, true)" style="flex: 1; background: ${item.is_active ? '#28a745' : '#6c757d'}; color: white; padding: 8px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">✓ Active</button>
+                                <button onclick="toggleAnnouncementStatus(${index}, false)" style="flex: 1; background: ${!item.is_active ? '#dc3545' : '#6c757d'}; color: white; padding: 8px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">✕ Stop</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="delete-btn" onclick="deleteAnnouncementItem(${index})">Delete</button>
+                </div>
+            `;
+            }).join('');
+        }
+
         // Update functions
         function updatePortfolio(index, field, value) {
             content.portfolio[index][field] = value;
@@ -299,6 +462,22 @@
 
         function updateVideo(index, field, value) {
             content.videos[index][field] = value;
+        }
+
+        function updateAnnouncement(index, field, value) {
+            if (!content.announcements || !content.announcements[index]) return;
+            if (field === 'is_active') {
+                content.announcements[index][field] = value === 'true';
+            } else if (['display_duration', 'priority', 'max_views_per_user'].includes(field)) {
+                content.announcements[index][field] = parseInt(value) || 0;
+            } else if (['start_date', 'end_date'].includes(field)) {
+                // Handle date fields - ensure they're stored as ISO strings
+                content.announcements[index][field] = value || null;
+            } else {
+                content.announcements[index][field] = value;
+            }
+            content.announcements[index].updated_at = new Date().toISOString();
+            saveAllChanges();
         }
 
         // Add functions
@@ -344,6 +523,28 @@
             renderVideoItems();
         }
 
+        function addAnnouncementItem() {
+            if (!content.announcements) {
+                content.announcements = [];
+            }
+            content.announcements.push({
+                id: Date.now().toString(),
+                title: '',
+                content: '',
+                image_url: null,
+                is_active: true,
+                start_date: null,
+                end_date: null,
+                display_duration: 5000,
+                priority: 10,
+                target_audience: 'all',
+                max_views_per_user: -1,
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString()
+            });
+            renderAnnouncementItems();
+        }
+
         // Delete functions
         function deletePortfolioItem(index) {
             if (confirm('Delete this portfolio item?')) {
@@ -373,23 +574,63 @@
             }
         }
 
+        function deleteAnnouncementItem(index) {
+            if (!content.announcements || !content.announcements[index]) return;
+            if (confirm('Delete this announcement?')) {
+                content.announcements.splice(index, 1);
+                saveAllChanges();
+                renderAnnouncementItems();
+                showStatus('🗑️ Announcement deleted successfully', 'success');
+            }
+        }
+
+        function setLiveNow(index) {
+            if (!content.announcements || !content.announcements[index]) return;
+            const now = new Date();
+            const thirtyDaysFromNow = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
+            
+            content.announcements[index].is_active = true;
+            content.announcements[index].start_date = now.toISOString();
+            content.announcements[index].end_date = thirtyDaysFromNow.toISOString();
+            content.announcements[index].updated_at = now.toISOString();
+            
+            saveAllChanges();
+            renderAnnouncementItems();
+            showStatus('🚀 Announcement is now LIVE! It will stay active for 30 days.', 'success');
+        }
+
+        function setScheduledMode(index) {
+            if (!content.announcements || !content.announcements[index]) return;
+            alert('📅 Switch to scheduled mode. Set your own start and end dates using the date fields below.');
+        }
+
+        function toggleAnnouncementStatus(index, isActive) {
+            if (!content.announcements || !content.announcements[index]) return;
+            content.announcements[index].is_active = isActive;
+            if (!isActive) {
+                content.announcements[index].end_date = new Date().toISOString();
+            }
+            content.announcements[index].updated_at = new Date().toISOString();
+            saveAllChanges();
+            renderAnnouncementItems();
+            showStatus(isActive ? '✓ Announcement activated' : '✕ Announcement stopped', 'success');
+        }
+
         // Save function
         async function saveAllChanges() {
             try {
-                // For live editing, we'll need a backend endpoint
-                // For now, show instructions
-                showStatus(`
-                    🚀 <strong>To save changes live:</strong><br>
-                    1. Download the content.json file below<br>
-                    2. Upload it to your hosting platform<br>
-                    3. Or set up a backend service for live editing<br><br>
-                    <em>Note: This demo saves locally. For live editing, you'll need a backend.</em>
-                `, 'success');
-
-                // Save to localStorage so browser keeps it live
+                // Save to localStorage immediately
                 localStorage.setItem('liveEditorContent', JSON.stringify(content));
 
-                // Create download link
+                // Show fullscreen success popup
+                showFullscreenPopup(
+                    '💾',
+                    'Changes Saved Successfully!',
+                    'Your content has been saved to local storage and is ready for download. The website will reflect these changes immediately.',
+                    'Continue Editing'
+                );
+
+                // Create download link for content.json
                 const dataStr = JSON.stringify(content, null, 2);
                 const blob = new Blob([dataStr], { type: 'application/json' });
                 const url = URL.createObjectURL(blob);
@@ -397,16 +638,37 @@
                 const link = document.createElement('a');
                 link.href = url;
                 link.download = 'content.json';
-                link.textContent = '📥 Download content.json';
-                link.style.cssText = 'display: inline-block; margin: 10px 0; padding: 10px 15px; background: #28a745; color: white; text-decoration: none; border-radius: 4px;';
+                link.textContent = '📥 Download Updated content.json';
+                link.style.cssText = 'display: inline-block; margin: 10px 0; padding: 10px 15px; background: #28a745; color: white; text-decoration: none; border-radius: 4px; font-weight: bold;';
 
-                const statusDiv = document.getElementById('status');
-                statusDiv.appendChild(link);
+                // Add download link to the popup message
+                setTimeout(() => {
+                    const popupMessage = document.getElementById('popup-message');
+                    popupMessage.innerHTML = 'Your content has been saved to local storage and is ready for download. The website will reflect these changes immediately.<br><br>';
+                    popupMessage.appendChild(link);
+                }, 100);
+
+                // Also show regular status message
+                showStatus('✅ Changes saved to localStorage. Download the file above to update your live site.', 'success');
 
                 URL.revokeObjectURL(url);
+
+                // Trigger content refresh in the main website (if it's open in another tab)
+                try {
+                    localStorage.setItem('contentLastUpdated', Date.now().toString());
+                } catch (e) {
+                    // Ignore if localStorage is full
+                }
+
             } catch (error) {
-                console.error('Error preparing download:', error);
-                showStatus('❌ Error preparing download. Check the console.', 'error');
+                console.error('Error saving changes:', error);
+                showFullscreenPopup(
+                    '❌',
+                    'Save Failed',
+                    'There was an error saving your changes. Please check the console for details.',
+                    'Try Again'
+                );
+                showStatus('❌ Error saving changes. Check the console.', 'error');
             }
         }
 
@@ -444,6 +706,33 @@
                 authenticate();
             }
         });
+
+        // Fullscreen popup functions
+        function showFullscreenPopup(icon, title, message, buttonText = 'Continue Editing') {
+            document.getElementById('popup-icon').textContent = icon;
+            document.getElementById('popup-title').textContent = title;
+            document.getElementById('popup-message').textContent = message;
+            document.getElementById('popup-button').textContent = buttonText;
+
+            const popup = document.getElementById('fullscreen-popup');
+            popup.classList.add('show');
+        }
+
+        function hideFullscreenPopup() {
+            const popup = document.getElementById('fullscreen-popup');
+            popup.classList.remove('show');
+        }
     </script>
+
+    <!-- Fullscreen Popup -->
+    <div id="fullscreen-popup" class="fullscreen-popup">
+        <div class="popup-content">
+            <div id="popup-icon" class="popup-icon">✅</div>
+            <div id="popup-title" class="popup-title">Action Completed</div>
+            <div id="popup-message" class="popup-message">Your changes have been saved successfully.</div>
+            <button id="popup-button" class="popup-button" onclick="hideFullscreenPopup()">Continue Editing</button>
+        </div>
+    </div>
+
 </body>
 </html>

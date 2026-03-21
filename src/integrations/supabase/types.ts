@@ -128,11 +128,101 @@ export type Database = {
         }
         Relationships: []
       }
+      announcements: {
+        Row: {
+          id: string
+          title: string
+          content: string
+          image_url: string | null
+          is_active: boolean
+          start_date: string | null
+          end_date: string | null
+          display_duration: number
+          priority: number
+          target_audience: string
+          max_views_per_user: number
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          title: string
+          content: string
+          image_url?: string | null
+          is_active?: boolean
+          start_date?: string | null
+          end_date?: string | null
+          display_duration?: number
+          priority?: number
+          target_audience?: string
+          max_views_per_user?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          title?: string
+          content?: string
+          image_url?: string | null
+          is_active?: boolean
+          start_date?: string | null
+          end_date?: string | null
+          display_duration?: number
+          priority?: number
+          target_audience?: string
+          max_views_per_user?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_announcement_views: {
+        Row: {
+          id: string
+          user_id: string | null
+          announcement_id: string
+          viewed_at: string
+        }
+        Insert: {
+          id?: string
+          user_id?: string | null
+          announcement_id: string
+          viewed_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string | null
+          announcement_id?: string
+          viewed_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_announcement_views_announcement_id_fkey"
+            columns: ["announcement_id"]
+            isOneToOne: false
+            referencedRelation: "announcements"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      get_active_announcements: {
+        Args: {
+          p_user_id?: string
+        }
+        Returns: {
+          id: string
+          title: string
+          content: string
+          image_url: string | null
+          display_duration: number
+          priority: number
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]

@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import { Play } from "lucide-react";
+import { Play, ChevronDown } from "lucide-react";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
-import { supabase } from "@/integrations/supabase/client";
+import { useLazyLoad } from "@/hooks/useLazyLoad";
+import { loadContentWithLiveEditor, useLiveEditorUpdates } from "@/utils/contentLoader";
 
 interface Video {
   id: string;
@@ -23,66 +24,53 @@ function getEmbedUrl(url: string): string | null {
 export default function VideosSection() {
   const { ref, isVisible } = useScrollReveal();
   const [videos, setVideos] = useState<Video[]>([]);
+  const { displayedItems, hasMore, loadMore, totalCount, displayedCount } = useLazyLoad(videos, {
+    initialCount: 2,
+    incrementCount: 2,
+  });
 
   useEffect(() => {
     const fetchVideos = async () => {
-      try {
-        // Try to load from Supabase first
-        const { data, error } = await supabase
-          .from("videos")
-          .select("*")
-          .order("created_at", { ascending: false });
-
-        if (data && data.length > 0) {
-          setVideos(data as Video[]);
-        } else {
-          // Fallback to local JSON file
-          const response = await fetch('/content.json');
-          const content = await response.json();
-          setVideos(content.videos || []);
-        }
-      } catch (error) {
-        // Fallback to local JSON file
-        try {
-          const response = await fetch('/content.json');
-          const content = await response.json();
-          setVideos(content.videos || []);
-        } catch (fallbackError) {
-          console.error("Error loading videos data:", fallbackError);
-          setVideos([]);
-        }
-      }
+      const videos = await loadContentWithLiveEditor('videos', 'videos');
+      setVideos(videos);
     };
 
     fetchVideos();
-
-    // Simple polling every 30 seconds
-    const interval = setInterval(fetchVideos, 30000);
-
-    return () => clearInterval(interval);
   }, []);
+
+  // Use live editor updates hook for real-time synchronization
+  // useLiveEditorUpdates(() => {
+  //   const fetchVideos = async () => {
+  //     const videos = await loadContentWithLiveEditor('videos', 'videos');
+  //     setVideos(videos);
+  //   };
+  //   fetchVideos();
+  // });
 
   const placeholders: Video[] = videos.length > 0 ? videos : [
     { id: "1", title: "Design Process Breakdown", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", platform: "youtube" },
     { id: "2", title: "Tech Gadget Review", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", platform: "youtube" },
   ];
 
+  const itemsToShow = videos.length > 0 ? displayedItems : placeholders;
+
   return (
     <section id="videos" className="section-padding bg-secondary/30" ref={ref}>
       <div className="max-w-5xl mx-auto">
         <div className={`text-center mb-12 transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
-          <p className="text-sm font-medium tracking-widest uppercase text-primary mb-3">Videos</p>
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-balance">Video Showcase</h2>
+          <p className="text-sm font-medium tracking-widest uppercase text-primary mb-3 font-orbitron">◆ Videos ◆</p>
+          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-balance font-orbitron glow-text" style={{ color: "hsl(var(--primary))" }}>Video Showcase</h2>
+          <p className="text-sm text-muted-foreground mt-2">Showing {displayedCount} of {totalCount} videos</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {placeholders.map((video, i) => {
+          {itemsToShow.map((video, i) => {
             const embedUrl = getEmbedUrl(video.url);
             return (
               <div
                 key={video.id}
-                className={`glass-card-hover overflow-hidden transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
-                style={{ transitionDelay: `${150 + i * 100}ms` }}
+                className={`glass-card-hover overflow-hidden transition-all duration-700 hover:scale-105 hover:shadow-xl hover:shadow-purple-500/20 fade-up-stagger ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
+                style={{ transitionDelay: `${150 + i * 100}ms`, animationDelay: `${150 + i * 100}ms` }}
               >
                 {embedUrl ? (
                   <div className="aspect-video">
@@ -96,20 +84,33 @@ export default function VideosSection() {
                     />
                   </div>
                 ) : (
-                  <a href={video.url} target="_blank" rel="noopener noreferrer" className="aspect-video bg-gradient-to-br from-primary/15 to-accent/15 flex items-center justify-center group">
+                  <a href={video.url} target="_blank" rel="noopener noreferrer" className="aspect-video bg-gradient-to-br from-cyan-500/10 via-purple-500/10 to-pink-500/10 flex items-center justify-center group">
                     <Play size={48} className="text-primary/40 group-hover:text-primary/70 transition-colors" />
                   </a>
                 )}
                 <div className="p-4">
-                  <h3 className="font-semibold text-sm">{video.title}</h3>
+                  <h3 className="font-semibold text-sm font-rajdhani">{video.title}</h3>
                   {video.platform && (
-                    <span className="text-xs text-muted-foreground capitalize">{video.platform}</span>
+                    <span className="text-xs text-muted-foreground capitalize font-space-mono">{video.platform}</span>
                   )}
                 </div>
               </div>
             );
           })}
         </div>
+
+        {/* Load More Button */}
+        {hasMore && (
+          <div className="flex justify-center mt-12">
+            <button
+              onClick={loadMore}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-primary to-secondary text-primary-foreground font-medium text-sm shadow-lg shadow-primary/50 hover:shadow-primary/75 transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.97] font-orbitron btn-neon-glow"
+            >
+              Load More
+              <ChevronDown size={16} />
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );
