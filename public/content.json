@@ -60,6 +60,13 @@
       "description": "dfhhhghdhjhjgfhfg  sthh",
       "price": 2334,
       "image_url": "/images/products/4.jpg"
+    },
+    {
+      "id": "1774080283230",
+      "title": "Steam Deck OLED 512GB",
+      "description": " - 512GB SSD \n- 16GB RAM \n- Carrying Case  \n",
+      "price": 7999,
+      "image_url": "/images/products/8.jpeg"
     }
   ],
   "updates": [
@@ -91,6 +98,18 @@
       "title": "Design Process Breakdown",
       "url": "https://youtu.be/M0L5Z-1Ymfc?si=U3cY_A9nLmW2TamD",
       "platform": "youtube"
+    },
+    {
+      "id": "1774058473165",
+      "title": " How to upload files and folders to GitHub: GitHub for beginners",
+      "url": "https://youtu.be/tlu5e0TxSzo?si=PATjPiV3XkA5ZnO1",
+      "platform": "youtube"
+    },
+    {
+      "id": "1774058501573",
+      "title": "",
+      "url": "https://www.tiktok.com/@twitch.ep/video/7618322678994193684?is_from_webapp=1&sender_device=pc&web_id=7606507484879341072",
+      "platform": "tiktok"
     }
   ]
 }
