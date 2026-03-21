@@ -60,6 +60,13 @@
       "description": "dfhhhghdhjhjgfhfg  sthh",
       "price": 2334,
       "image_url": "/images/products/4.jpg"
+    },
+    {
+      "id": "1774080283230",
+      "title": "Steam Deck OLED 512GB",
+      "description": " - 512GB SSD \n- 16GB RAM \n- Carrying Case  \n",
+      "price": 7999,
+      "image_url": "/images/products/8.jpg"
     }
   ],
   "updates": [
