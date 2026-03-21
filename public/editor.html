@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content Editor - No Coding Required!</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .section {
+            margin-bottom: 30px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 20px;
+        }
+        .section h2 {
+            color: #333;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 5px;
+        }
+        .item {
+            background: #f9f9f9;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #007bff;
+        }
+        .image-preview {
+            width: 100%;
+            max-width: 200px;
+            height: auto;
+            margin: 10px 0;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .delete-btn {
+            background: #dc3545;
+        }
+        .delete-btn:hover {
+            background: #c82333;
+        }
+        .add-btn {
+            background: #28a745;
+        }
+        .add-btn:hover {
+            background: #218838;
+        }
+        .save-all {
+            background: #ffc107;
+            color: black;
+            font-weight: bold;
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+        }
+        .save-all:hover {
+            background: #e0a800;
+        }
+        .image-tips {
+            background: #e7f3ff;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            border-left: 4px solid #2196F3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Website Content Editor</h1>
+        <p><strong>No coding required!</strong> Just fill in the forms below and click "Save All Changes".</p>
+        
+        <div class="image-tips">
+            📸 <strong>Need to add images?</strong> 
+            <a href="https://imgbb.com/" target="_blank">Upload to ImgBB</a> (free) or 
+            <a href="HOW_TO_ADD_IMAGES.md" target="_blank">read the image guide</a>
+        </div>
+
+        <div class="section">
+            <h2>📁 Portfolio Items</h2>
+            <div id="portfolio-items"></div>
+            <button class="add-btn" onclick="addPortfolioItem()">+ Add Portfolio Item</button>
+        </div>
+
+        <div class="section">
+            <h2>🛒 Products</h2>
+            <div id="products-items"></div>
+            <button class="add-btn" onclick="addProductItem()">+ Add Product</button>
+        </div>
+
+        <div class="section">
+            <h2>📰 Updates/News</h2>
+            <div id="updates-items"></div>
+            <button class="add-btn" onclick="addUpdateItem()">+ Add Update</button>
+        </div>
+
+        <div class="section">
+            <h2>🎥 Videos</h2>
+            <div id="videos-items"></div>
+            <button class="add-btn" onclick="addVideoItem()">+ Add Video</button>
+        </div>
+
+        <button class="save-all" onclick="saveAllChanges()">💾 Save All Changes</button>
+        <p><small>Changes will appear on your website after saving and refreshing the page.</small></p>
+    </div>
+
+    <script>
+        let content = {
+            portfolio: [],
+            products: [],
+            updates: [],
+            videos: []
+        };
+
+        // Load existing content
+        async function loadContent() {
+            try {
+                const response = await fetch('/content.json');
+                content = await response.json();
+                renderAllItems();
+            } catch (error) {
+                console.error('Error loading content:', error);
+                // Use default empty content
+                renderAllItems();
+            }
+        }
+
+        function renderAllItems() {
+            renderPortfolioItems();
+            renderProductItems();
+            renderUpdateItems();
+            renderVideoItems();
+        }
+
+        function renderPortfolioItems() {
+            const container = document.getElementById('portfolio-items');
+            container.innerHTML = content.portfolio.map((item, index) => `
+                <div class="item">
+                    <input type="text" placeholder="Title" value="${item.title || ''}" onchange="updatePortfolio(${index}, 'title', this.value)">
+                    <textarea placeholder="Description" onchange="updatePortfolio(${index}, 'description', this.value)">${item.description || ''}</textarea>
+                    <label><strong>Image URL:</strong></label>
+                    <input type="url" placeholder="e.g., https://i.ibb.co/xxxxx/image.jpg or /images/my-image.jpg" value="${item.image_url || ''}" onchange="updatePortfolio(${index}, 'image_url', this.value)">
+                    ${item.image_url ? `<img src="${item.image_url}" alt="${item.title}" class="image-preview" onerror="this.style.display='none'">` : ''}
+                    <button class="delete-btn" onclick="deletePortfolioItem(${index})">Delete</button>
+                </div>
+            `).join('');
+        }
+
+        function renderProductItems() {
+            const container = document.getElementById('products-items');
+            container.innerHTML = content.products.map((item, index) => `
+                <div class="item">
+                    <input type="text" placeholder="Product Name" value="${item.title || ''}" onchange="updateProduct(${index}, 'title', this.value)">
+                    <textarea placeholder="Description" onchange="updateProduct(${index}, 'description', this.value)">${item.description || ''}</textarea>
+                    <input type="number" step="0.01" placeholder="Price" value="${item.price || ''}" onchange="updateProduct(${index}, 'price', parseFloat(this.value))">
+                    <label><strong>Image URL:</strong></label>
+                    <input type="url" placeholder="e.g., https://i.ibb.co/xxxxx/product.jpg or /images/product.jpg" value="${item.image_url || ''}" onchange="updateProduct(${index}, 'image_url', this.value)">
+                    ${item.image_url ? `<img src="${item.image_url}" alt="${item.title}" class="image-preview" onerror="this.style.display='none'">` : ''}
+                    <button class="delete-btn" onclick="deleteProductItem(${index})">Delete</button>
+                </div>
+            `).join('');
+        }
+
+        function renderUpdateItems() {
+            const container = document.getElementById('updates-items');
+            container.innerHTML = content.updates.map((item, index) => `
+                <div class="item">
+                    <input type="text" placeholder="Title" value="${item.title || ''}" onchange="updateUpdate(${index}, 'title', this.value)">
+                    <textarea placeholder="Content" onchange="updateUpdate(${index}, 'content', this.value)">${item.content || ''}</textarea>
+                    <button class="delete-btn" onclick="deleteUpdateItem(${index})">Delete</button>
+                </div>
+            `).join('');
+        }
+
+        function renderVideoItems() {
+            const container = document.getElementById('videos-items');
+            container.innerHTML = content.videos.map((item, index) => `
+                <div class="item">
+                    <input type="text" placeholder="Video Title" value="${item.title || ''}" onchange="updateVideo(${index}, 'title', this.value)">
+                    <label><strong>Video URL (YouTube or TikTok):</strong></label>
+                    <input type="url" placeholder="e.g., https://www.youtube.com/watch?v=VIDEO_ID" value="${item.url || ''}" onchange="updateVideo(${index}, 'url', this.value)">
+                    <select onchange="updateVideo(${index}, 'platform', this.value)">
+                        <option value="youtube" ${item.platform === 'youtube' ? 'selected' : ''}>YouTube</option>
+                        <option value="tiktok" ${item.platform === 'tiktok' ? 'selected' : ''}>TikTok</option>
+                    </select>
+                    <button class="delete-btn" onclick="deleteVideoItem(${index})">Delete</button>
+                </div>
+            `).join('');
+        }
+
+        // Update functions
+        function updatePortfolio(index, field, value) {
+            content.portfolio[index][field] = value;
+        }
+
+        function updateProduct(index, field, value) {
+            content.products[index][field] = value;
+        }
+
+        function updateUpdate(index, field, value) {
+            content.updates[index][field] = value;
+        }
+
+        function updateVideo(index, field, value) {
+            content.videos[index][field] = value;
+        }
+
+        // Add functions
+        function addPortfolioItem() {
+            content.portfolio.push({
+                id: Date.now().toString(),
+                title: '',
+                description: '',
+                image_url: null
+            });
+            renderPortfolioItems();
+        }
+
+        function addProductItem() {
+            content.products.push({
+                id: Date.now().toString(),
+                title: '',
+                description: '',
+                price: 0,
+                image_url: null
+            });
+            renderProductItems();
+        }
+
+        function addUpdateItem() {
+            content.updates.push({
+                id: Date.now().toString(),
+                title: '',
+                content: '',
+                created_at: new Date().toISOString()
+            });
+            renderUpdateItems();
+        }
+
+        function addVideoItem() {
+            content.videos.push({
+                id: Date.now().toString(),
+                title: '',
+                url: '',
+                platform: 'youtube'
+            });
+            renderVideoItems();
+        }
+
+        // Delete functions
+        function deletePortfolioItem(index) {
+            if (confirm('Delete this portfolio item?')) {
+                content.portfolio.splice(index, 1);
+                renderPortfolioItems();
+            }
+        }
+
+        function deleteProductItem(index) {
+            if (confirm('Delete this product?')) {
+                content.products.splice(index, 1);
+                renderProductItems();
+            }
+        }
+
+        function deleteUpdateItem(index) {
+            if (confirm('Delete this update?')) {
+                content.updates.splice(index, 1);
+                renderUpdateItems();
+            }
+        }
+
+        function deleteVideoItem(index) {
+            if (confirm('Delete this video?')) {
+                content.videos.splice(index, 1);
+                renderVideoItems();
+            }
+        }
+
+        // Save function
+        async function saveAllChanges() {
+            try {
+                // Create a blob and download it
+                const dataStr = JSON.stringify(content, null, 2);
+                const blob = new Blob([dataStr], { type: 'application/json' });
+
+                // Create download link
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = 'content.json';
+
+                // Trigger download
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                URL.revokeObjectURL(url);
+
+                alert('✅ Content saved! Replace the content.json file in your public folder with the downloaded file, then refresh your website.');
+            } catch (error) {
+                console.error('Error saving:', error);
+                alert('❌ Error saving content. Check the console for details.');
+            }
+        }
+
+        // Load content when page loads
+        loadContent();
+    </script>
+</body>
+</html>

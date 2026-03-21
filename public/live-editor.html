@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Content Manager</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .auth-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .auth-section input {
+            padding: 10px;
+            margin: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 200px;
+        }
+        .auth-section button {
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .auth-section button:hover {
+            background: #0056b3;
+        }
+        .editor-section {
+            display: none;
+        }
+        .section {
+            margin-bottom: 30px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 20px;
+        }
+        .section h2 {
+            color: #333;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 5px;
+        }
+        .item {
+            background: #f9f9f9;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #007bff;
+        }
+        .image-preview {
+            width: 100%;
+            max-width: 200px;
+            height: auto;
+            margin: 10px 0;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .delete-btn {
+            background: #dc3545;
+        }
+        .delete-btn:hover {
+            background: #c82333;
+        }
+        .add-btn {
+            background: #28a745;
+        }
+        .add-btn:hover {
+            background: #218838;
+        }
+        .save-all {
+            background: #ffc107;
+            color: black;
+            font-weight: bold;
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+        }
+        .save-all:hover {
+            background: #e0a800;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            display: none;
+        }
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔐 Live Content Manager</h1>
+
+        <div class="auth-section">
+            <h2>Enter Password to Edit Content</h2>
+            <input type="password" id="password" placeholder="Enter admin password">
+            <button onclick="authenticate()">Login</button>
+            <p><small>Default password: <code>admin123</code></small></p>
+        </div>
+
+        <div class="editor-section" id="editor">
+            <h1>🎨 Live Content Editor</h1>
+            <p><strong>Edit your website content live!</strong> Changes will be saved to your website immediately.</p>
+
+            <div id="status" class="status"></div>
+
+            <div class="section">
+                <h2>📁 Portfolio Items</h2>
+                <div id="portfolio-items"></div>
+                <button class="add-btn" onclick="addPortfolioItem()">+ Add Portfolio Item</button>
+            </div>
+
+            <div class="section">
+                <h2>🛒 Products</h2>
+                <div id="products-items"></div>
+                <button class="add-btn" onclick="addProductItem()">+ Add Product</button>
+            </div>
+
+            <div class="section">
+                <h2>📰 Updates/News</h2>
+                <div id="updates-items"></div>
+                <button class="add-btn" onclick="addUpdateItem()">+ Add Update</button>
+            </div>
+
+            <div class="section">
+                <h2>🎥 Videos</h2>
+                <div id="videos-items"></div>
+                <button class="add-btn" onclick="addVideoItem()">+ Add Video</button>
+            </div>
+
+            <button class="save-all" onclick="saveAllChanges()">💾 Save All Changes to Website</button>
+            <button class="save-all" onclick="copyJsonToClipboard()" style="background:#1d4ed8">📋 Copy JSON to Clipboard</button>
+            <button class="save-all" onclick="clearSavedContent()" style="background:#db2777">🧹 Clear Local Saved Content</button>
+            <p><small>After save, use the download link or copy to commit manually. Hosted sites cannot auto-commit from browser.</small></p>
+        </div>
+    </div>
+
+    <script>
+        let content = {
+            portfolio: [],
+            products: [],
+            updates: [],
+            videos: []
+        };
+
+        const ADMIN_PASSWORD = 'admin123'; // Change this to your desired password
+
+        function authenticate() {
+            const password = document.getElementById('password').value;
+            if (password === ADMIN_PASSWORD) {
+                document.querySelector('.auth-section').style.display = 'none';
+                document.getElementById('editor').style.display = 'block';
+                loadContent();
+            } else {
+                alert('Incorrect password');
+            }
+        }
+
+        // Load existing content
+        async function loadContent() {
+            try {
+                const localData = localStorage.getItem('liveEditorContent');
+                if (localData) {
+                    content = JSON.parse(localData);
+                    showStatus('✅ Loaded saved content from localStorage.', 'success');
+                    renderAllItems();
+                    return;
+                }
+
+                const response = await fetch('/content.json');
+                content = await response.json();
+                renderAllItems();
+            } catch (error) {
+                console.error('Error loading content:', error);
+                showStatus('Error loading content. Please check the console.', 'error');
+            }
+        }
+
+        function renderAllItems() {
+            renderPortfolioItems();
+            renderProductItems();
+            renderUpdateItems();
+            renderVideoItems();
+        }
+
+        function renderPortfolioItems() {
+            const container = document.getElementById('portfolio-items');
+            container.innerHTML = content.portfolio.map((item, index) => `
+                <div class="item">
+                    <input type="text" placeholder="Title" value="${item.title || ''}" onchange="updatePortfolio(${index}, 'title', this.value)">
+                    <textarea placeholder="Description" onchange="updatePortfolio(${index}, 'description', this.value)">${item.description || ''}</textarea>
+                    <label><strong>Image URL:</strong></label>
+                    <input type="url" placeholder="e.g., https://i.ibb.co/xxxxx/image.jpg or /images/my-image.jpg" value="${item.image_url || ''}" onchange="updatePortfolio(${index}, 'image_url', this.value)">
+                    ${item.image_url ? `<img src="${item.image_url}" alt="${item.title}" class="image-preview" onerror="this.style.display='none'">` : ''}
+                    <button class="delete-btn" onclick="deletePortfolioItem(${index})">Delete</button>
+                </div>
+            `).join('');
+        }
+
+        function renderProductItems() {
+            const container = document.getElementById('products-items');
+            container.innerHTML = content.products.map((item, index) => `
+                <div class="item">
+                    <input type="text" placeholder="Product Name" value="${item.title || ''}" onchange="updateProduct(${index}, 'title', this.value)">
+                    <textarea placeholder="Description" onchange="updateProduct(${index}, 'description', this.value)">${item.description || ''}</textarea>
+                    <input type="number" step="0.01" placeholder="Price" value="${item.price || ''}" onchange="updateProduct(${index}, 'price', parseFloat(this.value))">
+                    <label><strong>Image URL:</strong></label>
+                    <input type="url" placeholder="e.g., https://i.ibb.co/xxxxx/product.jpg or /images/product.jpg" value="${item.image_url || ''}" onchange="updateProduct(${index}, 'image_url', this.value)">
+                    ${item.image_url ? `<img src="${item.image_url}" alt="${item.title}" class="image-preview" onerror="this.style.display='none'">` : ''}
+                    <button class="delete-btn" onclick="deleteProductItem(${index})">Delete</button>
+                </div>
+            `).join('');
+        }
+
+        function renderUpdateItems() {
+            const container = document.getElementById('updates-items');
+            container.innerHTML = content.updates.map((item, index) => `
+                <div class="item">
+                    <input type="text" placeholder="Title" value="${item.title || ''}" onchange="updateUpdate(${index}, 'title', this.value)">
+                    <textarea placeholder="Content" onchange="updateUpdate(${index}, 'content', this.value)">${item.content || ''}</textarea>
+                    <label><strong>Image URL (optional):</strong></label>
+                    <input type="url" placeholder="e.g., https://i.ibb.co/xxxxx/news.jpg" value="${item.image_url || ''}" onchange="updateUpdate(${index}, 'image_url', this.value)">
+                    ${item.image_url ? `<img src="${item.image_url}" alt="${item.title}" class="image-preview" onerror="this.style.display='none'">` : ''}
+                    <button class="delete-btn" onclick="deleteUpdateItem(${index})">Delete</button>
+                </div>
+            `).join('');
+        }
+
+        function renderVideoItems() {
+            const container = document.getElementById('videos-items');
+            container.innerHTML = content.videos.map((item, index) => `
+                <div class="item">
+                    <input type="text" placeholder="Video Title" value="${item.title || ''}" onchange="updateVideo(${index}, 'title', this.value)">
+                    <label><strong>Video URL (YouTube or TikTok):</strong></label>
+                    <input type="url" placeholder="e.g., https://www.youtube.com/watch?v=VIDEO_ID" value="${item.url || ''}" onchange="updateVideo(${index}, 'url', this.value)">
+                    <select onchange="updateVideo(${index}, 'platform', this.value)">
+                        <option value="youtube" ${item.platform === 'youtube' ? 'selected' : ''}>YouTube</option>
+                        <option value="tiktok" ${item.platform === 'tiktok' ? 'selected' : ''}>TikTok</option>
+                    </select>
+                    <button class="delete-btn" onclick="deleteVideoItem(${index})">Delete</button>
+                </div>
+            `).join('');
+        }
+
+        // Update functions
+        function updatePortfolio(index, field, value) {
+            content.portfolio[index][field] = value;
+        }
+
+        function updateProduct(index, field, value) {
+            content.products[index][field] = value;
+        }
+
+        function updateUpdate(index, field, value) {
+            content.updates[index][field] = value;
+        }
+
+        function updateVideo(index, field, value) {
+            content.videos[index][field] = value;
+        }
+
+        // Add functions
+        function addPortfolioItem() {
+            content.portfolio.push({
+                id: Date.now().toString(),
+                title: '',
+                description: '',
+                image_url: null
+            });
+            renderPortfolioItems();
+        }
+
+        function addProductItem() {
+            content.products.push({
+                id: Date.now().toString(),
+                title: '',
+                description: '',
+                price: 0,
+                image_url: null
+            });
+            renderProductItems();
+        }
+
+        function addUpdateItem() {
+            content.updates.push({
+                id: Date.now().toString(),
+                title: '',
+                content: '',
+                image_url: null,
+                created_at: new Date().toISOString()
+            });
+            renderUpdateItems();
+        }
+
+        function addVideoItem() {
+            content.videos.push({
+                id: Date.now().toString(),
+                title: '',
+                url: '',
+                platform: 'youtube'
+            });
+            renderVideoItems();
+        }
+
+        // Delete functions
+        function deletePortfolioItem(index) {
+            if (confirm('Delete this portfolio item?')) {
+                content.portfolio.splice(index, 1);
+                renderPortfolioItems();
+            }
+        }
+
+        function deleteProductItem(index) {
+            if (confirm('Delete this product?')) {
+                content.products.splice(index, 1);
+                renderProductItems();
+            }
+        }
+
+        function deleteUpdateItem(index) {
+            if (confirm('Delete this update?')) {
+                content.updates.splice(index, 1);
+                renderUpdateItems();
+            }
+        }
+
+        function deleteVideoItem(index) {
+            if (confirm('Delete this video?')) {
+                content.videos.splice(index, 1);
+                renderVideoItems();
+            }
+        }
+
+        // Save function
+        async function saveAllChanges() {
+            try {
+                // For live editing, we'll need a backend endpoint
+                // For now, show instructions
+                showStatus(`
+                    🚀 <strong>To save changes live:</strong><br>
+                    1. Download the content.json file below<br>
+                    2. Upload it to your hosting platform<br>
+                    3. Or set up a backend service for live editing<br><br>
+                    <em>Note: This demo saves locally. For live editing, you'll need a backend.</em>
+                `, 'success');
+
+                // Save to localStorage so browser keeps it live
+                localStorage.setItem('liveEditorContent', JSON.stringify(content));
+
+                // Create download link
+                const dataStr = JSON.stringify(content, null, 2);
+                const blob = new Blob([dataStr], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = 'content.json';
+                link.textContent = '📥 Download content.json';
+                link.style.cssText = 'display: inline-block; margin: 10px 0; padding: 10px 15px; background: #28a745; color: white; text-decoration: none; border-radius: 4px;';
+
+                const statusDiv = document.getElementById('status');
+                statusDiv.appendChild(link);
+
+                URL.revokeObjectURL(url);
+            } catch (error) {
+                console.error('Error preparing download:', error);
+                showStatus('❌ Error preparing download. Check the console.', 'error');
+            }
+        }
+
+        function copyJsonToClipboard() {
+            try {
+                const json = JSON.stringify(content, null, 2);
+                navigator.clipboard.writeText(json);
+                showStatus('✅ JSON copied to clipboard. Paste into your Git commit or tool.', 'success');
+            } catch (error) {
+                console.error('Copy failed:', error);
+                showStatus('❌ Copy to clipboard failed; use download instead.', 'error');
+            }
+        }
+
+        function clearSavedContent() {
+            localStorage.removeItem('liveEditorContent');
+            showStatus('🧹 Saved content cleared from localStorage.', 'success');
+        }
+
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.className = `status ${type}`;
+            statusDiv.innerHTML = message;
+            statusDiv.style.display = 'block';
+
+            // Auto-hide after 10 seconds
+            setTimeout(() => {
+                statusDiv.style.display = 'none';
+            }, 10000);
+        }
+
+        // Allow Enter key in password field
+        document.getElementById('password').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                authenticate();
+            }
+        });
+    </script>
+</body>
+</html>

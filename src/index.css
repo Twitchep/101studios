@@ -1,0 +1,155 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 210 20% 98%;
+    --foreground: 220 25% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 25% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 25% 10%;
+
+    --primary: 154 100% 23%; /* Ghana Green */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 48 96% 90%; /* Light Gold */
+    --secondary-foreground: 220 25% 18%;
+
+    --muted: 210 18% 93%;
+    --muted-foreground: 220 10% 46%;
+
+    --accent: 48 96% 68%; /* Gold */
+    --accent-foreground: 220 25% 10%;
+
+    --destructive: 355 78% 47%; /* Ghana Red */
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 210 18% 88%;
+    --input: 210 18% 88%;
+    --ring: 154 100% 23%;
+
+    --radius: 0.75rem;
+
+    --glass-bg: 0 0% 100% / 0.6;
+    --glass-border: 0 0% 100% / 0.3;
+    --glass-shadow: 220 25% 10% / 0.08;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 154 100% 23%;
+  }
+
+  .dark {
+    --background: 222 30% 8%;
+    --foreground: 210 20% 92%;
+
+    --card: 222 25% 12%;
+    --card-foreground: 210 20% 92%;
+
+    --popover: 222 25% 12%;
+    --popover-foreground: 210 20% 92%;
+
+    --primary: 154 100% 28%; /* Darker Green */
+    --primary-foreground: 220 25% 8%;
+
+    --secondary: 222 20% 18%;
+    --secondary-foreground: 210 20% 88%;
+
+    --muted: 222 20% 18%;
+    --muted-foreground: 210 12% 55%;
+
+    --accent: 48 96% 68%; /* Gold */
+    --accent-foreground: 220 25% 8%;
+
+    --destructive: 355 78% 47%; /* Red */
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 222 18% 22%;
+    --input: 222 18% 22%;
+    --ring: 154 100% 28%;
+
+    --glass-bg: 222 25% 12% / 0.6;
+    --glass-border: 0 0% 100% / 0.08;
+    --glass-shadow: 0 0% 0% / 0.3;
+
+    --sidebar-background: 222 25% 10%;
+    --sidebar-foreground: 210 20% 88%;
+    --sidebar-primary: 154 100% 28%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 222 20% 16%;
+    --sidebar-accent-foreground: 210 20% 88%;
+    --sidebar-border: 222 18% 20%;
+    --sidebar-ring: 154 100% 28%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply relative rounded-2xl border border-glass-border bg-glass backdrop-blur-xl;
+    box-shadow: 0 8px 32px hsl(var(--glass-shadow)),
+                0 1px 3px hsl(var(--glass-shadow));
+  }
+
+  .glass-card-hover {
+    @apply glass-card transition-all duration-300 ease-out;
+  }
+
+  .glass-card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 48px hsl(var(--glass-shadow)),
+                0 4px 12px hsl(var(--glass-shadow));
+  }
+
+  .glass-card-hover:active {
+    transform: translateY(-2px) scale(0.98);
+  }
+
+  .glass-nav {
+    @apply backdrop-blur-xl border-b border-glass-border;
+    background: hsl(var(--glass-bg));
+  }
+
+  .gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent;
+  }
+
+  .section-padding {
+    @apply px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24;
+  }
+
+  .section-padding-sm {
+    @apply px-4 sm:px-6 lg:px-8 py-12 sm:py-16;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .text-pretty {
+    text-wrap: pretty;
+  }
+}
