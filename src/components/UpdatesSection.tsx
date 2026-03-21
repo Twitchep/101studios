@@ -3,6 +3,7 @@ import { Bell, ChevronDown } from "lucide-react";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { useLazyLoad } from "@/hooks/useLazyLoad";
 import { loadContentWithLiveEditor, useLiveEditorUpdates } from "@/utils/contentLoader";
+import LazyImage from "./LazyImage";
 
 interface Update {
   id: string;
@@ -69,7 +70,7 @@ export default function UpdatesSection() {
               <div className="flex flex-col lg:flex-row gap-6">
                 {update.image_url && (
                   <div className="lg:w-1/3">
-                    <img
+                    <LazyImage
                       src={update.image_url}
                       alt={update.title}
                       className="w-full h-48 lg:h-32 object-cover rounded-lg shadow-md"

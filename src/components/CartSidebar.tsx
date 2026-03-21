@@ -1,6 +1,7 @@
 import React from 'react';
 import { X, ShoppingCart, Trash2, MessageCircle } from 'lucide-react';
 import { useCart } from '@/contexts/CartContext';
+import LazyImage from './LazyImage';
 
 interface CartSidebarProps {
   isOpen: boolean;
@@ -58,7 +59,7 @@ const CartSidebar: React.FC<CartSidebarProps> = ({
               {cart.map((item, index) => (
                 <div key={`${item.id}-${index}`} className="flex gap-3 p-3 bg-muted/50 rounded-lg">
                   {item.image_url && (
-                    <img
+                    <LazyImage
                       src={item.image_url}
                       alt={item.title}
                       className="w-16 h-16 object-cover rounded-lg flex-shrink-0"

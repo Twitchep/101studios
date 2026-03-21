@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { X, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import LazyImage from "./LazyImage";
 
 interface Announcement {
   id: string;
@@ -122,7 +123,7 @@ export function AnnouncementPopup() {
 
           {announcement.image_url && (
             <div className="mb-4">
-              <img
+              <LazyImage
                 src={announcement.image_url}
                 alt={announcement.title}
                 className="w-full h-32 object-cover rounded-lg"

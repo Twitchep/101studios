@@ -3,6 +3,7 @@ import { X, ChevronDown } from "lucide-react";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { useLazyLoad } from "@/hooks/useLazyLoad";
 import { loadContentWithLiveEditor, useLiveEditorUpdates } from "@/utils/contentLoader";
+import LazyImage from "./LazyImage";
 
 interface PortfolioItem {
   id: string;
@@ -37,17 +38,19 @@ export default function PortfolioSection() {
     return () => clearInterval(interval);
   }, []);
 
-  const placeholders: PortfolioItem[] = items.length > 0 ? items : [
-    { id: "1", title: "Brand Identity Design", description: "Complete brand identity system with logo, typography, and color palette.", image_url: null },
-    { id: "2", title: "UI Dashboard Concept", description: "Dark-themed analytics dashboard with glassmorphism elements.", image_url: null },
-    { id: "3", title: "Product Packaging", description: "Minimal packaging design for a tech startup product line.", image_url: null },
-    { id: "4", title: "Social Media Campaign", description: "Visual campaign designed for cross-platform social engagement.", image_url: null },
-    { id: "5", title: "Typography Poster", description: "Experimental typographic poster exploring depth and layering.", image_url: null },
-    { id: "6", title: "App Icon Set", description: "Suite of app icons with consistent style and detail.", image_url: null },
+  const placeholders: PortfolioItem[] = [
+    { id: "1", title: "HAPPY EID", description: "Wishing all muslims a happy Eid-al Fitr celebration ", image_url: "/images/portfolio/9.jpg" },
+    { id: "2", title: "Hi-Res Tech design Represntation ", description: "Stand out in your selling game", image_url: "/images/portfolio/5.png" },
+    { id: "3", title: "High Quality Designs", description: "Get premium look as a clothing brand ", image_url: "/images/portfolio/2.jpg" },
+    { id: "4", title: "Petronize Us Now!", description: "Logos\nFlyers\nBanners\nEdits and many more", image_url: "/images/portfolio/7.jpg" },
+    { id: "5", title: "Make your Birthdays a Memorable one with Us", description: "We do all sort of birthday flyers that will make your birthday a memorable one", image_url: "/images/portfolio/8.png" },
+    { id: "6", title: "Make your Resturant Design feel Premium ", description: "Resturant Design feel Premium ", image_url: "/images/portfolio/6.jpg" },
+    { id: "7", title: "Premium Looking Banners ", description: "Just 4 You", image_url: "/images/portfolio/10.jpg" },
+    { id: "8", title: "Why won't you work with Us??", description: "Work with us Today!!", image_url: "/images/portfolio/3.jpg" }
   ];
 
-  // Use displayed items from lazy load hook
-  const itemsToShow = items.length > 0 ? displayedItems : placeholders;
+  // Use displayed items from lazy load hook, or placeholders if no items loaded yet
+  const itemsToShow = items.length > 0 ? displayedItems : placeholders.slice(0, 3); // Show first 3 placeholders initially
 
   return (
     <section id="portfolio" className="section-padding" ref={ref}>
@@ -68,7 +71,7 @@ export default function PortfolioSection() {
             >
               <div className="aspect-[4/3] bg-gradient-to-br from-cyan-500/10 via-purple-500/10 to-pink-500/10 flex items-center justify-center overflow-hidden relative">
                 {item.image_url ? (
-                  <img src={item.image_url} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <LazyImage src={item.image_url} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                 ) : (
                   <span className="text-4xl font-bold text-primary/30 font-orbitron">{item.title.charAt(0)}</span>
                 )}
@@ -108,7 +111,7 @@ export default function PortfolioSection() {
             </div>
             <div className="aspect-[16/10] bg-gradient-to-br from-cyan-500/10 via-purple-500/10 to-pink-500/10 flex items-center justify-center">
               {selected.image_url ? (
-                <img src={selected.image_url} alt={selected.title} className="w-full h-full object-cover" />
+                <LazyImage src={selected.image_url} alt={selected.title} className="w-full h-full object-cover" />
               ) : (
                 <span className="text-6xl font-bold text-primary/20 font-orbitron">{selected.title.charAt(0)}</span>
               )}

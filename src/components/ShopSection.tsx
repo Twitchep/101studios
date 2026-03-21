@@ -5,6 +5,7 @@ import { useLazyLoad } from "@/hooks/useLazyLoad";
 import { useCart } from "@/contexts/CartContext";
 import { loadContentWithLiveEditor } from "@/utils/contentLoader";
 import CartSidebar from "./CartSidebar";
+import LazyImage from "./LazyImage";
 
 interface Product {
   id: string;
@@ -121,7 +122,7 @@ export default function ShopSection() {
             >
               <div className="aspect-square bg-gradient-to-br from-cyan-500/10 via-purple-500/10 to-pink-500/10 flex items-center justify-center overflow-hidden relative">
                 {product.image_url ? (
-                  <img src={product.image_url} alt={product.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <LazyImage src={product.image_url} alt={product.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                 ) : (
                   <ShoppingCart size={40} className="text-primary/25" />
                 )}
@@ -196,7 +197,7 @@ export default function ShopSection() {
               </div>
               {selectedProduct.image_url ? (
                 <div className="aspect-[16/9] bg-black/5">
-                  <img src={selectedProduct.image_url} alt={selectedProduct.title} className="w-full h-full object-cover" />
+                  <LazyImage src={selectedProduct.image_url} alt={selectedProduct.title} className="w-full h-full object-cover" />
                 </div>
               ) : null}
               <div className="p-4">
