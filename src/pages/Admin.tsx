@@ -3,8 +3,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { LogOut, Plus, Trash2, Edit2, Save, X, Upload, RefreshCw } from "lucide-react";
 import Navbar from "@/components/Navbar";
+import { ThemePreview } from "@/components/ThemePreview";
 
-type Tab = "portfolio" | "products" | "updates" | "videos";
+type Tab = "portfolio" | "products" | "updates" | "videos" | "themes";
 
 export default function AdminPage() {
   const navigate = useNavigate();
@@ -149,7 +150,7 @@ export default function AdminPage() {
 
           {/* Tabs */}
           <div className="flex gap-1 mb-6 p-1 glass-card rounded-xl w-fit">
-            {(["portfolio", "products", "updates", "videos"] as Tab[]).map((tab) => (
+            {(["portfolio", "products", "updates", "videos", "themes"] as Tab[]).map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
@@ -164,6 +165,7 @@ export default function AdminPage() {
           {activeTab === "products" && <AdminCRUD table="products" fields={["title", "description", "specs", "price", "image_url"]} />}
           {activeTab === "updates" && <AdminCRUD table="live_updates" fields={["title", "content", "image_url"]} />}
           {activeTab === "videos" && <AdminCRUD table="videos" fields={["title", "url", "platform"]} />}
+          {activeTab === "themes" && <ThemePreview />}
         </div>
       </div>
     </>

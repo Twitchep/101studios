@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Moon, Sun, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useTheme } from "@/hooks/useTheme";
 import { Link, useLocation } from "react-router-dom";
+import { ThemeSwitcher } from "./ThemeSwitcher";
 
 const navLinks = [
   { label: "Home", href: "/#hero" },
@@ -13,7 +14,7 @@ const navLinks = [
 ];
 
 export default function Navbar() {
-  const { isDark, toggle } = useTheme();
+  const { theme } = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
 
@@ -49,20 +50,12 @@ export default function Navbar() {
                 {link.label}
               </button>
             ))}
-            <button
-              onClick={toggle}
-              className="ml-2 p-2 rounded-lg hover:bg-secondary/50 text-muted-foreground hover:text-foreground transition-colors duration-200"
-              aria-label="Toggle theme"
-            >
-              {isDark ? <Sun size={18} /> : <Moon size={18} />}
-            </button>
+            <ThemeSwitcher />
           </div>
 
           {/* Mobile */}
           <div className="flex md:hidden items-center gap-2">
-            <button onClick={toggle} className="p-2 rounded-lg text-muted-foreground" aria-label="Toggle theme">
-              {isDark ? <Sun size={18} /> : <Moon size={18} />}
-            </button>
+            <ThemeSwitcher />
             <button onClick={() => setMobileOpen(!mobileOpen)} className="p-2 rounded-lg text-muted-foreground" aria-label="Menu">
               {mobileOpen ? <X size={20} /> : <Menu size={20} />}
             </button>

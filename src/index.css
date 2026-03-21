@@ -90,6 +90,264 @@
     --sidebar-border: 222 18% 20%;
     --sidebar-ring: 154 100% 28%;
   }
+
+  .christmas {
+    --background: 0 100% 97%;
+    --foreground: 0 100% 10%;
+
+    --card: 0 50% 98%;
+    --card-foreground: 0 100% 10%;
+
+    --popover: 0 50% 98%;
+    --popover-foreground: 0 100% 10%;
+
+    --primary: 120 100% 25%; /* Christmas Green */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 30 100% 90%; /* Light Red */
+    --secondary-foreground: 0 100% 15%;
+
+    --muted: 0 20% 95%;
+    --muted-foreground: 0 10% 45%;
+
+    --accent: 0 100% 50%; /* Red */
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 100% 45%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 20% 88%;
+    --input: 0 20% 88%;
+    --ring: 120 100% 25%;
+
+    --glass-bg: 0 50% 98% / 0.8;
+    --glass-border: 0 50% 95% / 0.5;
+    --glass-shadow: 0 100% 10% / 0.08;
+
+    --sidebar-background: 0 30% 97%;
+    --sidebar-foreground: 0 100% 15%;
+    --sidebar-primary: 120 100% 25%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 0 20% 95%;
+    --sidebar-accent-foreground: 0 100% 15%;
+    --sidebar-border: 0 20% 90%;
+    --sidebar-ring: 120 100% 25%;
+  }
+
+  .halloween {
+    --background: 45 100% 8%;
+    --foreground: 45 100% 92%;
+
+    --card: 45 80% 12%;
+    --card-foreground: 45 100% 92%;
+
+    --popover: 45 80% 12%;
+    --popover-foreground: 45 100% 92%;
+
+    --primary: 25 100% 50%; /* Orange */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 45 50% 18%;
+    --secondary-foreground: 45 100% 88%;
+
+    --muted: 45 50% 18%;
+    --muted-foreground: 45 50% 55%;
+
+    --accent: 60 100% 50%; /* Yellow */
+    --accent-foreground: 0 0% 0%;
+
+    --destructive: 0 100% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 45 50% 22%;
+    --input: 45 50% 22%;
+    --ring: 25 100% 50%;
+
+    --glass-bg: 45 80% 12% / 0.6;
+    --glass-border: 45 50% 25% / 0.3;
+    --glass-shadow: 0 0% 0% / 0.5;
+
+    --sidebar-background: 45 80% 10%;
+    --sidebar-foreground: 45 100% 88%;
+    --sidebar-primary: 25 100% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 45 50% 16%;
+    --sidebar-accent-foreground: 45 100% 88%;
+    --sidebar-border: 45 50% 20%;
+    --sidebar-ring: 25 100% 50%;
+  }
+
+  .newyear {
+    --background: 200 100% 97%;
+    --foreground: 200 100% 10%;
+
+    --card: 200 50% 98%;
+    --card-foreground: 200 100% 10%;
+
+    --popover: 200 50% 98%;
+    --popover-foreground: 200 100% 10%;
+
+    --primary: 200 100% 35%; /* Blue */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 280 100% 90%; /* Purple */
+    --secondary-foreground: 200 100% 15%;
+
+    --muted: 200 20% 95%;
+    --muted-foreground: 200 10% 45%;
+
+    --accent: 280 100% 50%; /* Purple */
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 100% 45%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 200 20% 88%;
+    --input: 200 20% 88%;
+    --ring: 200 100% 35%;
+
+    --glass-bg: 200 50% 98% / 0.8;
+    --glass-border: 200 50% 95% / 0.5;
+    --glass-shadow: 200 100% 10% / 0.08;
+
+    --sidebar-background: 200 30% 97%;
+    --sidebar-foreground: 200 100% 15%;
+    --sidebar-primary: 200 100% 35%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 200 20% 95%;
+    --sidebar-accent-foreground: 200 100% 15%;
+    --sidebar-border: 200 20% 90%;
+    --sidebar-ring: 200 100% 35%;
+  }
+
+  .easter {
+    --background: 60 100% 97%;
+    --foreground: 60 100% 10%;
+
+    --card: 60 50% 98%;
+    --card-foreground: 60 100% 10%;
+
+    --popover: 60 50% 98%;
+    --popover-foreground: 60 100% 10%;
+
+    --primary: 120 100% 25%; /* Green */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 300 100% 90%; /* Pink */
+    --secondary-foreground: 60 100% 15%;
+
+    --muted: 60 20% 95%;
+    --muted-foreground: 60 10% 45%;
+
+    --accent: 300 100% 60%; /* Pink */
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 100% 45%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 60 20% 88%;
+    --input: 60 20% 88%;
+    --ring: 120 100% 25%;
+
+    --glass-bg: 60 50% 98% / 0.8;
+    --glass-border: 60 50% 95% / 0.5;
+    --glass-shadow: 60 100% 10% / 0.08;
+
+    --sidebar-background: 60 30% 97%;
+    --sidebar-foreground: 60 100% 15%;
+    --sidebar-primary: 120 100% 25%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 60 20% 95%;
+    --sidebar-accent-foreground: 60 100% 15%;
+    --sidebar-border: 60 20% 90%;
+    --sidebar-ring: 120 100% 25%;
+  }
+
+  .summer {
+    --background: 45 100% 97%;
+    --foreground: 45 100% 10%;
+
+    --card: 45 50% 98%;
+    --card-foreground: 45 100% 10%;
+
+    --popover: 45 50% 98%;
+    --popover-foreground: 45 100% 10%;
+
+    --primary: 45 100% 50%; /* Orange */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 60 100% 90%; /* Yellow */
+    --secondary-foreground: 45 100% 15%;
+
+    --muted: 45 20% 95%;
+    --muted-foreground: 45 10% 45%;
+
+    --accent: 60 100% 50%; /* Yellow */
+    --accent-foreground: 0 0% 0%;
+
+    --destructive: 0 100% 45%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 45 20% 88%;
+    --input: 45 20% 88%;
+    --ring: 45 100% 50%;
+
+    --glass-bg: 45 50% 98% / 0.8;
+    --glass-border: 45 50% 95% / 0.5;
+    --glass-shadow: 45 100% 10% / 0.08;
+
+    --sidebar-background: 45 30% 97%;
+    --sidebar-foreground: 45 100% 15%;
+    --sidebar-primary: 45 100% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 45 20% 95%;
+    --sidebar-accent-foreground: 45 100% 15%;
+    --sidebar-border: 45 20% 90%;
+    --sidebar-ring: 45 100% 50%;
+  }
+
+  .autumn {
+    --background: 25 100% 97%;
+    --foreground: 25 100% 10%;
+
+    --card: 25 50% 98%;
+    --card-foreground: 25 100% 10%;
+
+    --popover: 25 50% 98%;
+    --popover-foreground: 25 100% 10%;
+
+    --primary: 25 100% 35%; /* Orange */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 15 100% 90%; /* Brown */
+    --secondary-foreground: 25 100% 15%;
+
+    --muted: 25 20% 95%;
+    --muted-foreground: 25 10% 45%;
+
+    --accent: 15 100% 30%; /* Brown */
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 100% 45%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 25 20% 88%;
+    --input: 25 20% 88%;
+    --ring: 25 100% 35%;
+
+    --glass-bg: 25 50% 98% / 0.8;
+    --glass-border: 25 50% 95% / 0.5;
+    --glass-shadow: 25 100% 10% / 0.08;
+
+    --sidebar-background: 25 30% 97%;
+    --sidebar-foreground: 25 100% 15%;
+    --sidebar-primary: 25 100% 35%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 25 20% 95%;
+    --sidebar-accent-foreground: 25 100% 15%;
+    --sidebar-border: 25 20% 90%;
+    --sidebar-ring: 25 100% 35%;
+  }
 }
 
 @layer base {
