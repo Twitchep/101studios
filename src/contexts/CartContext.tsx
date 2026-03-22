@@ -7,14 +7,16 @@ interface Product {
   specs?: string | null;
   price: number;
   image_url: string | null;
+  cartItemId?: string;
+  selectedSize?: string;
 }
 
 interface CartContextType {
   cart: Product[];
-  addToCart: (product: Product) => void;
-  removeFromCart: (productId: string) => void;
+  addToCart: (product: Product, selectedSize?: string) => void;
+  removeFromCart: (cartItemId: string) => void;
   clearCart: () => void;
-  getTotal: (currency: 'USD' | 'GHS', exchangeRate: number) => number;
+  getTotal: () => number;
   showNotification: boolean;
   setShowNotification: (show: boolean) => void;
 }
@@ -37,26 +39,25 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   const [cart, setCart] = useState<Product[]>([]);
   const [showNotification, setShowNotification] = useState(false);
 
-  const addToCart = (product: Product) => {
-    setCart((prev) => [...prev, product]);
+  const addToCart = (product: Product, selectedSize?: string) => {
+    const cartItemId = `${product.id}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+
+    setCart((prev) => [...prev, { ...product, cartItemId, selectedSize }]);
     setShowNotification(true);
     // Hide notification after 3 seconds
     setTimeout(() => setShowNotification(false), 3000);
   };
 
-  const removeFromCart = (productId: string) => {
-    setCart((prev) => prev.filter(item => item.id !== productId));
+  const removeFromCart = (cartItemId: string) => {
+    setCart((prev) => prev.filter(item => item.cartItemId !== cartItemId));
   };
 
   const clearCart = () => {
     setCart([]);
   };
 
-  const getTotal = (currency: 'USD' | 'GHS', exchangeRate: number) => {
-    return cart.reduce((sum, product) => {
-      const price = currency === 'USD' ? product.price : product.price * exchangeRate;
-      return sum + price;
-    }, 0);
+  const getTotal = () => {
+    return cart.reduce((sum, product) => sum + product.price, 0);
   };
 
   return (

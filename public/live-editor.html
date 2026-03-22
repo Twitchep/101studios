@@ -203,7 +203,14 @@
             <div id="status" class="status"></div>
 
             <div class="section">
-                <h2>📁 Portfolio Items</h2>
+                <h2>�️ Hero Slider</h2>
+                <div id="hero-slider-items"></div>
+                <button class="add-btn" onclick="addHeroSliderItem()">+ Add Hero Slide</button>
+                <p><small>Use this section to update landing page slider images, titles and subtitles.</small></p>
+            </div>
+
+            <div class="section">
+                <h2>�📁 Portfolio Items</h2>
                 <div id="portfolio-items"></div>
                 <button class="add-btn" onclick="addPortfolioItem()">+ Add Portfolio Item</button>
             </div>
@@ -242,6 +249,7 @@
 
     <script>
         let content = {
+            hero_slider: [],
             portfolio: [],
             products: [],
             updates: [],
@@ -271,7 +279,16 @@
                     content = await response.json();
                     console.log('✅ Loaded content from server');
 
-                    // Ensure announcements array exists
+                    // Ensure required arrays exist
+                    if (!content.hero_slider) {
+                        content.hero_slider = [];
+                    }
+                    if (!content.portfolio) {
+                        content.portfolio = [];
+                    }
+                    if (!content.products) {
+                        content.products = [];
+                    }
                     if (!content.announcements) {
                         content.announcements = [];
                     }
@@ -289,7 +306,16 @@
                 const localData = localStorage.getItem('liveEditorContent');
                 if (localData) {
                     content = JSON.parse(localData);
-                    // Ensure announcements array exists
+                    // Ensure required arrays exist
+                    if (!content.hero_slider) {
+                        content.hero_slider = [];
+                    }
+                    if (!content.portfolio) {
+                        content.portfolio = [];
+                    }
+                    if (!content.products) {
+                        content.products = [];
+                    }
                     if (!content.announcements) {
                         content.announcements = [];
                     }
@@ -305,6 +331,7 @@
         }
 
         function renderAllItems() {
+            renderHeroSliderItems();
             renderPortfolioItems();
             renderProductItems();
             renderUpdateItems();
@@ -318,10 +345,28 @@
                 <div class="item">
                     <input type="text" placeholder="Title" value="${item.title || ''}" onchange="updatePortfolio(${index}, 'title', this.value)">
                     <textarea placeholder="Description" onchange="updatePortfolio(${index}, 'description', this.value)">${item.description || ''}</textarea>
+                    <select onchange="updatePortfolio(${index}, 'category', this.value)">
+                        <option value="Graphics Design" ${item.category === 'Graphics Design' ? 'selected' : ''}>Graphics Design</option>
+                        <option value="Flyers" ${item.category === 'Flyers' ? 'selected' : ''}>Flyers</option>
+                        <option value="Logos" ${item.category === 'Logos' ? 'selected' : ''}>Logos</option>
+                        <option value="Banners" ${item.category === 'Banners' ? 'selected' : ''}>Banners</option>
+                    </select>
                     <label><strong>Image URL:</strong></label>
                     <input type="url" placeholder="e.g., https://i.ibb.co/xxxxx/image.jpg or /images/my-image.jpg" value="${item.image_url || ''}" onchange="updatePortfolio(${index}, 'image_url', this.value)">
                     ${item.image_url ? `<img src="${item.image_url}" alt="${item.title}" class="image-preview" onerror="this.style.display='none'">` : ''}
                     <button class="delete-btn" onclick="deletePortfolioItem(${index})">Delete</button>
+                </div>
+            `).join('');
+        }
+
+        function renderHeroSliderItems() {
+            const container = document.getElementById('hero-slider-items');
+            container.innerHTML = content.hero_slider.map((item, index) => `
+                <div class="item">
+                    <input type="text" placeholder="Slide Title" value="${item.title || ''}" onchange="updateHeroSlider(${index}, 'title', this.value)">
+                    <textarea placeholder="Subtitle" onchange="updateHeroSlider(${index}, 'subtitle', this.value)">${item.subtitle || ''}</textarea>
+                    <input type="url" placeholder="Image URL" value="${item.image_url || ''}" onchange="updateHeroSlider(${index}, 'image_url', this.value)">
+                    <button class="delete-btn" onclick="deleteHeroSliderItem(${index})">Delete</button>
                 </div>
             `).join('');
         }
@@ -333,6 +378,10 @@
                     <input type="text" placeholder="Product Name" value="${item.title || ''}" onchange="updateProduct(${index}, 'title', this.value)">
                     <textarea placeholder="Description" onchange="updateProduct(${index}, 'description', this.value)">${item.description || ''}</textarea>
                     <input type="number" step="0.01" placeholder="Price" value="${item.price || ''}" onchange="updateProduct(${index}, 'price', parseFloat(this.value))">
+                    <select onchange="updateProduct(${index}, 'category', this.value)">
+                        <option value="Electronics" ${item.category === 'Electronics' ? 'selected' : ''}>Electronics</option>
+                        <option value="Clothing" ${item.category === 'Clothing' ? 'selected' : ''}>Clothing</option>
+                    </select>
                     <label><strong>Image URL:</strong></label>
                     <input type="url" placeholder="e.g., https://i.ibb.co/xxxxx/product.jpg or /images/product.jpg" value="${item.image_url || ''}" onchange="updateProduct(${index}, 'image_url', this.value)">
                     ${item.image_url ? `<img src="${item.image_url}" alt="${item.title}" class="image-preview" onerror="this.style.display='none'">` : ''}
@@ -408,7 +457,7 @@
                         </div>
                     </div>
 
-                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 10px 0;">
+                    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin: 10px 0;">
                         <div>
                             <label><strong>Display Duration (ms):</strong></label>
                             <input type="number" placeholder="5000" value="${item.display_duration || 5000}" onchange="updateAnnouncement(${index}, 'display_duration', parseInt(this.value))">
@@ -416,6 +465,10 @@
                         <div>
                             <label><strong>Priority (1-100):</strong></label>
                             <input type="number" placeholder="10" min="1" max="100" value="${item.priority || 10}" onchange="updateAnnouncement(${index}, 'priority', parseInt(this.value))">
+                        </div>
+                        <div>
+                            <label><strong>Reload Frequency:</strong></label>
+                            <input type="number" placeholder="3" min="1" value="${item.reload_frequency || 3}" onchange="updateAnnouncement(${index}, 'reload_frequency', parseInt(this.value))">
                         </div>
                         <div>
                             <label><strong>Max Views:</strong></label>
@@ -464,11 +517,34 @@
             content.videos[index][field] = value;
         }
 
+        function updateHeroSlider(index, field, value) {
+            if (!content.hero_slider || !content.hero_slider[index]) return;
+            content.hero_slider[index][field] = value;
+            renderHeroSliderItems();
+        }
+
+        function addHeroSliderItem() {
+            if (!content.hero_slider) content.hero_slider = [];
+            content.hero_slider.push({
+                id: Date.now().toString(),
+                title: 'New Slide',
+                subtitle: 'Update this subtitle in the live editor.',
+                image_url: ''
+            });
+            renderHeroSliderItems();
+        }
+
+        function deleteHeroSliderItem(index) {
+            if (!content.hero_slider) return;
+            content.hero_slider.splice(index, 1);
+            renderHeroSliderItems();
+        }
+
         function updateAnnouncement(index, field, value) {
             if (!content.announcements || !content.announcements[index]) return;
             if (field === 'is_active') {
                 content.announcements[index][field] = value === 'true';
-            } else if (['display_duration', 'priority', 'max_views_per_user'].includes(field)) {
+            } else if (['display_duration', 'priority', 'max_views_per_user', 'reload_frequency'].includes(field)) {
                 content.announcements[index][field] = parseInt(value) || 0;
             } else if (['start_date', 'end_date'].includes(field)) {
                 // Handle date fields - ensure they're stored as ISO strings
@@ -486,6 +562,7 @@
                 id: Date.now().toString(),
                 title: '',
                 description: '',
+                category: 'Graphics Design',
                 image_url: null
             });
             renderPortfolioItems();
@@ -496,6 +573,7 @@
                 id: Date.now().toString(),
                 title: '',
                 description: '',
+                category: 'Electronics',
                 price: 0,
                 image_url: null
             });
@@ -537,6 +615,7 @@
                 end_date: null,
                 display_duration: 5000,
                 priority: 10,
+                reload_frequency: 3,
                 target_audience: 'all',
                 max_views_per_user: -1,
                 created_at: new Date().toISOString(),
@@ -622,11 +701,28 @@
                 // Save to localStorage immediately
                 localStorage.setItem('liveEditorContent', JSON.stringify(content));
 
+                let savedToServerFile = false;
+                try {
+                    const apiResponse = await fetch('/api/content', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(content)
+                    });
+
+                    savedToServerFile = apiResponse.ok;
+                } catch (apiError) {
+                    savedToServerFile = false;
+                }
+
                 // Show fullscreen success popup
                 showFullscreenPopup(
                     '💾',
                     'Changes Saved Successfully!',
-                    'Your content has been saved to local storage and is ready for download. The website will reflect these changes immediately.',
+                    savedToServerFile
+                        ? 'Your content has been saved to local storage and written directly to public/content.json via the local API.'
+                        : 'Your content has been saved to local storage. API file-save was unavailable, so use the download button to replace content.json manually.',
                     'Continue Editing'
                 );
 
@@ -644,12 +740,19 @@
                 // Add download link to the popup message
                 setTimeout(() => {
                     const popupMessage = document.getElementById('popup-message');
-                    popupMessage.innerHTML = 'Your content has been saved to local storage and is ready for download. The website will reflect these changes immediately.<br><br>';
+                    popupMessage.innerHTML = savedToServerFile
+                        ? 'Content saved to local storage and file successfully. Download this as backup:<br><br>'
+                        : 'Content saved to local storage. Download this file and replace public/content.json to persist changes:<br><br>';
                     popupMessage.appendChild(link);
                 }, 100);
 
                 // Also show regular status message
-                showStatus('✅ Changes saved to localStorage. Download the file above to update your live site.', 'success');
+                showStatus(
+                    savedToServerFile
+                        ? '✅ Changes saved to localStorage and content.json via API.'
+                        : '✅ Changes saved to localStorage. API save unavailable; download and replace content.json manually.',
+                    'success'
+                );
 
                 URL.revokeObjectURL(url);
 

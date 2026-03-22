@@ -38,8 +38,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <Link to="/" className="flex items-center space-x-2">
-            <LazyImage src="/images/logo.png" alt="Logo" className="h-8 w-8 animate-float" />
-            <span className="text-xl font-bold gradient-text tracking-tight">101studios</span>
+            <span className="text-xl font-bold tracking-[0.22em] text-orange-500 uppercase font-orbitron">101 STUDIOS</span>
           </Link>
 
           {/* Desktop */}
@@ -48,14 +47,14 @@ export default function Navbar() {
               <button
                 key={link.label}
                 onClick={() => handleNavClick(link.href)}
-                className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors duration-200 rounded-lg hover:bg-secondary/50"
+                className="px-3 py-2 text-sm font-medium text-white transition-colors duration-200 rounded-lg hover:bg-white/20"
               >
                 {link.label}
               </button>
             ))}
             <button
               onClick={() => handleNavClick("/#shop")}
-              className="relative p-2 text-muted-foreground hover:text-foreground transition-colors duration-200 rounded-lg hover:bg-secondary/50"
+              className="relative p-2 text-white transition-colors duration-200 rounded-lg hover:bg-white/20"
               aria-label="Shopping Cart"
             >
               <ShoppingCart size={20} />
@@ -72,7 +71,7 @@ export default function Navbar() {
           <div className="flex md:hidden items-center gap-2">
             <button
               onClick={() => handleNavClick("/#shop")}
-              className="relative p-2 text-muted-foreground hover:text-foreground transition-colors duration-200 rounded-lg"
+              className="relative p-2 text-white transition-colors duration-200 rounded-lg hover:bg-white/20"
               aria-label="Shopping Cart"
             >
               <ShoppingCart size={20} />
@@ -83,7 +82,7 @@ export default function Navbar() {
               )}
             </button>
             <ThemeSwitcher />
-            <button onClick={() => setMobileOpen(!mobileOpen)} className="p-2 rounded-lg text-muted-foreground" aria-label="Menu">
+            <button onClick={() => setMobileOpen(!mobileOpen)} className="p-2 rounded-lg text-white hover:bg-white/20 transition-colors" aria-label="Menu">
               {mobileOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
           </div>
@@ -98,7 +97,7 @@ export default function Navbar() {
               <button
                 key={link.label}
                 onClick={() => handleNavClick(link.href)}
-                className="block w-full text-left px-3 py-2 text-sm text-muted-foreground hover:text-foreground rounded-lg hover:bg-secondary/50 transition-colors"
+                className="block w-full text-left px-3 py-2 text-sm text-white rounded-lg hover:bg-white/20 transition-colors"
               >
                 {link.label}
               </button>

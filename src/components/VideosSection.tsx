@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Play, ChevronDown } from "lucide-react";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { useLazyLoad } from "@/hooks/useLazyLoad";
@@ -29,23 +29,16 @@ export default function VideosSection() {
     incrementCount: 2,
   });
 
-  useEffect(() => {
-    const fetchVideos = async () => {
-      const videos = await loadContentWithLiveEditor('videos', 'videos');
-      setVideos(videos);
-    };
-
-    fetchVideos();
+  const fetchVideos = useCallback(async () => {
+    const videos = await loadContentWithLiveEditor('videos', 'videos');
+    setVideos(videos);
   }, []);
 
-  // Use live editor updates hook for real-time synchronization
-  // useLiveEditorUpdates(() => {
-  //   const fetchVideos = async () => {
-  //     const videos = await loadContentWithLiveEditor('videos', 'videos');
-  //     setVideos(videos);
-  //   };
-  //   fetchVideos();
-  // });
+  useEffect(() => {
+    fetchVideos();
+  }, [fetchVideos]);
+
+  useLiveEditorUpdates(fetchVideos);
 
   const placeholders: Video[] = videos.length > 0 ? videos : [
     { id: "1", title: "Design Process Breakdown", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", platform: "youtube" },

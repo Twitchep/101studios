@@ -22,7 +22,7 @@ export function AnnouncementDemo() {
 
   return (
     <div className="space-y-6">
-      <Card>
+      <Card className="overflow-hidden border border-white/10 bg-white/10 dark:bg-white/5 backdrop-blur-2xl shadow-[0_20px_70px_rgba(0,0,0,0.16)]">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Settings className="h-5 w-5" />
@@ -30,14 +30,14 @@ export function AnnouncementDemo() {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="bg-muted/50 p-4 rounded-lg">
+          <div className="rounded-2xl border border-white/10 bg-white/10 p-4 backdrop-blur-xl">
             <h3 className="font-semibold mb-2">How the Announcement System Works:</h3>
             <ul className="text-sm space-y-1 text-muted-foreground">
               <li>• <strong>Popup Display:</strong> Announcements appear as modal popups on your website</li>
               <li>• <strong>Smart Scheduling:</strong> Set start/end dates for when announcements should show</li>
               <li>• <strong>Duration Control:</strong> Configure how long each popup stays visible</li>
               <li>• <strong>Priority System:</strong> Higher priority announcements show first</li>
-              <li>• <strong>View Limits:</strong> Control how many times each user sees an announcement</li>
+              <li>• <strong>Reload Cadence:</strong> Active announcements show every third page reload</li>
               <li>• <strong>Target Audience:</strong> Show to all visitors, new visitors, or returning visitors</li>
               <li>• <strong>Rich Content:</strong> Include images, formatted text, and call-to-action buttons</li>
             </ul>

@@ -1,5 +1,6 @@
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import { lazy, Suspense } from "react";
 
 // Lazy load heavier components
@@ -15,16 +16,16 @@ const Index = () => (
     <Navbar />
     <main>
       <HeroSection />
-      <Suspense fallback={<div className="py-20 flex items-center justify-center"><div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary"></div></div>}>
+      <Suspense fallback={<div className="py-20 flex items-center justify-center"><LoadingSpinner /></div>}>
         <PortfolioSection />
       </Suspense>
-      <Suspense fallback={<div className="py-20 flex items-center justify-center"><div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary"></div></div>}>
+      <Suspense fallback={<div className="py-20 flex items-center justify-center"><LoadingSpinner /></div>}>
         <ShopSection />
       </Suspense>
-      <Suspense fallback={<div className="py-20 flex items-center justify-center"><div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary"></div></div>}>
+      <Suspense fallback={<div className="py-20 flex items-center justify-center"><LoadingSpinner /></div>}>
         <UpdatesSection />
       </Suspense>
-      <Suspense fallback={<div className="py-20 flex items-center justify-center"><div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary"></div></div>}>
+      <Suspense fallback={<div className="py-20 flex items-center justify-center"><LoadingSpinner /></div>}>
         <VideosSection />
       </Suspense>
       <ContactSection />

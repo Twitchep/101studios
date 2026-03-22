@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { AnnouncementPopup } from "@/components/AnnouncementPopup";
 import { CartProvider } from "@/contexts/CartContext";
 import CartNotification from "@/components/CartNotification";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import { lazy, Suspense } from "react";
 
 // Lazy load the main page component
@@ -23,7 +24,7 @@ const App = () => (
         <AnnouncementPopup />
         <CartNotification />
         <BrowserRouter>
-          <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div></div>}>
+          <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><LoadingSpinner /></div>}>
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="*" element={<NotFound />} />

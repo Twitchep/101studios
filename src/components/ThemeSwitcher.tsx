@@ -33,7 +33,8 @@ const themeEmojis: Record<Theme, string> = {
 };
 
 export function ThemeSwitcher() {
-  const { theme, setTheme, themes, getCurrentEventTheme } = useTheme();
+  const { theme, setTheme, getCurrentEventTheme } = useTheme();
+  const themes = ['light', 'dark'] as const;
   const [isOpen, setIsOpen] = useState(false);
 
   const handleAutoDetect = () => {

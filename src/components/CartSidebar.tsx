@@ -6,22 +6,17 @@ import LazyImage from './LazyImage';
 interface CartSidebarProps {
   isOpen: boolean;
   onClose: () => void;
-  currency: 'USD' | 'GHS';
-  exchangeRate: number;
   onCheckout: () => void;
 }
 
 const CartSidebar: React.FC<CartSidebarProps> = ({
   isOpen,
   onClose,
-  currency,
-  exchangeRate,
   onCheckout
 }) => {
   const { cart, removeFromCart, getTotal } = useCart();
 
-  const convertPrice = (price: number) => (currency === 'USD' ? price : price * exchangeRate);
-  const formatPrice = (price: number) => currency === 'USD' ? `$${price.toFixed(2)}` : `GHS ${convertPrice(price).toFixed(2)}`;
+  const formatPrice = (price: number) => `GHS ${price.toFixed(2)}`;
 
   if (!isOpen) return null;
 
@@ -57,7 +52,7 @@ const CartSidebar: React.FC<CartSidebarProps> = ({
           ) : (
             <div className="space-y-4">
               {cart.map((item, index) => (
-                <div key={`${item.id}-${index}`} className="flex gap-3 p-3 bg-muted/50 rounded-lg">
+                <div key={item.cartItemId ?? `${item.id}-${index}`} className="flex gap-3 p-3 bg-muted/50 rounded-lg">
                   {item.image_url && (
                     <LazyImage
                       src={item.image_url}
@@ -67,12 +62,15 @@ const CartSidebar: React.FC<CartSidebarProps> = ({
                   )}
                   <div className="flex-1 min-w-0">
                     <h3 className="font-medium text-sm truncate">{item.title}</h3>
+                    {item.selectedSize && (
+                      <p className="text-xs text-primary mt-1">Size: {item.selectedSize}</p>
+                    )}
                     <p className="text-sm text-muted-foreground mt-1">
                       {formatPrice(item.price)}
                     </p>
                   </div>
                   <button
-                    onClick={() => removeFromCart(item.id)}
+                    onClick={() => removeFromCart(item.cartItemId ?? item.id)}
                     className="p-2 text-destructive hover:bg-destructive/10 rounded-lg transition-colors flex-shrink-0"
                   >
                     <Trash2 size={16} />
@@ -88,7 +86,7 @@ const CartSidebar: React.FC<CartSidebarProps> = ({
             <div className="flex items-center justify-between mb-4">
               <span className="font-semibold">Total:</span>
               <span className="font-bold text-lg text-primary">
-                {formatPrice(getTotal(currency, exchangeRate))}
+                {formatPrice(getTotal())}
               </span>
             </div>
             <button

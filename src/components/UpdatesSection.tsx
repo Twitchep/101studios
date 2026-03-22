@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Bell, ChevronDown } from "lucide-react";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { useLazyLoad } from "@/hooks/useLazyLoad";
@@ -21,23 +21,16 @@ export default function UpdatesSection() {
     incrementCount: 2,
   });
 
-  useEffect(() => {
-    const fetchUpdates = async () => {
-      const updates = await loadContentWithLiveEditor('updates', 'live_updates');
-      setUpdates(updates);
-    };
-
-    fetchUpdates();
+  const fetchUpdates = useCallback(async () => {
+    const updates = await loadContentWithLiveEditor('updates', 'live_updates');
+    setUpdates(updates);
   }, []);
 
-  // Use live editor updates hook for real-time synchronization
-  // useLiveEditorUpdates(() => {
-  //   const fetchUpdates = async () => {
-  //     const updates = await loadContentWithLiveEditor('updates', 'live_updates');
-  //     setUpdates(updates);
-  //   };
-  //   fetchUpdates();
-  // });
+  useEffect(() => {
+    fetchUpdates();
+  }, [fetchUpdates]);
+
+  useLiveEditorUpdates(fetchUpdates);
 
   const placeholders: Update[] = updates.length > 0 ? updates : [
     { id: "1", title: "New Design Collection Released", content: "Check out the latest brand identity projects added to the portfolio.", created_at: new Date().toISOString() },
@@ -56,7 +49,7 @@ export default function UpdatesSection() {
       <div className="max-w-4xl mx-auto">
         <div className={`text-center mb-12 transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
           <p className="text-sm font-medium tracking-widest uppercase text-primary mb-3 font-orbitron">◆ Live Updates ◆</p>
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-balance font-orbitron glow-text" style={{ color: "#00ffff" }}>Latest News</h2>
+          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-balance font-orbitron text-primary">Latest News</h2>
           <p className="text-sm text-muted-foreground mt-2">Showing {displayedCount} of {totalCount} updates</p>
         </div>
 
