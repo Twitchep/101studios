@@ -92,15 +92,15 @@ export function AnnouncementDemo() {
             <h3 className="font-semibold mb-3">Setup Instructions:</h3>
             <div className="space-y-2 text-sm">
               <p><strong>1. Database Setup:</strong> Run the migration file <code className="bg-muted px-1 py-0.5 rounded">supabase/migrations/20260321100000_create_announcements_table.sql</code></p>
-              <p><strong>2. Admin Access:</strong> Go to <code className="bg-muted px-1 py-0.5 rounded">/admin</code> → Announcements tab</p>
-              <p><strong>3. Create Announcement:</strong> Click "Add New" and fill in the details</p>
+              <p><strong>2. Editor Access:</strong> Open <code className="bg-muted px-1 py-0.5 rounded">/live-editor.html</code> and unlock the editor</p>
+              <p><strong>3. Create Announcement:</strong> Use the Announcements &amp; Popups section and save your changes</p>
               <p><strong>4. Test:</strong> Visit your website to see the popup in action</p>
             </div>
           </div>
 
           <div className="flex gap-2 pt-2">
             <Button variant="outline" size="sm" asChild>
-              <a href="/admin" target="_blank">Open Admin Panel</a>
+              <a href="/live-editor.html" target="_blank">Open Live Editor</a>
             </Button>
             <Button variant="outline" size="sm" onClick={() => window.location.reload()}>
               Test Popup System

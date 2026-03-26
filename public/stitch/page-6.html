@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-secondary-fixed-variant": "#5e289b",
+              "on-tertiary-container": "#7213ff",
+              "error": "#ffb4ab",
+              "on-secondary": "#460283",
+              "tertiary-fixed": "#e9ddff",
+              "primary-fixed": "#7df4ff",
+              "surface": "#131318",
+              "surface-container-highest": "#35343a",
+              "surface-tint": "#00dbe9",
+              "surface-bright": "#39383e",
+              "on-tertiary": "#3c0090",
+              "on-tertiary-fixed-variant": "#5700c9",
+              "primary-container": "#00f0ff",
+              "on-primary-fixed": "#002022",
+              "secondary-container": "#602b9d",
+              "on-error": "#690005",
+              "surface-container-low": "#1b1b20",
+              "secondary-fixed-dim": "#dab9ff",
+              "primary-fixed-dim": "#00dbe9",
+              "outline": "#849495",
+              "on-secondary-container": "#cfa7ff",
+              "on-surface": "#e4e1e9",
+              "primary": "#dbfcff",
+              "on-primary": "#00363a",
+              "on-error-container": "#ffdad6",
+              "secondary": "#dab9ff",
+              "tertiary-container": "#e1d2ff",
+              "surface-container": "#1f1f25",
+              "background": "#131318",
+              "outline-variant": "#3b494b",
+              "on-tertiary-fixed": "#23005b",
+              "surface-container-high": "#2a292f",
+              "inverse-on-surface": "#303036",
+              "on-secondary-fixed": "#2a0053",
+              "on-background": "#e4e1e9",
+              "on-surface-variant": "#b9cacb",
+              "inverse-surface": "#e4e1e9",
+              "on-primary-container": "#006970",
+              "tertiary": "#faf3ff",
+              "on-primary-fixed-variant": "#004f54",
+              "surface-container-lowest": "#0e0e13",
+              "secondary-fixed": "#eedbff",
+              "surface-dim": "#131318",
+              "surface-variant": "#35343a",
+              "error-container": "#93000a",
+              "tertiary-fixed-dim": "#d1bcff",
+              "inverse-primary": "#006970"
+            },
+            fontFamily: {
+              "headline": ["Space Grotesk"],
+              "body": ["Inter"],
+              "label": ["Space Grotesk"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(42, 41, 47, 0.4);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+        }
+        .aurora-blur {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(0, 240, 255, 0.05) 0%, transparent 70%);
+            filter: blur(150px);
+            pointer-events: none;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar -->
+<nav class="fixed top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-7xl rounded-full border border-white/10 bg-surface/40 backdrop-blur-xl flex justify-between items-center px-8 py-3 z-50 shadow-[0_20px_50px_rgba(0,240,255,0.08)]">
+<div class="text-2xl font-bold tracking-tighter text-cyan-400 dark:text-cyan-300 font-headline uppercase">ARTIFACT</div>
+<div class="hidden md:flex gap-8 items-center">
+<a class="text-cyan-400 dark:text-cyan-300 border-b-2 border-cyan-400 pb-1 font-headline tracking-tight text-sm uppercase" href="#">Gallery</a>
+<a class="text-slate-400 hover:text-white transition-colors font-headline tracking-tight text-sm uppercase hover:scale-105 transition-all duration-300" href="#">Shop</a>
+<a class="text-slate-400 hover:text-white transition-colors font-headline tracking-tight text-sm uppercase hover:scale-105 transition-all duration-300" href="#">About</a>
+<a class="text-slate-400 hover:text-white transition-colors font-headline tracking-tight text-sm uppercase hover:scale-105 transition-all duration-300" href="#">Contact</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">shopping_cart</button>
+<div class="h-6 w-[1px] bg-white/10"></div>
+<button class="bg-primary-container text-on-primary-container px-6 py-2 rounded-full font-headline text-xs font-bold uppercase tracking-widest hover:shadow-[0_0_20px_rgba(0,240,255,0.3)] hover:scale-105 transition-all duration-300 active:scale-95">Cart</button>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="relative">
+<div class="aurora-blur top-[-10%] left-[-10%]"></div>
+<div class="aurora-blur top-[40%] right-[-10%] opacity-50"></div>
+<!-- Hero Section -->
+<header class="relative h-[921px] w-full overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Abstract cinematic 3D render of a swirling cosmic nebula with deep purples, cyan energy arcs, and shimmering ethereal dust particles" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDV526s04qeiEQT5msnzDyffkLZisAkG1VkhNqkb2LKoBnb4s31BskrNBZ0NOJJE6hF6zKdFNXI38lXNi9ulUUPnHTG750IBfhFkox7iF3LkO7oslE8atxcdWIi2Z_hHqOLqLTa3AxM4s0E29le8k9kCSI7jV-iz_Tentko-QzioWCXZMBw06JfBCiRdhLOwwB4TfF0mTyPNnaW4ozK1LuhLBpXhELkqmm9nrMHUp98yORWA2PEjgLaAtVA5Q-y0y_4OOQw3xIch-Y"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent"></div>
+<div class="absolute bottom-16 left-0 w-full px-8 md:px-16">
+<div class="max-w-7xl mx-auto flex flex-col items-start">
+<span class="font-headline text-primary tracking-[0.4em] text-sm uppercase mb-4 px-4 py-1 border border-primary/20 rounded-full bg-primary/5 backdrop-blur-sm">Featured Project</span>
+<h1 class="font-headline text-7xl md:text-9xl font-bold tracking-tighter text-white uppercase leading-[0.8] mb-8">PROJECT <br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">NEBULA</span></h1>
+<div class="flex flex-wrap gap-12 mt-8">
+<div>
+<p class="font-label text-slate-500 text-[10px] tracking-[0.2em] uppercase mb-1">Year</p>
+<p class="font-headline text-lg text-white">2024</p>
+</div>
+<div>
+<p class="font-label text-slate-500 text-[10px] tracking-[0.2em] uppercase mb-1">Sector</p>
+<p class="font-headline text-lg text-white">Digital Experience</p>
+</div>
+<div>
+<p class="font-label text-slate-500 text-[10px] tracking-[0.2em] uppercase mb-1">Duration</p>
+<p class="font-headline text-lg text-white">6 Months</p>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- Project Overview & Meta -->
+<section class="max-w-7xl mx-auto px-8 md:px-16 py-32 grid grid-cols-1 md:grid-cols-12 gap-16">
+<div class="md:col-span-7">
+<h2 class="font-headline text-4xl font-light text-white mb-8 leading-tight">Creating a sensory-driven interface that captures the fluid nature of interstellar phenomena.</h2>
+<div class="prose prose-invert max-w-none text-on-surface-variant font-body leading-relaxed text-lg">
+<p>Project Nebula was born from the desire to push the boundaries of digital curation. We aimed to create a space where the interface doesn't just display content, but enhances the inherent emotional value of the artifacts within.</p>
+</div>
+</div>
+<div class="md:col-span-4 md:col-start-9">
+<div class="bg-surface-container-low rounded-lg p-8 border border-white/5 glass-panel">
+<h3 class="font-label text-xs tracking-widest uppercase text-primary mb-6 flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                        Technical Specs
+                    </h3>
+<ul class="space-y-6 font-label text-sm uppercase tracking-tight text-on-surface">
+<li class="flex justify-between items-end border-b border-outline-variant/20 pb-2">
+<span class="text-slate-500">Role</span>
+<span class="text-right">Lead Design &amp; Art Direction</span>
+</li>
+<li class="flex justify-between items-end border-b border-outline-variant/20 pb-2">
+<span class="text-slate-500">Tech Stack</span>
+<span class="text-right">WebGL / Three.js / React</span>
+</li>
+<li class="flex justify-between items-end border-b border-outline-variant/20 pb-2">
+<span class="text-slate-500">Visuals</span>
+<span class="text-right">Generative Shaders</span>
+</li>
+<li class="flex justify-between items-end border-b border-outline-variant/20 pb-2">
+<span class="text-slate-500">Audio</span>
+<span class="text-right">Spatial Synth Mapping</span>
+</li>
+</ul>
+</div>
+</div>
+</section>
+<!-- Image Gallery Grid -->
+<section class="max-w-[1400px] mx-auto px-8 py-16">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+<!-- Large Feature Image -->
+<div class="md:col-span-8 group relative overflow-hidden rounded-lg">
+<img class="w-full aspect-video object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Futuristic digital art featuring flowing 3D silk-like textures in iridescent cyan and violet against a dark pressurized void" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB7Cx0wPzoB9MyPFfOCPpr-j6jSlkIoYIK0t0v9jabOc3SzuWVZr5gfjUTJPORksxVFbg9E1LtIrc7pgCSpJ3umifeSLKKSCz0wWgHgaF61gqaluGeeqJPpxn8IxltvK4VuiZlhPzN2d5bfOultbF1iZez81FqZEhHSGSsh2oT5xBV2EnutWwT_Y_6e0AyFyvzWSnz8gQHdBxUPM3nkoz_YQyH7oW0mJCl_0pbsUlDL1GXjb-mS2QCTXdPJGa1JN7AgwkJuNcNl7JI"/>
+<div class="absolute bottom-6 right-6 glass-panel px-6 py-4 rounded-xl border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+<p class="font-label text-[10px] tracking-[0.2em] text-primary uppercase">Figure 01</p>
+<p class="font-headline text-white text-sm">Fluid Mesh Dynamics</p>
+</div>
+</div>
+<!-- Secondary Detailed Image -->
+<div class="md:col-span-4 mt-16 group relative overflow-hidden rounded-lg">
+<img class="w-full aspect-[4/5] object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Close up of a glowing blue data visualization map representing high-frequency information flow on a dark reflective surface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGNyis6UQF1WAifesbJ7BDKfv0vf8WPbwNAcUhOO1ZQSGgzwhF_e2GDx_vnrpzJJnSFKQEqpaPc3kj4hyou-nTBCmqoCCSYnknmi_fZErJtQSWGovvKzkqK6KT7NvuXwoMBwkQHrPeAySMzxvS13xGVfINUrsNtGVAk8sQ9tONJNQjZm6rnEW3_uTaPsQsnWMe5VYrI8RaMd8CwBhS3iNNWTYe30pxV7gHAuJsAU_aST5mRov0L6SO4lRCF6VYuzQB_3D8GCitw4s"/>
+<div class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+</div>
+</div>
+</section>
+<!-- The Challenge & Solution -->
+<section class="bg-surface-container-lowest/50 py-32 mt-16 relative overflow-hidden">
+<div class="max-w-7xl mx-auto px-8 md:px-16 grid grid-cols-1 md:grid-cols-2 gap-24 relative z-10">
+<div class="relative">
+<span class="font-headline text-8xl font-black text-white/5 absolute -top-12 -left-8 pointer-events-none select-none">01</span>
+<h3 class="font-headline text-3xl text-white mb-6 uppercase tracking-tight">The Challenge</h3>
+<p class="font-body text-on-surface-variant text-lg leading-relaxed">Most digital portfolios treat high-fidelity assets as static images. The challenge was to break the 2D plane and create a navigation system that feels as though the user is swimming through a pressurized field of light and data without sacrificing performance on mobile devices.</p>
+</div>
+<div class="relative">
+<span class="font-headline text-8xl font-black text-white/5 absolute -top-12 -left-8 pointer-events-none select-none">02</span>
+<h3 class="font-headline text-3xl text-white mb-6 uppercase tracking-tight">The Solution</h3>
+<p class="font-body text-on-surface-variant text-lg leading-relaxed">We developed a custom GPU-accelerated rendering engine that handles real-time refraction. By using adaptive level-of-detail (LOD) systems, we maintained 60fps while displaying 1.2 million particles that respond dynamically to the user's cursor movements and scroll velocity.</p>
+</div>
+</div>
+</section>
+<!-- Secondary Gallery / Bento -->
+<section class="max-w-7xl mx-auto px-8 py-32">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="rounded-lg overflow-hidden h-[400px]">
+<img class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000" data-alt="Abstract black and white architectural detail with sharp lighting and deep shadows creating a futuristic minimalist atmosphere" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_u8--f8P3EIT3eNtkFOG_6Po3Ky3HLbqXOrK-Y5WtKiqD5x915UdvxDbxYBF5QU8SANs09FcntMBnaSFlrtPdLJZTDrRpBdsgd5cm0sQ4idlyP5Xh9YHnGdDF2yFTMVi0t0iYrLPKa8iaI2XllucYnwmIZSu1C8YXCLHjvaDbMPQJXnwH1eIwraM6DBY7bTjj7rJoFfRcKFy48An2AaTP6pPHkSS2J5aNJdv5pe-a7Ek1mbgYBBTpqTYD3epsyOaveE-t_rBYglI"/>
+</div>
+<div class="rounded-lg overflow-hidden h-[400px]">
+<img class="w-full h-full object-cover" data-alt="Vibrant spectrum of liquid light gradients flowing smoothly from electric cyan to deep indigo with high-end digital grain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAM_BvmADvAO2RMj0We40oLfEKFa0VP4nPGB91P1ehRxCyAXupHDcHBKNORVpB10vO5_BkBbEa7hINAwLlYRPO5fK23zQZ3qkx3enuoSqaVvRCSyUnWGCikHqEyjcJ2ZWhXQeeb6wPdWECHicUYQ81rxNah09HvbbGsf9O6BecjAiZ57q_yO7LpNhm-8NfkJJbs7ig7Wms6_Nii8DGaDIssUwo9Zu9aXGEqIyxCYXEWIt6G67u9ws-eBaYrxFl7b2blz4v_wkQAoOU"/>
+</div>
+</div>
+</section>
+<!-- Next Project Navigation -->
+<section class="max-w-7xl mx-auto px-8 pb-32">
+<a class="group block relative w-full h-[400px] rounded-lg overflow-hidden bg-surface-container-high border border-white/5 hover:border-primary/40 transition-all duration-500" href="#">
+<div class="absolute inset-0 z-0">
+<img class="w-full h-full object-cover opacity-30 group-hover:opacity-60 group-hover:scale-105 transition-all duration-1000" data-alt="Abstract golden liquid waves flowing across a deep obsidian background with soft atmospheric lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWlRqfhtc7Rto3FyV1SzRrJxcbYTOxNQWxWXAqKbJxFFgik1bydq8E0f0rZYtDVyTa23LMjmZfmDzF8M4p6wfFUUactGemu2kPqX7jIRUOoT1Y_4opkWwMijK4xu6cvV3w4mbDWvg8yDDcWBshc1zvGwSxfC3vr4qXMoHbobYSm2Le8Kf5bBmWpcyqQEMWfrJP1yZnvJa0Ch5-WL3W5Uwldav32X_lAfrxvL4xEPDILFg36cV6wRynNIe3jCmCe4LermDnmTIuBAQ"/>
+</div>
+<div class="absolute inset-0 bg-gradient-to-r from-background to-transparent z-10"></div>
+<div class="relative z-20 h-full flex flex-col justify-center px-16">
+<p class="font-headline text-primary tracking-[0.3em] text-xs uppercase mb-4 opacity-70 group-hover:opacity-100 transition-opacity">Next Showcase</p>
+<h4 class="font-headline text-6xl md:text-8xl font-bold text-white tracking-tighter uppercase mb-6 group-hover:translate-x-4 transition-transform duration-500">AURORA PRIME</h4>
+<div class="flex items-center gap-4 group-hover:gap-8 transition-all">
+<span class="font-label text-sm text-slate-400 uppercase tracking-widest">Explore Project</span>
+<span class="material-symbols-outlined text-primary group-hover:translate-x-2 transition-transform">arrow_forward</span>
+</div>
+</div>
+</a>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full rounded-t-[3rem] border-t border-white/5 bg-surface-container-low/20 backdrop-blur-md flex flex-col gap-8 w-full px-12 py-16 mt-20">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+<div class="text-lg font-black text-white font-headline tracking-tighter uppercase">ARTIFACT</div>
+<div class="flex flex-wrap gap-8">
+<a class="font-label text-[10px] tracking-[0.1em] uppercase text-slate-500 hover:text-cyan-400 transition-colors duration-300" href="#">Instagram</a>
+<a class="font-label text-[10px] tracking-[0.1em] uppercase text-slate-500 hover:text-cyan-400 transition-colors duration-300" href="#">Twitter</a>
+<a class="font-label text-[10px] tracking-[0.1em] uppercase text-slate-500 hover:text-cyan-400 transition-colors duration-300" href="#">LinkedIn</a>
+<a class="font-label text-[10px] tracking-[0.1em] uppercase text-slate-500 hover:text-cyan-400 transition-colors duration-300" href="#">Terms</a>
+</div>
+</div>
+<div class="w-full h-[1px] bg-white/5"></div>
+<div class="flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="font-label text-[10px] tracking-[0.1em] uppercase text-slate-500">©2024 THE ETHEREAL ARTIFACT. ALL RIGHTS RESERVED.</p>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary-container"></span>
+<p class="font-label text-[10px] tracking-[0.1em] uppercase text-on-surface">System Status: Optimal</p>
+</div>
+</div>
+</footer>
+</body></html>

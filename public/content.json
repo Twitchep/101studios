@@ -101,6 +101,139 @@
       "description": "Work us today",
       "category": "Graphics Design",
       "image_url": "/images/portfolio/11.jpg"
+    },
+    {
+      "id": "1780000000001",
+      "title": "Creative Brand Design",
+      "description": "Stand out with a bold brand identity",
+      "category": "Graphics Design",
+      "image_url": "/images/portfolio/4.jpg"
+    },
+    {
+      "id": "1780000000002",
+      "title": "Eye-Catching Flyer",
+      "description": "Premium flyer designs that grab attention",
+      "category": "Flyers",
+      "image_url": "/images/portfolio/21.jpg"
+    },
+    {
+      "id": "1780000000003",
+      "title": "Modern Banner Design",
+      "description": "Professional banners for any occasion",
+      "category": "Banners",
+      "image_url": "/images/portfolio/22.jpg"
+    },
+    {
+      "id": "1780000000004",
+      "title": "Custom Logo Design",
+      "description": "Unique logos tailored to your brand",
+      "category": "Logos",
+      "image_url": "/images/portfolio/23.jpg"
+    },
+    {
+      "id": "1780000000005",
+      "title": "Premium Design Showcase",
+      "description": "Creative work that speaks for itself",
+      "category": "Graphics Design",
+      "image_url": "/images/portfolio/13 (1).JPG"
+    },
+    {
+      "id": "1780000000006",
+      "title": "Bold Flyer Design",
+      "description": "Make your event unforgettable",
+      "category": "Flyers",
+      "image_url": "/images/portfolio/13 (2).JPG"
+    },
+    {
+      "id": "1780000000010",
+      "title": "Event Flyer Design",
+      "description": "Flyers that bring people together",
+      "category": "Flyers",
+      "image_url": "/images/portfolio/13 (6).JPG"
+    },
+    {
+      "id": "1780000000012",
+      "title": "Brand Identity Design",
+      "description": "Complete brand identity packages",
+      "category": "Logos",
+      "image_url": "/images/portfolio/13 (8).JPG"
+    },
+    {
+      "id": "1780000000022",
+      "title": "Church Flyer Design",
+      "description": "Inspiring flyers for your congregation",
+      "category": "Flyers",
+      "image_url": "/images/portfolio/13 (18).JPG"
+    },
+    {
+      "id": "1780000000029",
+      "title": "GadgetTech Brand Design",
+      "description": "Premium tech brand visual identity",
+      "category": "Graphics Design",
+      "image_url": "/images/portfolio/GadgetTech 1.png"
+    },
+    {
+      "id": "1780000000030",
+      "title": "GadgetTech Promo Flyer",
+      "description": "Tech product promotions that sell",
+      "category": "Flyers",
+      "image_url": "/images/portfolio/GadgetTech 2.png"
+    },
+    {
+      "id": "1780000000031",
+      "title": "GadgetTech Social Post",
+      "description": "Engaging social media content for tech brands",
+      "category": "Graphics Design",
+      "image_url": "/images/portfolio/GadgetTech 3.png"
+    },
+    {
+      "id": "1780000000032",
+      "title": "GadgetTech Product Banner",
+      "description": "Showcase tech products with style",
+      "category": "Banners",
+      "image_url": "/images/portfolio/GadgetTech 4.png"
+    },
+    {
+      "id": "1780000000033",
+      "title": "GadgetTech Logo Design",
+      "description": "Bold logo for a tech-forward brand",
+      "category": "Logos",
+      "image_url": "/images/portfolio/GadgetTech 5.png"
+    },
+    {
+      "id": "1780000000034",
+      "title": "GadgetTech Ad Creative",
+      "description": "High-impact advertising creatives",
+      "category": "Graphics Design",
+      "image_url": "/images/portfolio/GadgetTech 6.png"
+    },
+    {
+      "id": "1780000000035",
+      "title": "GadgetTech Campaign Art",
+      "description": "Full marketing campaign visuals",
+      "category": "Flyers",
+      "image_url": "/images/portfolio/GadgetTech 7.png"
+    },
+    {
+      "id": "1780000000036",
+      "title": "GadgetTech Event Banner",
+      "description": "Tech event banners done right",
+      "category": "Banners",
+      "image_url": "/images/portfolio/GadgetTech 8.png"
+    },
+    {
+      "id": "1780000000037",
+      "title": "GadgetTech Brand Identity",
+      "description": "Complete identity package for tech brands",
+      "category": "Logos",
+      "image_url": "/images/portfolio/GadgetTech 9.png"
+    },
+    {
+      "id": "1780000000038",
+      "title": "GadgetTech Feature Design",
+      "description": "Feature highlights for tech products",
+      "category": "Graphics Design",
+      "image_url": "/images/portfolio/GadgetTech 10.jpg"
     }
   ],
   "products": [
@@ -108,7 +241,7 @@
       "id": "1",
       "title": "True Wireless Headphones",
       "description": "Active noise cancellation\nBass boost",
-      "price": 400,
+      "price": 60,
       "category": "Electronics",
       "image_url": "/images/products/5.png"
     },
@@ -116,7 +249,7 @@
       "id": "2",
       "title": "Super Neat Steam Deck OLED ",
       "description": "Super Neat\n- 512GB SSD\n- 16GB RAM\n- Carrying Case",
-      "price": 450,
+      "price": 7999,
       "category": "Electronics",
       "image_url": "/images/products/8.jpeg"
     },
@@ -124,7 +257,7 @@
       "id": "1774046093090",
       "title": "Hp Elitbook 840 G7 ",
       "description": "- Ryzen 5 4650U (4 0ghz )12CPUs\n- Equivalent to 10th Generation\n- 256gb M.2 Ssd (Upgradeable)\n- 8gb Ddr4 Ram (Upgradable)\n- 14inch Full HD 1080p Ips Display- Antiglare \n- Keyboard Lights \n- Wifi 6\n- Windows 11\n- Bang &Olufson Audio \n- Strong Battery \n- Original Charger\n",
-      "price": 150,
+      "price": 2999,
       "category": "Electronics",
       "image_url": "/images/products/1.jpg"
     },
@@ -132,7 +265,7 @@
       "id": "1774046150300",
       "title": "Neat Dell Inspirion 3505  ",
       "description": "- Ryzen 5 3500U (3.7Ghz Turbo) 8CPUs \n- 256Gb Ddr4 Ram (Upgradable)\n- 8gb ddr4 ram (Upgradable)\n- Randeon Vega Graphics 2gb dedicated \n- 15'6inch Full HD 1080p Ips Display\n- Full Keyboard \n- Good Battery \n- Comes with Charger",
-      "price": 280,
+      "price": 2850,
       "category": "Electronics",
       "image_url": "/images/products/3.jpg"
     },
@@ -140,7 +273,7 @@
       "id": "1774046175891",
       "title": "Very Neat Dell 5420  ",
       "description": "- i5 - 1165G7 (4.70ghz)8CPUs\n- 11th Generation \n- 14inch Micro - Edged HD Display Antiglare\n- 256Gb m.2 ssd (Upgradable) \n- 8gb Ddr4 Ram (Upgradable)\n- Keyboard Lights \n- dts Audio\n- Face ID\n- Windows 11 Pro\n- Excellent Battery Health",
-      "price": 120,
+      "price": 3200,
       "category": "Electronics",
       "image_url": "/images/products/4.jpg"
     },
@@ -148,7 +281,7 @@
       "id": "1774120580859",
       "title": "Neat Lenovo IdeaPad 3 81We ",
       "description": "- i5 - 1035G1 (3.60ghz Turbo)8CPUs\n- 10th Generation \n- 256Gb M.2 Ssd (Upgradeable)\n- 8gb Ddr4 ram (Upgradable)\n- 15inch HD Micro Edged Display\n- Full Keyboard \n- Windows 11\n- Office 21 Pre installed\n- Very Strong Battery\n- Comes with Charger \n",
-      "price": 130,
+      "price": 3400,
       "category": "Electronics",
       "image_url": "/images/products/5.jpg"
     },
@@ -156,7 +289,7 @@
       "id": "1774120937866",
       "title": "Neat Lenovo IdeaPad 3 81We  ",
       "description": " - i5 - 1035G1 (3.60ghz Turbo)8CPUs - 10th Generation  - 256Gb M.2 Ssd (Upgradeable) - 8gb Ddr4 ram (Upgradable) - 15inch HD Micro Edged Display - Full Keyboard  - Windows 11 - Office 21 Pre installed - Very Strong Battery - Comes with Charger ",
-      "price": 140,
+      "price": 1950,
       "category": "Electronics",
       "image_url": "/images/products/10.jpg"
     },
@@ -164,7 +297,7 @@
       "id": "1774120995934",
       "title": "Fairly Used Dell Lattitude 5500   ",
       "description": "- i7 - 8665U (4.80ghz turbo)8CPUs - Most Powerful 8th Gen U varient (15w) CPU. Super Fast - 15inch Full HD 1080p Ips Display  - ❌No Ssd added - ❌ No Ram added - Keyboard Lights - Excellent Battery - Speakers not loud at all. - No hidden faults",
-      "price": 90,
+      "price": 3400,
       "category": "Electronics",
       "image_url": "/images/products/6.jpg"
     },
@@ -172,9 +305,144 @@
       "id": "1774121402812",
       "title": "Lenovo IdeaPad Flex 5 x360 with broken Hinge. ",
       "description": "Touch doesn't work - Screen Works - Fully working board - Ryzen 7 4700U - Equivalent to 11th Gen Core i7-1165G7 - 16Gb Ddr4 Ram 3200mhz - ❌ No Ssd Included - Keyboard Lights  - You can buy the parts, board , fan , battery , etc. Or buy the complete for 👇🏽",
-      "price": 60,
+      "price": 1850,
       "category": "Electronics",
       "image_url": "/images/products/13.jpeg"
+    },
+    {
+      "id": "1780100000001",
+      "title": "Asus Gaming laptop",
+      "description": "Quality laptop to complement your setup",
+      "price": 8500,
+      "category": "Electronics",
+      "isNew": true,
+      "image_url": "/images/products/2.jpg"
+    },
+    {
+      "id": "1780100000002",
+      "title": "Lenovo Thinkpad",
+      "description": "Quality laptop to complement your setup",
+      "price": 2850,
+      "category": "Electronics",
+      "isNew": true,
+      "image_url": "/images/products/7.jpg"
+    },
+    {
+      "id": "1780100000003",
+      "title": "Acer Nitro Gaming Laptop",
+      "description": "Quality laptop to complement your setup",
+      "price": 6999,
+      "category": "Electronics",
+      "isNew": true,
+      "image_url": "/images/products/9.jpg"
+    },
+    {
+      "id": "1780100000004",
+      "title": "Logitech Wireless Mouse",
+      "description": "Quality Mouse to complement your setup",
+      "price": 120,
+      "category": "Electronics",
+      "isNew": true,
+      "image_url": "/images/products/14.jpg"
+    },
+    {
+      "id": "1780100000005",
+      "title": "Playstation 4 Controller",
+      "description": "Quality accessory to complement your setup",
+      "price": 320,
+      "category": "Electronics",
+      "isNew": true,
+      "image_url": "/images/products/15.jpg"
+    },
+    {
+      "id": "1780100000006",
+      "title": "Apple Airpods Pro",
+      "description": "Quality accessory to complement your setup",
+      "price": 180,
+      "category": "Electronics",
+      "isNew": true,
+      "image_url": "/images/products/16.jpg"
+    },
+    {
+      "id": "1780100000007",
+      "title": "External Harddrive case ",
+      "description": "Quality accessory to complement your setup",
+      "price": 150,
+      "category": "Electronics",
+      "isNew": true,
+      "image_url": "/images/products/17.jpg"
+    },
+    {
+      "id": "1780100000008",
+      "title": "Wireless Controller Android/PC/Iphone and SmartTV",
+      "description": "Quality accessory to complement your setup",
+      "price": 200,
+      "category": "Electronics",
+      "isNew": true,
+      "image_url": "/images/products/18.jpg"
+    },
+    {
+      "id": "1780100000009",
+      "title": "Wireless Mircrophone for Vlogs",
+      "description": "Quality accessory to complement your setup",
+      "price": 180,
+      "category": "Electronics",
+      "isNew": true,
+      "image_url": "/images/products/19.jpg"
+    },
+    {
+      "id": "1780100000010",
+      "title": "Wifi Adapter for laptops /PC/ Workstations",
+      "description": "Quality accessory to complement your setup",
+      "price": 150,
+      "category": "Electronics",
+      "isNew": true,
+      "image_url": "/images/products/20.jpg"
+    },
+    {
+      "id": "1780100000011",
+      "title": "PCIe Adapter USB-A / USB-C",
+      "description": "Quality accessory to complement your setup",
+      "price": 120,
+      "category": "Electronics",
+      "isNew": true,
+      "image_url": "/images/products/21.jpg"
+    },
+    {
+      "id": "1780100000012",
+      "title": "lenovo Thinkpad",
+      "description": "Quality accessory to complement your setup",
+      "price": 2800,
+      "category": "Electronics",
+      "isNew": true,
+      "image_url": "/images/products/22.jpg"
+    },
+    {
+      "id": "1780100000013",
+      "title": "lenovo Thinkpad",
+      "description": "Quality accessory to complement your setup",
+      "price": 2500,
+      "category": "Electronics",
+      "isNew": true,
+      "image_url": "/images/products/23.jpg"
+    },
+    {
+      "id": "1780100000014",
+      "title": "Wireless Gaming Keyboard / Mouse with RGB lights ",
+      "description": "Quality accessory to complement your setup",
+      "price": 200,
+      "category": "Electronics",
+      "isNew": true,
+      "image_url": "/images/products/24.jpg"
+    },
+    {
+      "id": "1780100000015",
+      "title": "Asus Laptop",
+      "description": "Quality Asus device — contact us for full specs and pricing",
+      "price": 6500,
+      "category": "Electronics",
+      "isNew": true,
+      "image_url": "/images/products/asus.jpg"
     },
     {
       "id": "clothing1",
@@ -290,8 +558,8 @@
   "announcements": [
     {
       "id": "1774087449467",
-      "title": "ADVERTISEMENT",
-      "content": "Work with us Today",
+      "title": "Welcome to Our Creative World",
+      "content": "Step in, explore the work, and discover bold design crafted to make your brand unforgettable.",
       "image_url": "/images/announce/ad.jpg",
       "is_active": true,
       "start_date": "2026-03-21T21:12:45.082Z",
@@ -304,5 +572,31 @@
       "created_at": "2026-03-21T10:04:09.467Z",
       "updated_at": "2026-03-21T21:13:35.561Z"
     }
-  ]
+  ],
+  "about": {
+    "hero_image": "/images/slider/11.jpg",
+    "title": "About GadgetTech",
+    "subtitle": "Design, fashion, and technology—built for bold brands.",
+    "bio": "GadgetTech is a Ghana-based creative and tech brand helping individuals and businesses stand out through premium design, custom clothing, and reliable gadgets. We combine creativity, quality, and fast delivery to turn ideas into results.",
+    "sections": [
+      {
+        "id": "about1",
+        "title": "Creative Design",
+        "description": "From flyers and logos to banners and social media visuals, we craft attention-grabbing designs that elevate your brand.",
+        "image_url": "/images/portfolio/9.jpg"
+      },
+      {
+        "id": "about2",
+        "title": "Custom Clothing",
+        "description": "Premium custom apparel for brands, teams, and events—designed for comfort, style, and lasting impressions.",
+        "image_url": "/images/clothing/3.png"
+      },
+      {
+        "id": "about3",
+        "title": "Tech Gadgets",
+        "description": "From laptops to accessories, we provide dependable gadgets that are sourced, tested, and delivered nationwide.",
+        "image_url": "/images/products/8.jpeg"
+      }
+    ]
+  }
 }

@@ -1,12 +1,27 @@
-import LazyImage from "./LazyImage";
-
 export default function LoadingSpinner() {
   return (
-    <div className="relative h-24 w-24 rounded-full border-4 border-white/20 border-t-orange-500 animate-spin flex items-center justify-center bg-black/20">
-      <div className="absolute inset-0 rounded-full bg-gradient-to-r from-black/50 via-orange-500/30 to-white/20" />
-      <div className="relative z-10 overflow-hidden rounded-full h-14 w-14 flex items-center justify-center bg-white">
-        <LazyImage src="/images/logo.png" alt="logo" className="h-10 w-10" />
+    <div className="loading-screen-loader-wrap" role="status" aria-live="polite" aria-label="Loading">
+      <div className="loading-screen-loader-shell">
+        <div className="loading-screen-loader">
+          <span>
+            <span />
+            <span />
+            <span />
+            <span />
+          </span>
+          <div className="loading-screen-loader-base">
+            <span />
+            <div className="loading-screen-loader-face" />
+          </div>
+        </div>
+        <div className="loading-screen-longfazers" aria-hidden="true">
+          <span />
+          <span />
+          <span />
+          <span />
+        </div>
       </div>
+      <div className="loading-screen-loader-label">Loading</div>
     </div>
   );
 }

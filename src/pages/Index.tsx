@@ -12,16 +12,18 @@ const ContactSection = lazy(() => import("@/components/ContactSection"));
 const Footer = lazy(() => import("@/components/Footer"));
 
 const Index = () => (
-  <>
+  <div className="aurora-bg min-h-screen">
     <Navbar />
     <main>
       <HeroSection />
       <Suspense fallback={<div className="py-20 flex items-center justify-center"><LoadingSpinner /></div>}>
         <PortfolioSection />
       </Suspense>
-      <Suspense fallback={<div className="py-20 flex items-center justify-center"><LoadingSpinner /></div>}>
-        <ShopSection />
-      </Suspense>
+      <div className="-mt-8 sm:-mt-10 lg:-mt-12">
+        <Suspense fallback={<div className="py-20 flex items-center justify-center"><LoadingSpinner /></div>}>
+          <ShopSection />
+        </Suspense>
+      </div>
       <Suspense fallback={<div className="py-20 flex items-center justify-center"><LoadingSpinner /></div>}>
         <UpdatesSection />
       </Suspense>
@@ -33,7 +35,7 @@ const Index = () => (
     <Suspense fallback={<div className="py-10 flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div></div>}>
       <Footer />
     </Suspense>
-  </>
+  </div>
 );
 
 export default Index;

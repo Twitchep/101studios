@@ -1,6 +1,7 @@
-import { ArrowDown, ShoppingBag, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowDown, ShoppingBag } from "lucide-react";
 import { useEffect, useState, useCallback } from "react";
 import { loadContentWithLiveEditor, useLiveEditorUpdates } from "@/utils/contentLoader";
+import Card from "@/components/card";
 
 interface SliderItem {
   id: string;
@@ -32,7 +33,16 @@ export default function HeroSection() {
       setSlides(data as SliderItem[]);
     } else {
       setSlides([
-        { id: 'default1', title: 'Welcome to Our Brand', subtitle: 'Black, white and orange style + powered by your content', image_url: '/images/portfolio/9.jpg' }
+        { id: 'slide1',  title: 'Where Bold Brands Come Alive',      subtitle: 'We craft striking visuals and memorable experiences that move people.',               image_url: '/images/slider/1.jfif' },
+        { id: 'slide2',  title: 'Design That Speaks First',           subtitle: 'Before a word is read, your brand has already made its impression.',                  image_url: '/images/slider/2.png'  },
+        { id: 'slide3',  title: 'Your Vision, Amplified',             subtitle: 'From concepts to campaigns — we make every brand story unforgettable.',               image_url: '/images/slider/3.jpg'  },
+        { id: 'slide4',  title: 'Built for Growth',                   subtitle: 'Proven design solutions that elevate every brand touchpoint.',                         image_url: '/images/slider/4.jpg'  },
+        { id: 'slide5',  title: 'Elevate Your Brand Identity',        subtitle: 'Logos, flyers, and visuals that set you apart from the crowd.',                       image_url: '/images/slider/5.jfif' },
+        { id: 'slide6',  title: 'Branded Content That Converts',      subtitle: 'Purposeful design crafted to turn attention into action.',                            image_url: '/images/slider/6.jpg'  },
+        { id: 'slide7',  title: 'The Art of Bold Expression',         subtitle: 'We bring your brand narrative to life with every pixel.',                             image_url: '/images/slider/7.jpg'  },
+        { id: 'slide8',  title: 'Stand Out. Stay Relevant.',          subtitle: 'Timeless design meets modern aesthetics for lasting impact.',                         image_url: '/images/slider/8.jfif' },
+        { id: 'slide9',  title: 'Crafted for the Premium Market',     subtitle: 'Luxury-grade visuals for brands that refuse to blend in.',                           image_url: '/images/slider/9.jfif' },
+        { id: 'slide10', title: 'From Sketch to Screen',              subtitle: 'End-to-end design services that make your brand shine at every scale.',               image_url: '/images/slider/10.jpg' },
       ]);
     }
   }, []);
@@ -99,7 +109,7 @@ export default function HeroSection() {
   };
 
   return (
-    <section id="hero" className="relative min-h-screen overflow-hidden section-padding pt-24" aria-label="Homepage hero">
+    <section id="hero" className="relative min-h-screen overflow-hidden section-padding pt-28" aria-label="Homepage hero">
       <img
         src={currentHeroImage}
         alt={currentSlide.title || "Hero slide"}
@@ -110,8 +120,9 @@ export default function HeroSection() {
           }
         }}
       />
-      <div className="absolute inset-0 bg-black/40" />
-      <div className="absolute inset-0 bg-white/15 dark:bg-black/45 backdrop-blur-sm" />
+      <div className="absolute inset-0 bg-black/50" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(249,115,22,0.22),transparent_30%),radial-gradient(circle_at_80%_70%,rgba(249,115,22,0.14),transparent_35%)]" />
+      <div className="absolute inset-0 bg-black/30 backdrop-blur-[2px]" />
       <div className="water-effect" />
 
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -131,43 +142,42 @@ export default function HeroSection() {
         ))}
       </div>
 
-      <div className="relative z-10 max-w-5xl mx-auto text-center py-28 px-4">
-        <p className="text-sm font-medium tracking-widest uppercase text-white/80 mb-4 font-orbitron">◆ Dynamic Slider</p>
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white font-orbitron mb-4">{currentSlide.title}</h1>
-        <p className="text-base md:text-xl text-white/85 max-w-3xl mx-auto mb-8 font-rajdhani">{currentSlide.subtitle}</p>
-
-        <div className="flex items-center justify-center gap-3 mb-8">
-          <button onClick={prevSlide} className="w-10 h-10 rounded-full border border-white/60 text-white/90 hover:bg-white/10 transition">
-            <ChevronLeft size={20} />
-          </button>
-          <button onClick={nextSlide} className="w-10 h-10 rounded-full border border-white/60 text-white/90 hover:bg-white/10 transition">
-            <ChevronRight size={20} />
-          </button>
+      <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-12 px-4 py-20 lg:grid-cols-[minmax(280px,360px)_minmax(0,1fr)] lg:gap-16">
+        <div className="mx-auto lg:mx-0 lg:justify-self-start">
+          <Card
+            prompt="Spotlight"
+            title={currentSlide.title || "Where Bold Brands Come Alive"}
+            subtitle={currentSlide.subtitle || "Designs that make your story unforgettable."}
+          />
         </div>
 
-        <div className="flex justify-center gap-2">
-          {slides.map((slide, idx) => (
-            <span
-              key={slide.id}
-              className={`w-2 h-2 rounded-full ${idx === activeIndex ? 'bg-orange-500' : 'bg-white/50'} transition`}
-              onClick={() => setActiveIndex(idx)}
-            />
-          ))}
-        </div>
+        <div className="hero-slider-panel mx-auto w-full max-w-4xl lg:mx-0 lg:justify-self-end">
+          <div className="hero-slider-panel__dot" />
+          <div className="hero-slider-panel__inner text-center lg:text-left">
+            <div className="hero-slider-panel__ray" />
+            <div className="hero-slider-panel__line hero-slider-panel__line--top" />
+            <div className="hero-slider-panel__line hero-slider-panel__line--left" />
+            <div className="hero-slider-panel__line hero-slider-panel__line--bottom" />
+            <div className="hero-slider-panel__line hero-slider-panel__line--right" />
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-10">
-          <button
-            onClick={() => scrollTo('portfolio')}
-            className="px-6 py-3 rounded-lg bg-white text-black font-bold hover:opacity-90 transition"
-          >
-            View Portfolio
-          </button>
-          <button
-            onClick={() => scrollTo('shop')}
-            className="px-6 py-3 rounded-lg border border-orange-400 text-white hover:bg-orange-500 transition"
-          >
-            View Shop
-          </button>
+            <p className="hero-slider-panel__chip mb-5">
+              <span className="hero-slider-panel__chip-indicator" aria-hidden="true" />
+              <span>Built for Bold Brands</span>
+            </p>
+            <h1 className="hero-slider-panel__title text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold font-orbitron mb-5 leading-[0.92] tracking-tight">
+              {currentSlide.title}
+            </h1>
+            <p className="text-base md:text-2xl text-white/85 max-w-3xl lg:max-w-2xl lg:mx-0 mx-auto mb-9 font-rajdhani">{currentSlide.subtitle}</p>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mt-10">
+              <button onClick={() => scrollTo('portfolio')} className="stitch-btn-primary">
+                See Our Work
+              </button>
+              <button onClick={() => scrollTo('shop')} className="stitch-btn-ghost">
+                Shop Collections
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </section>

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-secondary-fixed-variant": "#5e289b",
+              "on-tertiary-container": "#7213ff",
+              "error": "#ffb4ab",
+              "on-secondary": "#460283",
+              "tertiary-fixed": "#e9ddff",
+              "primary-fixed": "#7df4ff",
+              "surface": "#131318",
+              "surface-container-highest": "#35343a",
+              "surface-tint": "#00dbe9",
+              "surface-bright": "#39383e",
+              "on-tertiary": "#3c0090",
+              "on-tertiary-fixed-variant": "#5700c9",
+              "primary-container": "#00f0ff",
+              "on-primary-fixed": "#002022",
+              "secondary-container": "#602b9d",
+              "on-error": "#690005",
+              "surface-container-low": "#1b1b20",
+              "secondary-fixed-dim": "#dab9ff",
+              "primary-fixed-dim": "#00dbe9",
+              "outline": "#849495",
+              "on-secondary-container": "#cfa7ff",
+              "on-surface": "#e4e1e9",
+              "primary": "#dbfcff",
+              "on-primary": "#00363a",
+              "on-error-container": "#ffdad6",
+              "secondary": "#dab9ff",
+              "tertiary-container": "#e1d2ff",
+              "surface-container": "#1f1f25",
+              "background": "#131318",
+              "outline-variant": "#3b494b",
+              "on-tertiary-fixed": "#23005b",
+              "surface-container-high": "#2a292f",
+              "inverse-on-surface": "#303036",
+              "on-secondary-fixed": "#2a0053",
+              "on-background": "#e4e1e9",
+              "on-surface-variant": "#b9cacb",
+              "inverse-surface": "#e4e1e9",
+              "on-primary-container": "#006970",
+              "tertiary": "#faf3ff",
+              "on-primary-fixed-variant": "#004f54",
+              "surface-container-lowest": "#0e0e13",
+              "secondary-fixed": "#eedbff",
+              "surface-dim": "#131318",
+              "surface-variant": "#35343a",
+              "error-container": "#93000a",
+              "tertiary-fixed-dim": "#d1bcff",
+              "inverse-primary": "#006970"
+            },
+            fontFamily: {
+              "headline": ["Space Grotesk"],
+              "body": ["Inter"],
+              "label": ["Space Grotesk"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+      body {
+        background-color: #131318;
+        color: #e4e1e9;
+        font-family: 'Inter', sans-serif;
+      }
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .aurora-bg {
+        background: radial-gradient(circle at 50% -20%, rgba(0, 240, 255, 0.05), transparent 70%),
+                    radial-gradient(circle at 0% 100%, rgba(218, 185, 255, 0.03), transparent 50%);
+      }
+      .glass-card {
+        background: rgba(42, 41, 47, 0.4);
+        backdrop-filter: blur(24px);
+        border: 1px solid rgba(132, 148, 149, 0.2);
+      }
+      .project-hover:hover .project-overlay {
+        opacity: 1;
+      }
+      .project-hover:hover img {
+        transform: scale(1.05);
+      }
+    </style>
+</head>
+<body class="aurora-bg min-h-screen">
+<!-- TopNavBar Shell -->
+<nav class="fixed top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-7xl rounded-full border border-white/10 bg-surface/40 backdrop-blur-xl flex justify-between items-center px-8 py-3 z-50 shadow-[0_20px_50px_rgba(0,240,255,0.08)]">
+<div class="text-2xl font-bold tracking-tighter text-cyan-400 font-['Space_Grotesk']">ARTIFACT</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-cyan-400 border-b-2 border-cyan-400 pb-1 font-['Space_Grotesk'] tracking-tight text-sm uppercase" href="#">Gallery</a>
+<a class="text-slate-400 hover:text-white transition-colors font-['Space_Grotesk'] tracking-tight text-sm uppercase" href="#">Shop</a>
+<a class="text-slate-400 hover:text-white transition-colors font-['Space_Grotesk'] tracking-tight text-sm uppercase" href="#">About</a>
+<a class="text-slate-400 hover:text-white transition-colors font-['Space_Grotesk'] tracking-tight text-sm uppercase" href="#">Contact</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-slate-400 hover:text-cyan-400 transition-colors">
+<span class="material-symbols-outlined">shopping_cart</span>
+</button>
+<button class="md:hidden text-white">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+</nav>
+<main class="pt-32 pb-20 px-6 max-w-7xl mx-auto">
+<!-- Section Header -->
+<header class="mb-16 flex flex-col md:flex-row md:items-end justify-between gap-8">
+<div class="max-w-2xl">
+<h1 class="text-6xl md:text-8xl font-headline font-bold tracking-tighter text-on-surface leading-none mb-6">
+                    SELECTED <br/> <span class="text-primary-container">WORKS</span>
+</h1>
+<p class="text-on-surface-variant font-body text-lg max-w-md">
+                    Exploring the intersection of high-fidelity aesthetics and functional digital ecosystems.
+                </p>
+</div>
+<!-- Filters: Minimalist Tab Switcher -->
+<div class="flex p-1 bg-surface-container-low rounded-full border border-outline-variant/20 backdrop-blur-md">
+<button class="px-6 py-2 rounded-full bg-primary-container text-on-primary-container font-label text-xs uppercase tracking-widest transition-all">All</button>
+<button class="px-6 py-2 rounded-full text-on-surface-variant hover:text-on-surface font-label text-xs uppercase tracking-widest transition-all">UI/UX</button>
+<button class="px-6 py-2 rounded-full text-on-surface-variant hover:text-on-surface font-label text-xs uppercase tracking-widest transition-all">3D</button>
+<button class="px-6 py-2 rounded-full text-on-surface-variant hover:text-on-surface font-label text-xs uppercase tracking-widest transition-all">Branding</button>
+</div>
+</header>
+<!-- Asymmetrical Project Grid -->
+<section class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+<!-- Project 1: Large Featured -->
+<div class="md:col-span-8 group project-hover relative overflow-hidden glass-card rounded-lg transition-all duration-500">
+<div class="aspect-[16/9] overflow-hidden">
+<img alt="Abstract digital flow" class="w-full h-full object-cover transition-transform duration-700 ease-out" data-alt="abstract digital artwork with flowing neon blue and violet curves against a deep black background, futuristic and cinematic lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-8gjTcskYBI-BCcjDUESpHh77a1aYSxnuretxOrQQCrkufdaNQHQkhPqpc-CYMoUx04Mp7w5PO2oKQRf65RmCshRhG4cDPBjh-xVIuwUglTLkgaGOs3SwjT5IQr3w7njYBWDNTtTyY5SFm5CAQmUmMzNKlJ-PUEt88qLyOw3_la5HpZBs1isuKHgnEaykRFW2Rzvbt3E2oHexaHKQUG_15KxDJaintxSusVW1Z9Ol82uyLLk7qF9IPZdwKR5XR0p9WeW7fUv17pg"/>
+</div>
+<div class="project-overlay absolute inset-0 bg-gradient-to-t from-surface-container-lowest/90 via-transparent to-transparent opacity-0 transition-opacity duration-500 flex flex-col justify-end p-12">
+<span class="font-label text-xs text-primary-container tracking-[0.2em] mb-2 uppercase">UI/UX • Interaction</span>
+<h3 class="text-4xl font-headline font-bold text-white shadow-[0_0_20px_rgba(0,240,255,0.3)]">CYBERNETIC ARCHIVE</h3>
+</div>
+</div>
+<!-- Project 2: Vertical Detail -->
+<div class="md:col-span-4 group project-hover relative overflow-hidden glass-card rounded-lg transition-all duration-500 md:mt-16">
+<div class="aspect-[3/4] overflow-hidden">
+<img alt="3D Glass Artifact" class="w-full h-full object-cover transition-transform duration-700 ease-out" data-alt="hyper-realistic 3D render of a floating glass geometric sculpture with internal refractive light and metallic textures in a void" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9F06AuueO7Ew6X9Eyi_DJnOHaI4WHpdrLsM7emZsZ8UVpHsvYtiNvId9aQmdHtWW5OyVCkFW_dnlKj2xN0K9nDdc8kGIC4zYDatYV2rR9w9guPpLsUV_uAZjaUxqceTbRX6F-QeM1Lkehg8VTVHqqS2m0Q10OwmE8FhSG4vD_NBolnDludI1TzktE-oBJgjjJdwbuGhDoX3SPBvj3W28o6zOqJOgo4gsHwkCZhgefcK_X5CIeq1e0RIXgaLR4r74Mj5b34W6nnVY"/>
+</div>
+<div class="project-overlay absolute inset-0 bg-gradient-to-t from-surface-container-lowest/90 via-transparent to-transparent opacity-0 transition-opacity duration-500 flex flex-col justify-end p-8">
+<span class="font-label text-xs text-secondary-fixed-dim tracking-[0.2em] mb-2 uppercase">3D Visualization</span>
+<h3 class="text-2xl font-headline font-bold text-white">VOID FRAGMENT 01</h3>
+</div>
+</div>
+<!-- Project 3: Wide Layout -->
+<div class="md:col-span-5 group project-hover relative overflow-hidden glass-card rounded-lg transition-all duration-500">
+<div class="aspect-square md:aspect-[4/3] overflow-hidden">
+<img alt="Branding Elements" class="w-full h-full object-cover transition-transform duration-700 ease-out" data-alt="minimalist typographic poster design with high contrast black and white elements and a single neon cyan highlight" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDTB0OmHICY-tNe1NsmbkGNlppUauEETDcaHL7_T-vYe8apC59_ZYtWdgsSK8pwiifSW0pihucc5HT_3B6vLtmCqd3I5TPleqNywIwDkdX8kMotPzjw30oNnGj-N5T_F-YMOBgtgIND_qakZKcxDkm_3dF5k5wP-1wLWnQ7ISsjF9P_0yTU6imVfQoE-f_QMrAkekXTcTvaQaSemXlTbYwvdz14YSdNAdH--R52vaeDXZ7XBf9INx9C_-fkDFlN47Hl9pqYkPyVC6Q"/>
+</div>
+<div class="project-overlay absolute inset-0 bg-gradient-to-t from-surface-container-lowest/90 via-transparent to-transparent opacity-0 transition-opacity duration-500 flex flex-col justify-end p-8">
+<span class="font-label text-xs text-primary-container tracking-[0.2em] mb-2 uppercase">Branding</span>
+<h3 class="text-2xl font-headline font-bold text-white">NEO-MONOLITH</h3>
+</div>
+</div>
+<!-- Project 4: High Impact -->
+<div class="md:col-span-7 group project-hover relative overflow-hidden glass-card rounded-lg transition-all duration-500 md:-mt-32">
+<div class="aspect-video overflow-hidden">
+<img alt="Experimental Interface" class="w-full h-full object-cover transition-transform duration-700 ease-out" data-alt="futuristic dashboard interface with glass panels, glowing blue data visualizations, and high-end editorial typography" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCbZkVULd4UQVQc_tlpgZymD0WtPoFsE1dKmTi08QdQskfpLPKdw2DaLP8OfbDh8khtQOp3VK6-_DMpDDhV5IJ_dTMi3EKKknm9qEgpAlfoe-_usPWXHYI6f6LqdsYlc5g0YGSQIkBCvIXK8E_mL6tCMyPzH1tqoYr_Ev_FspNeiAxg868-zfM9rMEQoWjMFKn1oaQVld2zeiM6jt34yeW840SGm1-NJsNnKdEg9F2sfzcmdVxVZlSil7aTyptNgRuxchx458Q6nCk"/>
+</div>
+<div class="project-overlay absolute inset-0 bg-gradient-to-t from-surface-container-lowest/90 via-transparent to-transparent opacity-0 transition-opacity duration-500 flex flex-col justify-end p-10">
+<span class="font-label text-xs text-primary-container tracking-[0.2em] mb-2 uppercase">UI/UX • Product</span>
+<h3 class="text-3xl font-headline font-bold text-white shadow-[0_0_20px_rgba(0,240,255,0.3)]">OS-01 INTERFACE</h3>
+</div>
+</div>
+<!-- Project 5: Small Detail -->
+<div class="md:col-span-4 group project-hover relative overflow-hidden glass-card rounded-lg transition-all duration-500">
+<div class="aspect-square overflow-hidden">
+<img alt="Graphic Motion" class="w-full h-full object-cover transition-transform duration-700 ease-out" data-alt="vibrant abstract gradient background with silk-like textures in deep magenta and electric blue, soft glowing edges" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCryGdvp_pWe1EtqAMZWwfYs3pwMElCgPRrCF3Nhjjhkrf7vQ8XvfMuy0p6wWzQXzQX7luokMt6LJIJtdoMG2Xkz54g7J9o0fC05-B2xZkU0TkFv-JUEHQ8VEkAZQvKeZBxRREZ58jGHOFrVj0AcaYRLPnnoIFUu9DwrnWMbMmbVRnzJj7cwu39nsBMqp8QV2mb0ADkZfR70BlbtGXaIBuBgRor-ZKPno_fkpN16JePa_dult_lzg4Dl2qOL2Frobtgp38Q-hz_S_U"/>
+</div>
+<div class="project-overlay absolute inset-0 bg-gradient-to-t from-surface-container-lowest/90 via-transparent to-transparent opacity-0 transition-opacity duration-500 flex flex-col justify-end p-8">
+<span class="font-label text-xs text-secondary-fixed-dim tracking-[0.2em] mb-2 uppercase">Motion</span>
+<h3 class="text-2xl font-headline font-bold text-white">FLUID ETHER</h3>
+</div>
+</div>
+<!-- Project 6: Final Capstone -->
+<div class="md:col-span-8 group project-hover relative overflow-hidden glass-card rounded-lg transition-all duration-500">
+<div class="aspect-[21/9] overflow-hidden">
+<img alt="Panoramic design" class="w-full h-full object-cover transition-transform duration-700 ease-out" data-alt="cinematic wide shot of a futuristic minimalist architecture interior with cold blue lighting and reflective dark floors" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB7SnCNbB5ry75wXT_h7tJxEC6Xqsd9N7c4CNWLAUcKK3QOVKrRfW-TuOCic_j35xjFn5tRehmnEKSHhvWVsXvFOqKFehQbBPwsah5ypV7KUeZ9-SBZUSMeC387hc5AFEnUiDLuEXAVOy7z1LNpwp4EBzdMSe0WEqMLYCK6VrAHWJSkbdmxh5oj-HadrfvIzXiDARTNUylMOIoxeaJUHBVdwcmaddDCTlBjeON_CoJBNejTdvPAOFFwR0PUsfH66ya6q0rdGpLFQ2M"/>
+</div>
+<div class="project-overlay absolute inset-0 bg-gradient-to-t from-surface-container-lowest/90 via-transparent to-transparent opacity-0 transition-opacity duration-500 flex flex-col justify-end p-12">
+<span class="font-label text-xs text-primary-container tracking-[0.2em] mb-2 uppercase">Concept • Space</span>
+<h3 class="text-4xl font-headline font-bold text-white">LUMINAL PAVILION</h3>
+</div>
+</div>
+</section>
+<!-- CTA Section -->
+<section class="mt-32 text-center py-20 bg-surface-container-low rounded-[3rem] border border-white/5 relative overflow-hidden">
+<div class="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-full bg-primary/5 blur-[120px] rounded-full"></div>
+<h2 class="text-4xl md:text-6xl font-headline font-bold mb-8 relative z-10">HAVE A VISION?</h2>
+<button class="relative z-10 px-10 py-4 bg-gradient-to-r from-primary to-primary-container text-on-primary font-label font-bold rounded-full hover:shadow-[0_0_30px_rgba(0,240,255,0.4)] hover:scale-105 transition-all duration-300 uppercase tracking-widest text-sm">
+                Start a Project
+            </button>
+</section>
+</main>
+<!-- Footer Shell -->
+<footer class="w-full rounded-t-[3rem] border-t border-white/5 bg-surface-container-low/20 backdrop-blur-md flex flex-col gap-8 px-12 py-16 mt-20">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-12">
+<div class="text-lg font-black text-white font-['Space_Grotesk'] tracking-tighter">ARTIFACT</div>
+<div class="flex flex-wrap gap-8">
+<a class="text-slate-500 hover:text-cyan-400 transition-colors duration-300 font-['Space_Grotesk'] text-[10px] tracking-[0.1em] uppercase" href="#">Instagram</a>
+<a class="text-slate-500 hover:text-cyan-400 transition-colors duration-300 font-['Space_Grotesk'] text-[10px] tracking-[0.1em] uppercase" href="#">Twitter</a>
+<a class="text-slate-500 hover:text-cyan-400 transition-colors duration-300 font-['Space_Grotesk'] text-[10px] tracking-[0.1em] uppercase" href="#">LinkedIn</a>
+<a class="text-slate-500 hover:text-cyan-400 transition-colors duration-300 font-['Space_Grotesk'] text-[10px] tracking-[0.1em] uppercase" href="#">Terms</a>
+</div>
+</div>
+<div class="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="text-slate-500 font-['Space_Grotesk'] text-[10px] tracking-[0.1em] uppercase">©2024 THE ETHEREAL ARTIFACT. ALL RIGHTS RESERVED.</p>
+<div class="flex gap-4">
+<div class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></div>
+<span class="text-slate-400 font-['Space_Grotesk'] text-[10px] tracking-[0.1em] uppercase">SYSTEMS ONLINE</span>
+</div>
+</div>
+</footer>
+</body></html>

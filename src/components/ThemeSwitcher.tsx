@@ -1,86 +1,36 @@
-import { useState } from "react";
-import { Palette, ChevronDown, Sparkles } from "lucide-react";
-import { useTheme, Theme } from "@/hooks/useTheme";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-
-const themeNames: Record<Theme, string> = {
-  light: "Light",
-  dark: "Dark",
-  christmas: "Christmas",
-  halloween: "Halloween",
-  newyear: "New Year",
-  easter: "Easter",
-  summer: "Summer",
-  autumn: "Autumn",
-};
-
-const themeEmojis: Record<Theme, string> = {
-  light: "☀️",
-  dark: "🌙",
-  christmas: "🎄",
-  halloween: "🎃",
-  newyear: "🎉",
-  easter: "🐰",
-  summer: "🏖️",
-  autumn: "🍂",
-};
+import { useTheme } from "@/hooks/useTheme";
 
 export function ThemeSwitcher() {
-  const { theme, setTheme, getCurrentEventTheme } = useTheme();
-  const themes = ['light', 'dark'] as const;
-  const [isOpen, setIsOpen] = useState(false);
+  const { theme, setTheme } = useTheme();
+  const isDark = theme === "dark";
 
-  const handleAutoDetect = () => {
-    const eventTheme = getCurrentEventTheme();
-    setTheme(eventTheme);
-    setIsOpen(false);
+  const toggleTheme = () => {
+    setTheme(isDark ? "light" : "dark");
   };
 
   return (
-    <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant="ghost"
-          size="sm"
-          className="h-9 w-9 px-0"
-          aria-label="Switch theme"
-        >
-          <Palette className="h-4 w-4" />
-          <ChevronDown className="h-3 w-3 ml-1" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-40">
-        <DropdownMenuItem onClick={handleAutoDetect} className="cursor-pointer">
-          <Sparkles className="h-4 w-4 mr-2" />
-          Auto-detect Event
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        {themes.map((themeOption) => (
-          <DropdownMenuItem
-            key={themeOption}
-            onClick={() => {
-              setTheme(themeOption);
-              setIsOpen(false);
-            }}
-            className={`cursor-pointer ${
-              theme === themeOption ? "bg-accent" : ""
-            }`}
-          >
-            <span className="mr-2">{themeEmojis[themeOption]}</span>
-            {themeNames[themeOption]}
-            {theme === themeOption && (
-              <span className="ml-auto text-xs">✓</span>
-            )}
-          </DropdownMenuItem>
-        ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <button
+      type="button"
+      onClick={toggleTheme}
+      aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
+      aria-pressed={isDark}
+      className="navbar-button group relative h-[3em] w-[6em] rounded-full bg-[hsl(0,0%,7%)] shadow-[0px_2px_4px_0px_rgb(18,18,18,0.25),0px_4px_8px_0px_rgb(18,18,18,0.35)]"
+    >
+      <span className="absolute inset-[0.1em] rounded-full border-[1px] border-[hsl(0,0%,25%)]" />
+
+      <div className="absolute left-[0.5em] top-1/2 flex h-[2em] w-[2em] -translate-y-1/2 items-center justify-center rounded-full bg-white shadow-[inset_0px_2px_2px_0px_hsl(0,0%,85%)]">
+        <div className="h-[1.5em] w-[1.5em] rounded-full bg-[hsl(0,0%,7%)] shadow-[0px_2px_2px_0px_hsl(0,0%,85%)]" />
+      </div>
+
+      <div className="absolute right-[0.5em] top-1/2 flex h-[2em] -translate-y-1/2 items-center justify-center text-[0.9em] text-[hsl(0,0%,72%)]">
+        {isDark ? "🌙" : "☀️"}
+      </div>
+
+      <span className={`absolute left-[0.25em] top-1/2 flex h-[2.5em] w-[2.5em] -translate-y-1/2 items-center justify-center rounded-full bg-[rgb(26,26,26)] shadow-[inset_4px_4px_4px_0px_rgba(64,64,64,0.25),inset_-4px_-4px_4px_0px_rgba(16,16,16,0.5)] duration-300 ${isDark ? "left-[calc(100%-2.75em)]" : "left-[0.25em]"}`}>
+        <span className="relative h-full w-full rounded-full">
+          <span className="absolute inset-[0.1em] rounded-full border-[1px] border-[hsl(0,0%,50%)]" />
+        </span>
+      </span>
+    </button>
   );
 }

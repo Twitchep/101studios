@@ -1,10 +1,10 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { ShoppingCart, ChevronDown, Eye, Maximize2 } from "lucide-react";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { useLazyLoad } from "@/hooks/useLazyLoad";
 import { useCart } from "@/contexts/CartContext";
 import { loadContentWithLiveEditor, useLiveEditorUpdates } from "@/utils/contentLoader";
-import CartSidebar from "./CartSidebar";
+import { useLocation, useNavigate } from "react-router-dom";
 import LazyImage from "./LazyImage";
 
 interface Product {
@@ -18,20 +18,24 @@ interface Product {
   image_urls?: string[];
   sizes?: string[];
   selectedSize?: string;
+  isNew?: boolean;
 }
 
 const WHATSAPP_NUMBER = "+233548656980"; // Replace with your number
 
 export default function ShopSection() {
   const { ref, isVisible } = useScrollReveal();
+  const location = useLocation();
+  const navigate = useNavigate();
   const [products, setProducts] = useState<Product[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
-  const [isCartOpen, setIsCartOpen] = useState(false);
   const { cart, addToCart, getTotal } = useCart();
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [selectedSize, setSelectedSize] = useState<string>('');
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
+  const [activeTile, setActiveTile] = useState<number | null>(null);
+  const [tileOffset, setTileOffset] = useState(0);
 
   const filteredProducts = selectedCategory === 'All' ? products : products.filter(p => p.category === selectedCategory);
   const { displayedItems, hasMore, loadMore, totalCount, displayedCount } = useLazyLoad(filteredProducts, {
@@ -50,11 +54,30 @@ export default function ShopSection() {
 
   useLiveEditorUpdates(fetchProducts);
 
+  useEffect(() => {
+    const id = setInterval(() => setTileOffset(prev => prev + 1), 3000);
+    return () => clearInterval(id);
+  }, []);
+
   const placeholders: Product[] = products.length > 0 ? products : [
-    { id: "1", title: "Wireless Earbuds Pro", description: "Active noise cancellation with 36-hour battery.", price: 79.99, category: "Electronics", image_url: null },
-    { id: "2", title: "Mechanical Keyboard", description: "Hot-swappable switches, RGB backlit, compact 75%.", price: 129.99, category: "Electronics", image_url: null },
-    { id: "3", title: "USB-C Hub 7-in-1", description: "HDMI 4K, USB 3.0, SD card reader, PD charging.", price: 49.99, category: "Electronics", image_url: null },
-    { id: "4", title: "Smart LED Desk Lamp", description: "Adjustable color temperature, wireless charging base.", price: 64.99, category: "Electronics", image_url: null },
+    { id: "1",  title: "Wireless Earbuds Pro",          description: "Active noise cancellation, rich bass, 36-hour battery life.",             price: 320,  category: "Electronics", image_url: "/images/products/1.jpg"   },
+    { id: "2",  title: "Smart LED Desk Lamp",            description: "Warm-to-cool colour temperature with built-in wireless charging base.",   price: 180,  category: "Electronics", image_url: "/images/products/2.jpg"   },
+    { id: "3",  title: "USB-C Hub 7-in-1",               description: "HDMI 4K, 3× USB 3.0, SD card reader, 100W PD fast charging.",           price: 130,  category: "Electronics", image_url: "/images/products/3.jpg"   },
+    { id: "4",  title: "Mechanical Keyboard",            description: "Hot-swappable RGB switches, compact 75% layout, aluminium frame.",       price: 450,  category: "Electronics", image_url: "/images/products/4.jpg"   },
+    { id: "5",  title: "Portable Bluetooth Speaker",    description: "360° surround sound, IPX7 waterproof, 20-hour playtime.",                price: 200,  category: "Electronics", image_url: "/images/products/5.jpg"   },
+    { id: "6",  title: "Gaming Mouse RGB",               description: "16 000 DPI optical sensor, 7 programmable buttons, lightweight design.", price: 170,  category: "Electronics", image_url: "/images/products/5.png"   },
+    { id: "7",  title: "Phone Stand & Charger",          description: "Adjustable alloy mount with 15W Qi wireless fast charging.",             price: 95,   category: "Electronics", image_url: "/images/products/6.jpg"   },
+    { id: "8",  title: "Smart Watch Series X",           description: "Health & GPS tracking, AMOLED display, 7-day battery life.",             price: 550,  category: "Electronics", image_url: "/images/products/7.jpg"   },
+    { id: "9",  title: "Noise-Cancelling Headphones",   description: "Studio-grade sound, 30-hour ANC battery, foldable travel design.",      price: 490,  category: "Electronics", image_url: "/images/products/8.jpeg"  },
+    { id: "10", title: "4K Webcam HD Pro",               description: "Crystal-clear video calls with auto-focus and built-in ring light.",     price: 220,  category: "Electronics", image_url: "/images/products/9.jpg"   },
+    { id: "11", title: "Mini Portable Projector",        description: "1080p HD projection up to 150-inch screen, 3-hour runtime.",            price: 780,  category: "Electronics", image_url: "/images/products/10.jpg"  },
+    { id: "12", title: "USB Fast Charging Pad",          description: "Multi-device simultaneous wireless charging, 20W output.",              price: 85,   category: "Electronics", image_url: "/images/products/13.jpeg" },
+    { id: "13", title: "ASUS Gaming Laptop",             description: "RTX 4060, 144Hz IPS display, 16GB RAM, 512GB NVMe SSD.",               price: 5500, category: "Electronics", image_url: "/images/products/asus.jpg" },
+    { id: "14", title: "Oversized Premium Hoodie",       description: "Heavyweight cotton blend, dropped shoulders, embroidered logo.",        price: 180,  category: "Clothing",    image_url: "/images/clothing/1.jpg"   },
+    { id: "15", title: "Graphic Tee Collection",         description: "Limited-run screen-print tees, 100% organic cotton, unisex sizing.",   price: 75,   category: "Clothing",    image_url: "/images/clothing/2.png"   },
+    { id: "16", title: "Cargo Pants — Street Edition",  description: "Multi-pocket utility cargo trousers with tapered slim fit.",            price: 160,  category: "Clothing",    image_url: "/images/clothing/3.png"   },
+    { id: "17", title: "Streetwear Bomber Jacket",       description: "Satin-finish reversible bomber, minimal branding, relaxed fit.",       price: 280,  category: "Clothing",    image_url: "/images/clothing/4.png"   },
+    { id: "18", title: "Monochrome Fit Set",             description: "Matching jogger and crop-top set in muted neutral tones.",             price: 210,  category: "Clothing",    image_url: "/images/clothing/5.png"   },
   ];
 
   const itemsToShow = filteredProducts.length > 0 ? displayedItems : placeholders;
@@ -121,125 +144,239 @@ export default function ShopSection() {
       `Hi! I'd like to order: ${productNames}. Total: GHS ${total.toFixed(2)}.`
     );
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`, "_blank");
-    setIsCartOpen(false);
   };
 
+  const stackedImages = useMemo(() => {
+    const allImages = [...products, ...placeholders]
+      .map((product) => product.image_url)
+      .filter((image): image is string => !!image);
+
+    const pool = allImages.length >= 5 ? allImages : [
+      ...allImages,
+      '/images/products/1.jpg',
+      '/images/products/4.jpg',
+      '/images/products/7.jpg',
+      '/images/clothing/4.png',
+      '/images/products/asus.jpg',
+    ];
+
+    const unique = Array.from(new Set(pool));
+    const start = tileOffset % unique.length;
+    const wrap = (i: number) => unique[(start + i) % unique.length];
+    return [wrap(0), wrap(1), wrap(2), wrap(3), wrap(4)];
+  }, [products, tileOffset]);
+
+  const openShopPage = () => {
+    if (location.pathname !== '/shop') {
+      navigate('/shop');
+      return;
+    }
+    document.getElementById('shop-catalog')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  const clearActiveTileIfMouse = (pointerType: string) => {
+    if (pointerType === 'mouse') {
+      setActiveTile(null);
+    }
+  };
+
+  const showCatalog = location.pathname === '/shop' || location.pathname === '/legacy/shop';
+
   return (
-    <section id="shop" className="section-padding bg-secondary/30" ref={ref}>
+    <section id="shop" className="section-padding" ref={ref}>
       <div className="max-w-7xl mx-auto">
-        <div className={`text-center mb-12 transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
-          <p className="text-sm font-medium tracking-widest uppercase text-primary mb-3 font-orbitron">◆ Shop ◆</p>
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-balance font-orbitron text-primary">Products</h2>
-          <div className="mt-4 flex flex-wrap justify-center items-center gap-3 text-sm">
-            <span className="font-rajdhani">Category:</span>
-            <div className="flex gap-2">
-              {['All', 'Electronics', 'Clothing'].map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setSelectedCategory(cat)}
-                  className={`px-3 py-1 rounded-lg border font-rajdhani transition-colors ${
-                    selectedCategory === cat
-                      ? 'bg-primary text-primary-foreground border-primary'
-                      : 'border-border bg-secondary/50 hover:bg-primary/20 hover:text-primary'
-                  }`}
+        <div className={`stitch-panel p-6 md:p-8 mb-12 transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
+          <div className="text-center mb-6">
+            <p className="stitch-chip mb-4">Shop Preview</p>
+            <h3 className="text-2xl sm:text-4xl font-bold tracking-tight font-orbitron text-foreground">Curated Product Picks</h3>
+            <p className="mt-3 text-sm md:text-base text-white/80 font-rajdhani">Discover standout pieces designed to upgrade your everyday look.</p>
+          </div>
+
+          <button
+            type="button"
+            onClick={openShopPage}
+            onPointerLeave={(event) => clearActiveTileIfMouse(event.pointerType)}
+            className="group relative mx-auto block w-full max-w-5xl h-[340px] sm:h-[380px]"
+            aria-label="Open shopping page"
+          >
+            <div
+              onPointerEnter={() => setActiveTile(0)}
+              onPointerDown={() => setActiveTile(0)}
+              onPointerUp={(event) => clearActiveTileIfMouse(event.pointerType)}
+              onPointerCancel={(event) => clearActiveTileIfMouse(event.pointerType)}
+              className={`absolute left-[7%] sm:left-[12%] top-[54%] -translate-y-1/2 h-44 w-44 sm:h-52 sm:w-52 rounded-[1.4rem] overflow-hidden border border-white/20 bg-black/35 backdrop-blur-xl shadow-2xl transition-all duration-400 ${activeTile === 0 ? '-translate-x-6 rotate-[-14deg] scale-[1.1]' : 'rotate-[-8deg] hover:-translate-x-5 hover:rotate-[-12deg] hover:scale-[1.07]'}`}
+            >
+              <LazyImage src={stackedImages[0]} alt="Shop preview left one" className="h-full w-full object-cover" />
+            </div>
+            <div
+              onPointerEnter={() => setActiveTile(1)}
+              onPointerDown={() => setActiveTile(1)}
+              onPointerUp={(event) => clearActiveTileIfMouse(event.pointerType)}
+              onPointerCancel={(event) => clearActiveTileIfMouse(event.pointerType)}
+              className={`absolute left-[20%] sm:left-[26%] top-[50%] -translate-y-1/2 h-44 w-44 sm:h-52 sm:w-52 rounded-[1.4rem] overflow-hidden border border-white/20 bg-black/35 backdrop-blur-xl shadow-2xl transition-all duration-400 ${activeTile === 1 ? '-translate-x-3 rotate-[-7deg] scale-[1.09]' : 'rotate-[-2deg] hover:-translate-x-2 hover:rotate-[-5deg] hover:scale-[1.06]'}`}
+            >
+              <LazyImage src={stackedImages[1]} alt="Shop preview left two" className="h-full w-full object-cover" />
+            </div>
+            <div
+              onPointerEnter={() => setActiveTile(2)}
+              onPointerDown={() => setActiveTile(2)}
+              onPointerUp={(event) => clearActiveTileIfMouse(event.pointerType)}
+              onPointerCancel={(event) => clearActiveTileIfMouse(event.pointerType)}
+              className={`absolute right-[20%] sm:right-[26%] top-[50%] -translate-y-1/2 h-44 w-44 sm:h-52 sm:w-52 rounded-[1.4rem] overflow-hidden border border-white/20 bg-black/35 backdrop-blur-xl shadow-2xl transition-all duration-400 ${activeTile === 2 ? 'translate-x-3 rotate-[7deg] scale-[1.09]' : 'rotate-[2deg] hover:translate-x-2 hover:rotate-[5deg] hover:scale-[1.06]'}`}
+            >
+              <LazyImage src={stackedImages[2]} alt="Shop preview right one" className="h-full w-full object-cover" />
+            </div>
+            <div
+              onPointerEnter={() => setActiveTile(3)}
+              onPointerDown={() => setActiveTile(3)}
+              onPointerUp={(event) => clearActiveTileIfMouse(event.pointerType)}
+              onPointerCancel={(event) => clearActiveTileIfMouse(event.pointerType)}
+              className={`absolute right-[7%] sm:right-[12%] top-[54%] -translate-y-1/2 h-44 w-44 sm:h-52 sm:w-52 rounded-[1.4rem] overflow-hidden border border-white/20 bg-black/35 backdrop-blur-xl shadow-2xl transition-all duration-400 ${activeTile === 3 ? 'translate-x-6 rotate-[14deg] scale-[1.1]' : 'rotate-[8deg] hover:translate-x-5 hover:rotate-[12deg] hover:scale-[1.07]'}`}
+            >
+              <LazyImage src={stackedImages[3]} alt="Shop preview right two" className="h-full w-full object-cover" />
+            </div>
+
+            <div
+              onPointerEnter={() => setActiveTile(4)}
+              onPointerDown={() => setActiveTile(4)}
+              onPointerUp={(event) => clearActiveTileIfMouse(event.pointerType)}
+              onPointerCancel={(event) => clearActiveTileIfMouse(event.pointerType)}
+              className={`absolute left-1/2 top-[23%] -translate-x-1/2 h-48 w-48 sm:h-56 sm:w-56 rounded-[1.6rem] overflow-hidden border border-primary/40 bg-black/40 backdrop-blur-xl shadow-[0_20px_60px_rgba(249,115,22,0.35)] transition-all duration-400 ${activeTile === 4 ? '-translate-y-3 scale-[1.14] rotate-0' : 'hover:-translate-y-2 hover:scale-[1.1]'}`}
+            >
+              <LazyImage src={stackedImages[4]} alt="Shop preview center" className="h-full w-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-transparent" />
+              <div className="absolute bottom-3 left-3 right-3 text-center">
+                <p className="text-[10px] uppercase tracking-[0.18em] text-primary font-orbitron">Open Shop</p>
+              </div>
+            </div>
+
+            <div className="absolute inset-x-0 bottom-0 flex justify-center">
+              <span className="stitch-btn-primary">Go to Shopping Page</span>
+            </div>
+          </button>
+        </div>
+
+        {showCatalog && (
+          <>
+            <div className={`text-center mb-12 transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
+              <p className="stitch-chip mb-4">Shop</p>
+              <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-balance font-orbitron text-foreground">Products</h2>
+              <div className="mt-4 flex flex-wrap justify-center items-center gap-3 text-sm">
+                <span className="font-rajdhani">Category:</span>
+                <div className="flex gap-2">
+                  {['All', 'Electronics', 'Clothing'].map((cat) => (
+                    <button
+                      key={cat}
+                      onClick={() => setSelectedCategory(cat)}
+                      className={`px-3 py-1.5 rounded-full border text-xs uppercase tracking-[0.12em] font-orbitron transition-colors ${
+                        selectedCategory === cat
+                          ? 'bg-primary text-primary-foreground border-primary'
+                          : 'border-white/20 bg-black/35 hover:bg-black/50 hover:text-primary'
+                      }`}
+                    >
+                      {cat}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <p className="text-sm text-muted-foreground mt-2">Showing {displayedCount} of {totalCount} products</p>
+            </div>
+
+            <div id="shop-catalog" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {itemsToShow.map((product, i) => (
+                <div
+                  key={product.id}
+                  className={`stitch-panel transition-all duration-500 hover:-translate-y-2 hover:border-primary/40 hover:shadow-[0_24px_70px_rgba(249,115,22,0.22)] fade-up-stagger ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
+                  style={{ transitionDelay: `${150 + i * 80}ms`, animationDelay: `${150 + i * 80}ms` }}
                 >
-                  {cat}
-                </button>
+                  <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.18),transparent_32%),radial-gradient(circle_at_bottom_left,rgba(249,115,22,0.18),transparent_28%)]" />
+                  <div className="aspect-square bg-gradient-to-br from-primary/10 via-white/5 to-accent/10 flex items-center justify-center overflow-hidden relative">
+                    {product.image_url ? (
+                      <LazyImage src={product.image_url} alt={product.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                    ) : (
+                      <ShoppingCart size={40} className="text-primary/25" />
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent opacity-80" />
+                    <div className="absolute left-3 right-3 top-3 flex items-center justify-between opacity-0 transition-all duration-300 group-hover:opacity-100">
+                      <button
+                        onClick={() => setLightboxImage(getProductImages(product)[0] ?? null)}
+                        className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/40 px-3 py-2 text-xs font-medium text-white backdrop-blur-xl transition hover:bg-black/55"
+                      >
+                        <Maximize2 size={14} />
+                        View Image
+                      </button>
+                      <div className="rounded-full border border-primary/30 bg-primary/15 px-3 py-1 text-[11px] text-white backdrop-blur-xl">
+                        {product.category}
+                      </div>
+                    </div>
+                    {product.isNew && (
+                      <div className="absolute left-3 top-3 rounded-full bg-green-500 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-white shadow-md font-orbitron">
+                        New
+                      </div>
+                    )}
+                    <div className="absolute inset-x-0 bottom-3 flex justify-center px-3 opacity-0 transition-all duration-300 group-hover:opacity-100">
+                      <button
+                        onClick={() => handleProductAction(product)}
+                        className="w-full max-w-[180px] rounded-2xl bg-gradient-to-r from-primary to-orange-400 px-4 py-2.5 text-sm font-medium text-primary-foreground shadow-lg shadow-primary/30 transition-all duration-300 hover:scale-[1.02] font-orbitron"
+                      >
+                        {product.category === 'Clothing' ? 'Choose Size' : 'Add to Cart'}
+                      </button>
+                    </div>
+                  </div>
+                  <div className="relative p-5 text-left">
+                    <div className="mb-3 flex items-start justify-between gap-3">
+                      <h3 className="font-semibold text-sm line-clamp-2 font-rajdhani text-foreground">{product.title}</h3>
+                      <span className="shrink-0 rounded-full border border-primary/20 bg-primary/10 px-2.5 py-1 text-[11px] font-medium text-primary">
+                        {product.category}
+                      </span>
+                    </div>
+                    <p className="text-xs text-muted-foreground mb-4 text-pretty line-clamp-3">{product.description}</p>
+                    <div className="flex items-center justify-between gap-3">
+                      <span className="text-lg font-bold text-primary tabular-nums font-space-mono">{formatPrice(product.price)}</span>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => openProductModal(product)}
+                          className="rounded-xl border border-white/10 bg-white/10 px-3 py-2 text-xs font-medium text-foreground backdrop-blur-xl transition-all duration-300 hover:border-primary/30 hover:bg-white/15 hover:shadow-lg hover:shadow-primary/10 active:scale-95 font-rajdhani"
+                        >
+                          View
+                        </button>
+                        <button
+                          onClick={() => handleProductAction(product)}
+                          className="rounded-xl bg-gradient-to-r from-primary to-orange-400 px-3 py-2 text-xs font-medium text-primary-foreground shadow-lg shadow-primary/20 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-primary/40 active:scale-95 font-rajdhani"
+                        >
+                          {product.category === 'Clothing' ? 'Sizes' : 'Add'}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               ))}
             </div>
-          </div>
-          <p className="text-sm text-muted-foreground mt-2">Showing {displayedCount} of {totalCount} products</p>
-        </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {itemsToShow.map((product, i) => (
-            <div
-              key={product.id}
-              className={`relative overflow-hidden rounded-[28px] border border-white/10 bg-white/10 dark:bg-white/5 backdrop-blur-2xl shadow-[0_14px_45px_rgba(0,0,0,0.16)] transition-all duration-500 hover:-translate-y-2 hover:border-primary/40 hover:shadow-[0_24px_70px_rgba(249,115,22,0.22)] fade-up-stagger ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
-              style={{ transitionDelay: `${150 + i * 80}ms`, animationDelay: `${150 + i * 80}ms` }}
-            >
-              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.18),transparent_32%),radial-gradient(circle_at_bottom_left,rgba(249,115,22,0.18),transparent_28%)]" />
-              <div className="aspect-square bg-gradient-to-br from-primary/10 via-white/5 to-accent/10 flex items-center justify-center overflow-hidden relative">
-                {product.image_url ? (
-                  <LazyImage src={product.image_url} alt={product.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                ) : (
-                  <ShoppingCart size={40} className="text-primary/25" />
-                )}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent opacity-80" />
-                <div className="absolute left-3 right-3 top-3 flex items-center justify-between opacity-0 transition-all duration-300 group-hover:opacity-100">
-                  <button
-                    onClick={() => setLightboxImage(getProductImages(product)[0] ?? null)}
-                    className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/40 px-3 py-2 text-xs font-medium text-white backdrop-blur-xl transition hover:bg-black/55"
-                  >
-                    <Maximize2 size={14} />
-                    View Image
-                  </button>
-                  <div className="rounded-full border border-primary/30 bg-primary/15 px-3 py-1 text-[11px] text-white backdrop-blur-xl">
-                    {product.category}
-                  </div>
-                </div>
-                <div className="absolute inset-x-0 bottom-3 flex justify-center px-3 opacity-0 transition-all duration-300 group-hover:opacity-100">
-                  <button
-                    onClick={() => handleProductAction(product)}
-                    className="w-full max-w-[180px] rounded-2xl bg-gradient-to-r from-primary to-orange-400 px-4 py-2.5 text-sm font-medium text-primary-foreground shadow-lg shadow-primary/30 transition-all duration-300 hover:scale-[1.02] font-orbitron"
-                  >
-                    {product.category === 'Clothing' ? 'Choose Size' : 'Add to Cart'}
-                  </button>
-                </div>
+            {hasMore && (
+              <div className="flex justify-center mt-12">
+                <button
+                  onClick={loadMore}
+                  className="stitch-btn-primary"
+                >
+                  Load More
+                  <ChevronDown size={16} />
+                </button>
               </div>
-              <div className="relative p-5 text-left">
-                <div className="mb-3 flex items-start justify-between gap-3">
-                  <h3 className="font-semibold text-sm line-clamp-2 font-rajdhani text-foreground">{product.title}</h3>
-                  <span className="shrink-0 rounded-full border border-primary/20 bg-primary/10 px-2.5 py-1 text-[11px] font-medium text-primary">
-                    {product.category}
-                  </span>
-                </div>
-                <p className="text-xs text-muted-foreground mb-4 text-pretty line-clamp-3">{product.description}</p>
-                <div className="flex items-center justify-between gap-3">
-                  <span className="text-lg font-bold text-primary tabular-nums font-space-mono">{formatPrice(product.price)}</span>
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => openProductModal(product)}
-                      className="rounded-xl border border-white/10 bg-white/10 px-3 py-2 text-xs font-medium text-foreground backdrop-blur-xl transition-all duration-300 hover:border-primary/30 hover:bg-white/15 hover:shadow-lg hover:shadow-primary/10 active:scale-95 font-rajdhani"
-                    >
-                      View
-                    </button>
-                    <button
-                      onClick={() => handleProductAction(product)}
-                      className="rounded-xl bg-gradient-to-r from-primary to-orange-400 px-3 py-2 text-xs font-medium text-primary-foreground shadow-lg shadow-primary/20 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-primary/40 active:scale-95 font-rajdhani"
-                    >
-                      {product.category === 'Clothing' ? 'Sizes' : 'Add'}
-                    </button>
-                  </div>
-                </div>
+            )}
+
+            {cart.length > 0 && (
+              <div className="mt-8 flex justify-center animate-fade-up">
+                <button
+                  onClick={() => window.dispatchEvent(new Event("open-cart"))}
+                  className="stitch-btn-ghost"
+                >
+                  <Eye size={18} />
+                  View Cart ({cart.length} items)
+                </button>
               </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Load More Button */}
-        {hasMore && (
-          <div className="flex justify-center mt-12">
-            <button
-              onClick={loadMore}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-primary to-accent text-accent-foreground font-medium text-sm shadow-lg shadow-primary/50 hover:shadow-primary/75 transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.97] font-orbitron btn-neon-glow"
-            >
-              Load More
-              <ChevronDown size={16} />
-            </button>
-          </div>
-        )}
-
-        {cart.length > 0 && (
-          <div className="mt-8 flex justify-center animate-fade-up">
-            <button
-              onClick={() => setIsCartOpen(true)}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-secondary to-accent text-accent-foreground font-medium shadow-lg shadow-secondary/50 hover:shadow-secondary/75 transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.97] font-orbitron btn-neon-glow"
-            >
-              <Eye size={18} />
-              View Cart ({cart.length} items)
-            </button>
-          </div>
+            )}
+          </>
         )}
 
         {selectedProduct && (
@@ -377,12 +514,6 @@ export default function ShopSection() {
         )}
       </div>
 
-      {/* Cart Sidebar */}
-      <CartSidebar
-        isOpen={isCartOpen}
-        onClose={() => setIsCartOpen(false)}
-        onCheckout={checkout}
-      />
     </section>
   );
 }

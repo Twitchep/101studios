@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ARTIFACT | Creating the Unseen</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-secondary-fixed-variant": "#5e289b",
+              "on-tertiary-container": "#7213ff",
+              "error": "#ffb4ab",
+              "on-secondary": "#460283",
+              "tertiary-fixed": "#e9ddff",
+              "primary-fixed": "#7df4ff",
+              "surface": "#131318",
+              "surface-container-highest": "#35343a",
+              "surface-tint": "#00dbe9",
+              "surface-bright": "#39383e",
+              "on-tertiary": "#3c0090",
+              "on-tertiary-fixed-variant": "#5700c9",
+              "primary-container": "#00f0ff",
+              "on-primary-fixed": "#002022",
+              "secondary-container": "#602b9d",
+              "on-error": "#690005",
+              "surface-container-low": "#1b1b20",
+              "secondary-fixed-dim": "#dab9ff",
+              "primary-fixed-dim": "#00dbe9",
+              "outline": "#849495",
+              "on-secondary-container": "#cfa7ff",
+              "on-surface": "#e4e1e9",
+              "primary": "#dbfcff",
+              "on-primary": "#00363a",
+              "on-error-container": "#ffdad6",
+              "secondary": "#dab9ff",
+              "tertiary-container": "#e1d2ff",
+              "surface-container": "#1f1f25",
+              "background": "#131318",
+              "outline-variant": "#3b494b",
+              "on-tertiary-fixed": "#23005b",
+              "surface-container-high": "#2a292f",
+              "inverse-on-surface": "#303036",
+              "on-secondary-fixed": "#2a0053",
+              "on-background": "#e4e1e9",
+              "on-surface-variant": "#b9cacb",
+              "inverse-surface": "#e4e1e9",
+              "on-primary-container": "#006970",
+              "tertiary": "#faf3ff",
+              "on-primary-fixed-variant": "#004f54",
+              "surface-container-lowest": "#0e0e13",
+              "secondary-fixed": "#eedbff",
+              "surface-dim": "#131318",
+              "surface-variant": "#35343a",
+              "error-container": "#93000a",
+              "tertiary-fixed-dim": "#d1bcff",
+              "inverse-primary": "#006970"
+            },
+            fontFamily: {
+              "headline": ["Space Grotesk"],
+              "body": ["Inter"],
+              "label": ["Space Grotesk"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .aurora-bg {
+            background: radial-gradient(circle at 20% 30%, rgba(0, 240, 255, 0.05) 0%, transparent 40%),
+                        radial-gradient(circle at 80% 70%, rgba(218, 185, 255, 0.05) 0%, transparent 40%);
+        }
+        .glass-card {
+            backdrop-filter: blur(24px);
+            background: rgba(42, 41, 47, 0.4);
+        }
+        .pulse-dot {
+            box-shadow: 0 0 0 0 rgba(0, 240, 255, 0.7);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 240, 255, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(0, 240, 255, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 240, 255, 0); }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar -->
+<nav class="fixed top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-7xl rounded-full border border-white/10 bg-surface/40 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,240,255,0.08)] flex justify-between items-center px-8 py-3 z-50">
+<div class="text-2xl font-bold tracking-tighter text-cyan-400 dark:text-cyan-300 font-headline">ARTIFACT</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="font-['Space_Grotesk'] tracking-tight text-sm uppercase text-slate-400 hover:text-white transition-colors" href="#">Gallery</a>
+<a class="font-['Space_Grotesk'] tracking-tight text-sm uppercase text-slate-400 hover:text-white transition-colors" href="#">Shop</a>
+<a class="font-['Space_Grotesk'] tracking-tight text-sm uppercase text-slate-400 hover:text-white transition-colors" href="#">About</a>
+<a class="font-['Space_Grotesk'] tracking-tight text-sm uppercase text-slate-400 hover:text-white transition-colors" href="#">Contact</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">shopping_cart</button>
+<button class="bg-primary-container text-on-primary-container px-6 py-2 rounded-full font-headline text-xs font-bold uppercase tracking-widest hover:shadow-[0_0_20px_rgba(0,240,255,0.3)] hover:scale-105 transition-all duration-300">Cart</button>
+</div>
+</nav>
+<main class="relative min-h-screen aurora-bg">
+<!-- Hero Section -->
+<section class="relative pt-44 pb-20 px-6 max-w-7xl mx-auto flex flex-col items-center text-center">
+<!-- Available Badge -->
+<div class="inline-flex items-center gap-3 bg-surface-container-high/50 border border-outline-variant/20 px-4 py-2 rounded-full mb-8 backdrop-blur-md">
+<span class="w-2 h-2 rounded-full bg-primary-container pulse-dot"></span>
+<span class="font-headline text-[10px] tracking-[0.2em] uppercase text-primary">Available for Work</span>
+</div>
+<h1 class="font-headline text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-white/40 mb-6 leading-[0.9]">
+                CREATING THE <br/>UNSEEN
+            </h1>
+<p class="font-body text-xl md:text-2xl text-on-surface-variant max-w-2xl mb-12 font-light">
+                Multidisciplinary Designer &amp; Digital Artist crafting high-fidelity experiences for the modern web.
+            </p>
+<div class="flex flex-col sm:flex-row gap-6">
+<button class="bg-gradient-to-r from-primary to-primary-container text-on-primary px-10 py-4 rounded-xl font-headline font-bold uppercase tracking-widest text-sm hover:shadow-[0_0_30px_rgba(0,240,255,0.4)] transition-all duration-300 transform hover:-translate-y-1">
+                    Hire Me
+                </button>
+<button class="glass-card border border-outline-variant/20 text-on-surface px-10 py-4 rounded-xl font-headline font-bold uppercase tracking-widest text-sm hover:bg-surface-container-highest/60 transition-all duration-300">
+                    View Gallery
+                </button>
+</div>
+</section>
+<!-- Social Proof -->
+<section class="max-w-7xl mx-auto px-6 mb-32">
+<div class="glass-card border border-outline-variant/10 rounded-lg p-12 flex flex-col items-center gap-12">
+<span class="font-headline text-[10px] tracking-[0.3em] uppercase text-slate-500">Trusted by Global Innovators</span>
+<div class="flex flex-wrap justify-center items-center gap-12 md:gap-24 opacity-50 grayscale hover:grayscale-0 transition-all duration-700">
+<div class="flex items-center gap-2 font-headline font-bold text-2xl"><span class="material-symbols-outlined">bolt</span>NEON</div>
+<div class="flex items-center gap-2 font-headline font-bold text-2xl"><span class="material-symbols-outlined">layers</span>STRATA</div>
+<div class="flex items-center gap-2 font-headline font-bold text-2xl"><span class="material-symbols-outlined">token</span>VOID</div>
+<div class="flex items-center gap-2 font-headline font-bold text-2xl"><span class="material-symbols-outlined">blur_on</span>ORB</div>
+</div>
+</div>
+</section>
+<!-- Bento Portfolio Preview -->
+<section class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-12 gap-6 pb-40">
+<div class="md:col-span-8 group relative overflow-hidden rounded-lg bg-surface-container-low h-[500px]">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="abstract flowing liquid metal 3d render with cyan and purple neon reflections and deep shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7v_DhE4q0bf6I6isGpaeBCHRYJvYH5zEe14y-hupMHynK5AL0_u_JrpSc-Qgjhy2aImEjarIp0Ncv9t5CBv5MlAZ7HbrswfWElAxTh_2fO50eD2xZIIrDXRHlBzarmms5aWSZyfBgePjx-viWjdvaZ6JO7oamI_OBB9823CzOM-6FHAmdQFNeMluBub6urUyuX4A2p5wS8St0EBQlURXpNqj5_lPtswCeMdt-pUL6zIkO-GPI0VvJS-S2BbnJaEZo6KyVekp0rR0"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent opacity-60"></div>
+<div class="absolute bottom-8 left-8">
+<span class="font-label text-[10px] uppercase tracking-widest text-primary mb-2 block">Visual Identity</span>
+<h3 class="font-headline text-3xl font-bold">NEON GENESIS</h3>
+</div>
+</div>
+<div class="md:col-span-4 group relative overflow-hidden rounded-lg bg-surface-container-low h-[500px]">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="minimalist 3d geometric shapes floating in a pressurized void with soft volumetric lighting and grain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuARGSXUPpi7_gAo5ILPvD7OcxxfDWOHLcNjoiSjF1HccjV-nlcGPLPEh5BkzA7Bx-oMiWyBeD69QSpZpVZEzesYo0shgomSn7DrrzUIkRhj34gN1pSzTIjuboFk7z47sIvR0hvyUnaMCv6uZLSz3T-hByJkCVg_MJZvdSsoBt7Pz8EGQYxhw5VwFFdO5JxnJRbz37dY-12UyQhpeXtasiqujaa9L22BOUptDJ0kL5Xl3Hs3A9rJ4jR1aTtAa2xE5GzKNi8D8C7kmD4"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent opacity-60"></div>
+<div class="absolute bottom-8 left-8">
+<span class="font-label text-[10px] uppercase tracking-widest text-secondary mb-2 block">Experimental</span>
+<h3 class="font-headline text-3xl font-bold">THE VOID</h3>
+</div>
+</div>
+<div class="md:col-span-4 group relative overflow-hidden rounded-lg bg-surface-container-low h-[400px]">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="ethereal digital art of colorful smoke trails blending into deep black background high fidelity" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAfWA9-jbHDFf2hc29MRZ4R5KY2IJn12CD6EQ0A2fXCblc4oAXr2RP0Wgluful3R8gOlPBnDYGYW9iCxl3gwJ8y8K31IEwrS4gB2KEShlB_2ifkcQxO_V2bauT0JP9_v7q9RZVcBB2TRbR4B03TW7fTuEIixpoii0qdBzvQ1FUv6PMKxIiIdAv0uZ9FoKHDgi7JiG2rPnRofZn81V9HVinflsibdEfY5watx6jzbGf-9WvaXBbXt9Yjejyppp4D5LKcAIZPwLTby8"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent opacity-60"></div>
+<div class="absolute bottom-8 left-8">
+<h3 class="font-headline text-2xl font-bold">AETHER</h3>
+</div>
+</div>
+<div class="md:col-span-8 group relative overflow-hidden rounded-lg bg-surface-container-low h-[400px]">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="macro close up of crystal structures with sharp edges refracting rainbow light on dark surface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDpQb1kS4N8Fad1rXPU2aIV-XX89nUtK_7PERo3n4IK-kmbicJ-7TxKFYgORaiE87BFNtV9tnvw2vkui2pie1-6Ns7Wb1d5rsz0k8RR_M1yuf7pChpYs_8oVpYP5ZgJv0kAgMLjr6IPCuPOMSEImxbilPKb3Kgf5RTWf_KemxIzB1LZZaBxGwr663RYvjll0OqeMVNFceLZJzZJiqFUWt1Ulbnx81jVzzZG-2CI77Jz6INHmn65Qmu-uaXyD6bBt5XOP2TZSTOMfVw"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent opacity-60"></div>
+<div class="absolute bottom-8 left-8">
+<h3 class="font-headline text-2xl font-bold">REFRACTION</h3>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full rounded-t-[3rem] border-t border-white/5 bg-surface-container-low/20 backdrop-blur-md flex flex-col gap-8 w-full px-12 py-16 mt-20">
+<div class="max-w-7xl mx-auto w-full grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+<div>
+<div class="text-lg font-black text-white font-headline mb-4 uppercase tracking-tighter">ARTIFACT</div>
+<p class="font-body text-slate-500 max-w-sm mb-8">
+                    Pushing the boundaries of digital aesthetics and functional beauty.
+                </p>
+<div class="flex gap-6">
+<a class="font-['Space_Grotesk'] text-[10px] tracking-[0.1em] uppercase text-slate-500 hover:text-cyan-400 transition-colors duration-300" href="#">Instagram</a>
+<a class="font-['Space_Grotesk'] text-[10px] tracking-[0.1em] uppercase text-slate-500 hover:text-cyan-400 transition-colors duration-300" href="#">Twitter</a>
+<a class="font-['Space_Grotesk'] text-[10px] tracking-[0.1em] uppercase text-slate-500 hover:text-cyan-400 transition-colors duration-300" href="#">LinkedIn</a>
+</div>
+</div>
+<div class="flex flex-col md:items-end gap-6">
+<div class="text-right">
+<p class="font-headline text-[10px] tracking-[0.2em] text-slate-500 uppercase mb-2">Join the Collective</p>
+<form class="flex gap-2">
+<input class="bg-surface-container-lowest border-0 border-b border-outline-variant/20 focus:border-primary focus:ring-0 text-sm font-headline tracking-widest text-white px-0 py-2 w-64 transition-all" placeholder="EMAIL ADDRESS" type="email"/>
+<button class="material-symbols-outlined text-primary hover:translate-x-1 transition-transform">arrow_forward</button>
+</form>
+</div>
+</div>
+</div>
+<div class="max-w-7xl mx-auto w-full pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+<div class="font-['Space_Grotesk'] text-[10px] tracking-[0.1em] uppercase text-slate-500">©2024 THE ETHEREAL ARTIFACT. ALL RIGHTS RESERVED.</div>
+<div class="flex gap-8">
+<a class="font-['Space_Grotesk'] text-[10px] tracking-[0.1em] uppercase text-slate-500 hover:text-white transition-colors" href="#">Terms</a>
+<a class="font-['Space_Grotesk'] text-[10px] tracking-[0.1em] uppercase text-slate-500 hover:text-white transition-colors" href="#">Privacy</a>
+</div>
+</div>
+</footer>
+</body></html>

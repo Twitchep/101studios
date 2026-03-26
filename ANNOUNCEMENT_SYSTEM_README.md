@@ -82,12 +82,12 @@ Max Views: 1
 Display Duration: 5000ms
 ```
 
-### Holiday Promotion
+### Limited-Time Promotion
 ```
-Title: "🎄 Christmas Special!"
-Content: "Get 20% off all products this holiday season. Limited time offer!"
-Start Date: 2026-12-01
-End Date: 2026-12-31
+Title: "🔥 Limited-Time Special!"
+Content: "Get 20% off all products for a limited time. Don't miss out!"
+Start Date: 2026-06-01
+End Date: 2026-06-30
 Target Audience: all
 Priority: 100
 ```

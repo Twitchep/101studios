@@ -5,18 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Live Content Manager</title>
     <style>
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
         body {
             font-family: Arial, sans-serif;
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
             background: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
         }
         .container {
             background: white;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 1000px;
+            height: 100%;
+            overflow-y: auto;
+            box-sizing: border-box;
         }
         .auth-section {
             text-align: center;
@@ -240,6 +251,16 @@
                 <p><small>Configure popup messages that appear on your website with scheduling and targeting options.</small></p>
             </div>
 
+            <div class="section">
+                <h2>👤 About Page</h2>
+                <div id="about-hero-fields"></div>
+                <hr style="margin: 20px 0; border-color: #eee;">
+                <h3 style="color:#333; margin-bottom:8px;">Service Cards</h3>
+                <div id="about-sections-items"></div>
+                <button class="add-btn" onclick="addAboutSection()">+ Add Service Card</button>
+                <p><small>Edit the About page hero image, bio text, and service cards displayed to visitors.</small></p>
+            </div>
+
             <button class="save-all" onclick="saveAllChanges()">💾 Save All Changes to Website</button>
             <button class="save-all" onclick="copyJsonToClipboard()" style="background:#1d4ed8">📋 Copy JSON to Clipboard</button>
             <button class="save-all" onclick="clearSavedContent()" style="background:#db2777">🧹 Clear Local Saved Content</button>
@@ -254,10 +275,38 @@
             products: [],
             updates: [],
             videos: [],
-            announcements: []
+            announcements: [],
+            about: {
+                hero_image: '',
+                title: '',
+                subtitle: '',
+                bio: '',
+                sections: []
+            }
         };
 
         const ADMIN_PASSWORD = 'admin123'; // Change this to your desired password
+
+        function normalizeContent(raw = {}) {
+            const safe = (raw && typeof raw === 'object') ? raw : {};
+            const safeAbout = (safe.about && typeof safe.about === 'object') ? safe.about : {};
+
+            return {
+                hero_slider: Array.isArray(safe.hero_slider) ? safe.hero_slider : [],
+                portfolio: Array.isArray(safe.portfolio) ? safe.portfolio : [],
+                products: Array.isArray(safe.products) ? safe.products : [],
+                updates: Array.isArray(safe.updates) ? safe.updates : [],
+                videos: Array.isArray(safe.videos) ? safe.videos : [],
+                announcements: Array.isArray(safe.announcements) ? safe.announcements : [],
+                about: {
+                    hero_image: typeof safeAbout.hero_image === 'string' ? safeAbout.hero_image : '',
+                    title: typeof safeAbout.title === 'string' ? safeAbout.title : '',
+                    subtitle: typeof safeAbout.subtitle === 'string' ? safeAbout.subtitle : '',
+                    bio: typeof safeAbout.bio === 'string' ? safeAbout.bio : '',
+                    sections: Array.isArray(safeAbout.sections) ? safeAbout.sections : []
+                }
+            };
+        }
 
         function authenticate() {
             const password = document.getElementById('password').value;
@@ -274,24 +323,16 @@
         async function loadContent() {
             try {
                 // Always try to load from the server first (content.json)
-                const response = await fetch('/content.json');
+                const response = await fetch(`/content.json?v=${Date.now()}`, {
+                    cache: 'no-store',
+                    headers: {
+                        'Cache-Control': 'no-cache',
+                        Pragma: 'no-cache'
+                    }
+                });
                 if (response.ok) {
-                    content = await response.json();
+                    content = normalizeContent(await response.json());
                     console.log('✅ Loaded content from server');
-
-                    // Ensure required arrays exist
-                    if (!content.hero_slider) {
-                        content.hero_slider = [];
-                    }
-                    if (!content.portfolio) {
-                        content.portfolio = [];
-                    }
-                    if (!content.products) {
-                        content.products = [];
-                    }
-                    if (!content.announcements) {
-                        content.announcements = [];
-                    }
 
                     // Save to localStorage as backup
                     localStorage.setItem('liveEditorContent', JSON.stringify(content));
@@ -305,20 +346,7 @@
                 // Fallback to localStorage
                 const localData = localStorage.getItem('liveEditorContent');
                 if (localData) {
-                    content = JSON.parse(localData);
-                    // Ensure required arrays exist
-                    if (!content.hero_slider) {
-                        content.hero_slider = [];
-                    }
-                    if (!content.portfolio) {
-                        content.portfolio = [];
-                    }
-                    if (!content.products) {
-                        content.products = [];
-                    }
-                    if (!content.announcements) {
-                        content.announcements = [];
-                    }
+                    content = normalizeContent(JSON.parse(localData));
                     showStatus('⚠️ Loaded saved content from localStorage (server unavailable).', 'error');
                 } else {
                     // Last resort: show error
@@ -337,6 +365,7 @@
             renderUpdateItems();
             renderVideoItems();
             renderAnnouncementItems();
+            renderAboutSection();
         }
 
         function renderPortfolioItems() {
@@ -695,11 +724,140 @@
             showStatus(isActive ? '✓ Announcement activated' : '✕ Announcement stopped', 'success');
         }
 
+        // ── About Page ──
+        function renderAboutSection() {
+            const a = content.about || {};
+
+            // Hero / info fields
+            const heroContainer = document.getElementById('about-hero-fields');
+            const imgPreview = a.hero_image
+                ? `<img src="${escapeAttr(a.hero_image)}" alt="Hero preview" class="image-preview" onerror="this.style.display='none'">`
+                : '';
+            heroContainer.innerHTML = `
+                <div class="item">
+                    <label><strong>Hero Background Image URL:</strong></label>
+                    <input type="url" placeholder="e.g. https://i.ibb.co/xxx/image.jpg or /images/slider/10.jpg"
+                        value="${escapeAttr(a.hero_image || '')}"
+                        onchange="updateAboutField('hero_image', this.value)">
+                    ${imgPreview}
+                    <label><strong>Page Title:</strong></label>
+                    <input type="text" placeholder="About Us"
+                        value="${escapeAttr(a.title || '')}"
+                        onchange="updateAboutField('title', this.value)">
+                    <label><strong>Subtitle:</strong></label>
+                    <input type="text" placeholder="Creative. Bold. Authentic."
+                        value="${escapeAttr(a.subtitle || '')}"
+                        onchange="updateAboutField('subtitle', this.value)">
+                    <label><strong>Bio / Description:</strong></label>
+                    <textarea rows="4" placeholder="Tell visitors who you are..."
+                        onchange="updateAboutField('bio', this.value)">${escapeText(a.bio || '')}</textarea>
+                </div>`;
+
+            // Service cards
+            const sectionsContainer = document.getElementById('about-sections-items');
+            const sections = a.sections || [];
+            if (sections.length === 0) {
+                sectionsContainer.innerHTML = '<p style="color:#999;padding:16px;text-align:center;">No service cards yet. Click "+ Add Service Card" to create one.</p>';
+                return;
+            }
+            sectionsContainer.innerHTML = sections.map((s, i) => `
+                <div class="item">
+                    <input type="text" placeholder="Card Title (e.g. Graphics Design)"
+                        value="${escapeAttr(s.title || '')}"
+                        onchange="updateAboutSectionField(${i}, 'title', this.value)">
+                    <textarea rows="3" placeholder="Short description..."
+                        onchange="updateAboutSectionField(${i}, 'description', this.value)">${escapeText(s.description || '')}</textarea>
+                    <label><strong>Image URL:</strong></label>
+                    <input type="url" placeholder="e.g. https://i.ibb.co/xxx/img.jpg or /images/portfolio/1.jpg"
+                        value="${escapeAttr(s.image_url || '')}"
+                        onchange="updateAboutSectionField(${i}, 'image_url', this.value)">
+                    ${s.image_url ? `<img src="${escapeAttr(s.image_url)}" alt="${escapeAttr(s.title || '')}" class="image-preview" onerror="this.style.display='none'">` : ''}
+                    <button class="delete-btn" onclick="deleteAboutSection(${i})">Delete Card</button>
+                </div>`).join('');
+        }
+
+        function escapeAttr(str) {
+            return String(str || '').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        }
+        function escapeText(str) {
+            return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+
+        function updateAboutField(field, value) {
+            if (!content.about) content.about = { sections: [] };
+            content.about[field] = value;
+            // Re-render just the hero image preview without full re-render
+            if (field === 'hero_image') {
+                const preview = document.querySelector('#about-hero-fields .image-preview');
+                if (preview) {
+                    preview.src = value;
+                    preview.style.display = value ? '' : 'none';
+                }
+            }
+        }
+
+        function updateAboutSectionField(index, field, value) {
+            if (!content.about || !content.about.sections) return;
+            content.about.sections[index][field] = value;
+            if (field === 'image_url') {
+                const items = document.querySelectorAll('#about-sections-items .item');
+                const item = items[index];
+                if (item) {
+                    let preview = item.querySelector('.image-preview');
+                    if (value) {
+                        if (!preview) {
+                            preview = document.createElement('img');
+                            preview.className = 'image-preview';
+                            preview.onerror = function() { this.style.display = 'none'; };
+                            item.insertBefore(preview, item.querySelector('.delete-btn'));
+                        }
+                        preview.src = value;
+                        preview.style.display = '';
+                    } else if (preview) {
+                        preview.style.display = 'none';
+                    }
+                }
+            }
+        }
+
+        function addAboutSection() {
+            if (!content.about) content.about = { sections: [] };
+            if (!content.about.sections) content.about.sections = [];
+            content.about.sections.push({
+                id: Date.now().toString(),
+                title: '',
+                description: '',
+                image_url: ''
+            });
+            renderAboutSection();
+        }
+
+        function deleteAboutSection(index) {
+            if (!content.about || !content.about.sections) return;
+            if (confirm('Delete this service card?')) {
+                content.about.sections.splice(index, 1);
+                renderAboutSection();
+            }
+        }
+
         // Save function
         async function saveAllChanges() {
             try {
+                content = normalizeContent(content);
+
                 // Save to localStorage immediately
                 localStorage.setItem('liveEditorContent', JSON.stringify(content));
+                localStorage.setItem('contentLastUpdated', Date.now().toString());
+
+                try {
+                    if (typeof BroadcastChannel !== 'undefined') {
+                        const channel = new BroadcastChannel('live-editor-content');
+                        channel.postMessage({ type: 'live-editor-updated', timestamp: Date.now() });
+                        channel.close();
+                    }
+                } catch (broadcastError) {
+                    console.warn('Broadcast update failed:', broadcastError);
+                }
 
                 let savedToServerFile = false;
                 try {
@@ -755,13 +913,6 @@
                 );
 
                 URL.revokeObjectURL(url);
-
-                // Trigger content refresh in the main website (if it's open in another tab)
-                try {
-                    localStorage.setItem('contentLastUpdated', Date.now().toString());
-                } catch (e) {
-                    // Ignore if localStorage is full
-                }
 
             } catch (error) {
                 console.error('Error saving changes:', error);

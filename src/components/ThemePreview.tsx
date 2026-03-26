@@ -6,12 +6,6 @@ import { Badge } from "@/components/ui/badge";
 const themePreviews: Record<Theme, { name: string; description: string; emoji: string }> = {
   light: { name: "Light", description: "Clean and bright theme", emoji: "☀️" },
   dark: { name: "Dark", description: "Easy on the eyes", emoji: "🌙" },
-  christmas: { name: "Christmas", description: "Festive holiday theme", emoji: "🎄" },
-  halloween: { name: "Halloween", description: "Spooky autumn theme", emoji: "🎃" },
-  newyear: { name: "New Year", description: "Fresh start celebration", emoji: "🎉" },
-  easter: { name: "Easter", description: "Spring celebration theme", emoji: "🐰" },
-  summer: { name: "Summer", description: "Bright and vibrant", emoji: "🏖️" },
-  autumn: { name: "Autumn", description: "Warm fall colors", emoji: "🍂" },
 };
 
 export function ThemePreview() {
@@ -19,10 +13,17 @@ export function ThemePreview() {
 
   return (
     <div className="space-y-6">
-      <div className="text-center">
+      <div
+        className="text-center p-6"
+        style={{
+          borderRadius: "50px",
+          background: "#e0e0e0",
+          boxShadow: "inset 30px 30px 59px #bebebe, inset -30px -30px 59px #ffffff",
+        }}
+      >
         <h2 className="text-2xl font-bold mb-2">Theme Gallery</h2>
         <p className="text-muted-foreground">
-          Preview and switch between different themes. Each theme changes the entire design including colors, backgrounds, and accents.
+          Preview and switch between light and dark themes.
         </p>
       </div>
 
@@ -34,9 +35,14 @@ export function ThemePreview() {
           return (
             <Card
               key={theme}
-              className={`cursor-pointer transition-all duration-200 hover:shadow-lg ${
+              className={`cursor-pointer transition-all duration-200 border-0 ${
                 isActive ? "ring-2 ring-primary" : ""
               }`}
+              style={{
+                borderRadius: "50px",
+                background: "#e0e0e0",
+                boxShadow: "inset 30px 30px 59px #bebebe, inset -30px -30px 59px #ffffff",
+              }}
               onClick={() => setTheme(theme)}
             >
               <CardHeader className="pb-3">
@@ -84,9 +90,15 @@ export function ThemePreview() {
         })}
       </div>
 
-      <div className="text-center text-sm text-muted-foreground">
-        <p>💡 Tip: Themes automatically adapt to current events and seasons!</p>
-        <p>🎨 Use the palette icon in the navbar to quickly switch themes</p>
+      <div
+        className="text-center text-sm text-muted-foreground p-6"
+        style={{
+          borderRadius: "50px",
+          background: "#e0e0e0",
+          boxShadow: "inset 30px 30px 59px #bebebe, inset -30px -30px 59px #ffffff",
+        }}
+      >
+        <p>💡 Tip: Use the palette icon in the navbar to switch themes quickly.</p>
       </div>
     </div>
   );

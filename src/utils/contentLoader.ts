@@ -8,6 +8,19 @@ export interface ContentData {
   updates: any[];
   videos: any[];
   announcements: any[];
+  about?: any;
+}
+
+async function fetchContentJson(): Promise<ContentData> {
+  const response = await fetch(`/content.json?v=${Date.now()}`, {
+    cache: 'no-store',
+    headers: {
+      'Cache-Control': 'no-cache',
+      Pragma: 'no-cache'
+    }
+  });
+
+  return response.json();
 }
 
 function mergeContentArrays(primary: any[], fallback: any[]) {
@@ -63,8 +76,7 @@ export async function loadContentWithLiveEditor(
     let fallbackContent: any[] = [];
 
     try {
-      const fallbackResponse = await fetch('/content.json');
-      const fallbackJson = await fallbackResponse.json();
+      const fallbackJson = await fetchContentJson();
       fallbackContent = fallbackJson[contentType] || [];
     } catch (fallbackReadError) {
       console.warn(`Unable to read fallback content for ${contentType}:`, fallbackReadError);
@@ -108,8 +120,7 @@ export async function loadContentWithLiveEditor(
 
     // Last resort: try content.json directly
     try {
-      const response = await fetch('/content.json');
-      const content = await response.json();
+      const content = await fetchContentJson();
       return content[contentType] || [];
     } catch (fallbackError) {
       console.error(`Fallback failed for ${contentType}:`, fallbackError);
@@ -123,6 +134,8 @@ export async function loadContentWithLiveEditor(
  */
 export function useLiveEditorUpdates(callback: () => void) {
   React.useEffect(() => {
+    let lastSeenUpdate = parseInt(localStorage.getItem('contentLastUpdated') || '0', 10);
+
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === 'liveEditorContent' || e.key === 'contentLastUpdated') {
         console.log('🔄 Live editor content updated, refreshing...');
@@ -130,26 +143,40 @@ export function useLiveEditorUpdates(callback: () => void) {
       }
     };
 
+    const handleBroadcastUpdate = (event: MessageEvent) => {
+      if (event?.data?.type === 'live-editor-updated') {
+        console.log('🔄 Live editor broadcast received, refreshing...');
+        callback();
+      }
+    };
+
+    const liveEditorChannel = typeof BroadcastChannel !== 'undefined'
+      ? new BroadcastChannel('live-editor-content')
+      : null;
+
+    if (liveEditorChannel) {
+      liveEditorChannel.addEventListener('message', handleBroadcastUpdate);
+    }
+
     // Listen for storage events (cross-tab updates)
     window.addEventListener('storage', handleStorageChange);
 
     // Also check periodically for localStorage changes
     const interval = setInterval(() => {
-      const lastUpdate = localStorage.getItem('contentLastUpdated');
-      if (lastUpdate) {
-        const lastUpdateTime = parseInt(lastUpdate);
-        const now = Date.now();
-        // If updated within last 5 seconds, refresh
-        if (now - lastUpdateTime < 5000) {
-          console.log('🔄 Detected recent live editor update, refreshing...');
-          localStorage.removeItem('contentLastUpdated'); // Clear the flag
-          callback();
-        }
+      const nextUpdate = parseInt(localStorage.getItem('contentLastUpdated') || '0', 10);
+      if (nextUpdate > lastSeenUpdate) {
+        lastSeenUpdate = nextUpdate;
+        console.log('🔄 Detected new live editor timestamp, refreshing...');
+        callback();
       }
-    }, 2000);
+    }, 1000);
 
     return () => {
       window.removeEventListener('storage', handleStorageChange);
+      if (liveEditorChannel) {
+        liveEditorChannel.removeEventListener('message', handleBroadcastUpdate);
+        liveEditorChannel.close();
+      }
       clearInterval(interval);
     };
   }, [callback]);
