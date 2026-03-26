@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">101 Studios</string>
+    <string name="title_activity_main">101 Studios</string>
+    <string name="package_name">com.studios101.app</string>
+    <string name="custom_url_scheme">com.studios101.app</string>
+</resources>

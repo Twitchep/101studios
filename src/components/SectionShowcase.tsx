@@ -1,6 +1,6 @@
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 
 export type SectionKey = "portfolio" | "shop" | "updates" | "videos" | "contact";
 
@@ -61,12 +61,7 @@ interface SectionShowcaseProps {
 }
 
 export default function SectionShowcase({ currentSection }: SectionShowcaseProps) {
-  const [tick, setTick] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => setTick((prev) => prev + 1), 3200);
-    return () => clearInterval(interval);
-  }, []);
+  const tick = 0;
 
   const cards = useMemo(
     () => (currentSection ? showcaseCards.filter((card) => card.key !== currentSection) : showcaseCards),
@@ -86,7 +81,7 @@ export default function SectionShowcase({ currentSection }: SectionShowcaseProps
           <p className="stitch-chip mb-4">Explore Pages</p>
           <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-foreground font-orbitron">Liquid Glass Navigation</h2>
           <p className="text-muted-foreground mt-3 max-w-2xl mx-auto font-rajdhani text-base">
-            Apart from the navbar, visitors can discover every section through animated glass cards with auto-switching visuals.
+            Apart from the navbar, visitors can discover every section through animated glass cards.
           </p>
         </div>
 
@@ -114,7 +109,7 @@ export default function SectionShowcase({ currentSection }: SectionShowcaseProps
                       <Sparkles size={14} />
                       {card.subtitle}
                     </span>
-                    <span className="text-xs font-space-mono text-white/80">Auto switch</span>
+                    <span className="text-xs font-space-mono text-white/80">Preview</span>
                   </div>
 
                   <div className="relative mt-6 h-[220px]">

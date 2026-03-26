@@ -77,7 +77,7 @@ export default function VideosSection() {
           <p className="text-sm text-muted-foreground mt-2">Showing {displayedCount} of {totalCount} videos</p>
         </div>
 
-        <div className={`${isLandingPage ? "relative left-1/2 w-screen -translate-x-1/2" : ""} mb-10 transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
+        <div className={`mb-10 transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
           <div
             className={`stitch-panel overflow-hidden group ${isLandingPage ? "rounded-none border-x-0" : ""}`}
             onMouseMove={(event) => {

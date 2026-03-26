@@ -23,7 +23,6 @@ export default function PortfolioSection() {
   const [selected, setSelected] = useState<PortfolioItem | null>(null);
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
   const [hoverGlow, setHoverGlow] = useState({ x: 50, y: 50 });
-  const [tileOffset, setTileOffset] = useState(0);
 
   const filteredItems = selectedCategory === 'All' ? items : items.filter(item => item.category === selectedCategory);
   const { displayedItems, hasMore, loadMore, totalCount, displayedCount } = useLazyLoad(filteredItems, {
@@ -33,7 +32,8 @@ export default function PortfolioSection() {
 
   const fetchItems = useCallback(async () => {
     const data = await loadContentWithLiveEditor('portfolio', 'portfolio_items');
-    setItems(data as PortfolioItem[]);
+    const normalizedItems = Array.isArray(data) ? [...(data as PortfolioItem[])].reverse() : [];
+    setItems(normalizedItems);
   }, []);
 
   useEffect(() => {
@@ -41,11 +41,6 @@ export default function PortfolioSection() {
   }, [fetchItems]);
 
   useLiveEditorUpdates(fetchItems);
-
-  useEffect(() => {
-    const id = setInterval(() => setTileOffset(prev => prev + 1), 3000);
-    return () => clearInterval(id);
-  }, []);
 
   const placeholders: PortfolioItem[] = [
     { id: "1",  title: "Festive Campaign Design",       description: "Seasonal graphics built for maximum reach and cultural impact.",           category: "Flyers",          image_url: "/images/portfolio/9.jpg"  },
@@ -69,10 +64,10 @@ export default function PortfolioSection() {
   const featuredTiles = useMemo(() => {
     const pool = sourceItems.filter(item => item.image_url);
     if (pool.length <= 8) return pool.slice(0, 8);
-    const start = tileOffset % pool.length;
+    const start = 0;
     const wrap = (i: number) => pool[(start + i) % pool.length];
     return Array.from({ length: 8 }, (_, i) => wrap(i));
-  }, [sourceItems, tileOffset]);
+  }, [sourceItems]);
   const showGallery = location.pathname === "/portfolio" || location.pathname === "/legacy/portfolio";
   const isLandingPortfolio = !showGallery;
 

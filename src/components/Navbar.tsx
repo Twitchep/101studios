@@ -36,11 +36,11 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-7xl">
-      <div className="rounded-full border border-white/15 bg-black/55 dark:bg-black/55 backdrop-blur-xl shadow-[0_20px_50px_rgba(249,115,22,0.12)] px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+    <nav className="fixed top-3 sm:top-4 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-7xl">
+      <div className="rounded-full border border-white/15 bg-black/55 dark:bg-black/55 backdrop-blur-xl shadow-[0_20px_50px_rgba(249,115,22,0.12)] px-3 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-14 sm:h-16">
           <Link to="/" className="flex items-center space-x-2">
-            <span className="text-lg sm:text-xl font-bold tracking-[0.2em] text-primary uppercase font-orbitron">101 STUDIOS</span>
+            <span className="text-[0.72rem] sm:text-xl font-bold tracking-[0.1em] sm:tracking-[0.2em] text-primary uppercase font-orbitron">101 STUDIOS</span>
           </Link>
 
           {/* Desktop */}

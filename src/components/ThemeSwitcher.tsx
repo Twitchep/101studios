@@ -14,7 +14,7 @@ export function ThemeSwitcher() {
       onClick={toggleTheme}
       aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
       aria-pressed={isDark}
-      className="navbar-button group relative h-[3em] w-[6em] rounded-full bg-[hsl(0,0%,7%)] shadow-[0px_2px_4px_0px_rgb(18,18,18,0.25),0px_4px_8px_0px_rgb(18,18,18,0.35)]"
+      className="navbar-button group relative text-[0.78rem] sm:text-base h-[3em] w-[6em] rounded-full bg-[hsl(0,0%,7%)] shadow-[0px_2px_4px_0px_rgb(18,18,18,0.25),0px_4px_8px_0px_rgb(18,18,18,0.35)]"
     >
       <span className="absolute inset-[0.1em] rounded-full border-[1px] border-[hsl(0,0%,25%)]" />
 

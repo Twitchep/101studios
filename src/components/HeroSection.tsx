@@ -53,14 +53,6 @@ export default function HeroSection() {
 
   useLiveEditorUpdates(fetchSlider);
 
-  useEffect(() => {
-    if (!slides.length) return;
-    const interval = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % slides.length);
-    }, 7000);
-    return () => clearInterval(interval);
-  }, [slides]);
-
   const currentSlide = slides[activeIndex] || slides[0] || { title: '', subtitle: '', image_url: '' };
 
   const getHeroImageCandidates = (rawUrl: string) => {
@@ -69,23 +61,14 @@ export default function HeroSection() {
 
     const normalized = cleaned.startsWith('/') || cleaned.startsWith('http') ? cleaned : `/${cleaned}`;
     const filename = normalized.split('/').pop() || '';
-    const baseName = filename.includes('.') ? filename.slice(0, filename.lastIndexOf('.')) : filename;
-    const dirs = ['/images/slider', '/images/portfolio', '/images/products', '/images/clothing', '/images/liveupdates', '/images/announce', '/images'];
-    const exts = ['.jpg', '.jpeg', '.png', '.jfif', '.webp'];
-
     const candidates = [normalized];
+    const hasExt = /\.[a-z0-9]+$/i.test(filename);
 
-    if (filename) {
-      dirs.forEach((dir) => {
-        candidates.push(`${dir}/${filename}`);
+    if (filename && !hasExt && !normalized.startsWith('http')) {
+      const currentDir = normalized.includes('/') ? normalized.slice(0, normalized.lastIndexOf('/')) : '';
+      ['.webp', '.jpg', '.jpeg', '.png', '.jfif'].forEach((ext) => {
+        candidates.push(`${currentDir}/${filename}${ext}`);
       });
-      if (baseName) {
-        dirs.forEach((dir) => {
-          exts.forEach((ext) => {
-            candidates.push(`${dir}/${baseName}${ext}`);
-          });
-        });
-      }
     }
 
     return Array.from(new Set(candidates));
@@ -114,6 +97,10 @@ export default function HeroSection() {
         src={currentHeroImage}
         alt={currentSlide.title || "Hero slide"}
         className="absolute inset-0 w-full h-full object-cover"
+        loading="eager"
+        fetchPriority="high"
+        decoding="async"
+        sizes="100vw"
         onError={() => {
           if (heroImageIndex < heroCandidates.length - 1) {
             setHeroImageIndex((prev) => prev + 1);

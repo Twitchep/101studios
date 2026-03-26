@@ -24,3 +24,7 @@ dist-ssr
 *.sw?
 
 .vercel
+
+# Local build caches and generated outputs
+.gradle-home/
+esbuild_out.txt

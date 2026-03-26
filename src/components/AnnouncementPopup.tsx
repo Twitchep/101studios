@@ -22,7 +22,6 @@ interface Announcement {
 export function AnnouncementPopup() {
   const [announcement, setAnnouncement] = useState<Announcement | null>(null);
   const [isVisible, setIsVisible] = useState(false);
-  const [userId, setUserId] = useState<string>("");
 
   useEffect(() => {
     const pageLoadToken = String(performance.timeOrigin || Date.now());
@@ -37,8 +36,7 @@ export function AnnouncementPopup() {
       return id;
     };
 
-    const userId = getUserId();
-    setUserId(userId);
+    getUserId();
 
     const incrementReloadCount = (announcementId: string) => {
       const loadMarkerKey = `announcement_load_marker_${announcementId}`;
@@ -109,12 +107,9 @@ export function AnnouncementPopup() {
       }
     };
 
-    // Check immediately and then every 5 minutes
+    // Check announcements once on page load.
     checkForAnnouncements();
-    const interval = setInterval(checkForAnnouncements, 5 * 60 * 1000);
-
-    return () => clearInterval(interval);
-  }, [userId]);
+  }, []);
 
   const handleClose = () => {
     setIsVisible(false);

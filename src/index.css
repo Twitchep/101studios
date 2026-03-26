@@ -210,10 +210,12 @@
 
   body {
     @apply bg-background text-foreground antialiased;
+    overflow-x: clip;
   }
 
   html {
     scroll-behavior: smooth;
+    overflow-x: clip;
   }
 }
 
@@ -290,6 +292,7 @@
   }
 
   .portfolio-port-container .portfolio-port-glass {
+    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     background: linear-gradient(hsl(0 0% 100% / 0.12), transparent);
     border: 1px solid hsl(0 0% 100% / 0.16);
@@ -373,6 +376,16 @@
 
     .porto-card .porto-textbox {
       opacity: 1;
+    }
+
+    /* Mobile has no persistent hover; keep the gallery's blur treatment visible. */
+    .portfolio-gallery-card .porto-img {
+      filter: blur(4px);
+    }
+
+    .portfolio-port-container .portfolio-port-glass {
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
     }
 
     .porto-card:hover .porto-img {

@@ -35,7 +35,6 @@ export default function ShopSection() {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
   const [activeTile, setActiveTile] = useState<number | null>(null);
-  const [tileOffset, setTileOffset] = useState(0);
 
   const filteredProducts = selectedCategory === 'All' ? products : products.filter(p => p.category === selectedCategory);
   const { displayedItems, hasMore, loadMore, totalCount, displayedCount } = useLazyLoad(filteredProducts, {
@@ -53,11 +52,6 @@ export default function ShopSection() {
   }, [fetchProducts]);
 
   useLiveEditorUpdates(fetchProducts);
-
-  useEffect(() => {
-    const id = setInterval(() => setTileOffset(prev => prev + 1), 3000);
-    return () => clearInterval(id);
-  }, []);
 
   const placeholders: Product[] = products.length > 0 ? products : [
     { id: "1",  title: "Wireless Earbuds Pro",          description: "Active noise cancellation, rich bass, 36-hour battery life.",             price: 320,  category: "Electronics", image_url: "/images/products/1.jpg"   },
@@ -161,10 +155,10 @@ export default function ShopSection() {
     ];
 
     const unique = Array.from(new Set(pool));
-    const start = tileOffset % unique.length;
+    const start = 0;
     const wrap = (i: number) => unique[(start + i) % unique.length];
     return [wrap(0), wrap(1), wrap(2), wrap(3), wrap(4)];
-  }, [products, tileOffset]);
+  }, [products]);
 
   const openShopPage = () => {
     if (location.pathname !== '/shop') {
@@ -196,7 +190,7 @@ export default function ShopSection() {
             type="button"
             onClick={openShopPage}
             onPointerLeave={(event) => clearActiveTileIfMouse(event.pointerType)}
-            className="group relative mx-auto block w-full max-w-5xl h-[340px] sm:h-[380px]"
+            className="group relative mx-auto block w-full max-w-5xl h-[280px] sm:h-[380px] overflow-hidden"
             aria-label="Open shopping page"
           >
             <div
@@ -204,7 +198,7 @@ export default function ShopSection() {
               onPointerDown={() => setActiveTile(0)}
               onPointerUp={(event) => clearActiveTileIfMouse(event.pointerType)}
               onPointerCancel={(event) => clearActiveTileIfMouse(event.pointerType)}
-              className={`absolute left-[7%] sm:left-[12%] top-[54%] -translate-y-1/2 h-44 w-44 sm:h-52 sm:w-52 rounded-[1.4rem] overflow-hidden border border-white/20 bg-black/35 backdrop-blur-xl shadow-2xl transition-all duration-400 ${activeTile === 0 ? '-translate-x-6 rotate-[-14deg] scale-[1.1]' : 'rotate-[-8deg] hover:-translate-x-5 hover:rotate-[-12deg] hover:scale-[1.07]'}`}
+              className={`absolute left-[6%] sm:left-[12%] top-[54%] -translate-y-1/2 h-32 w-32 sm:h-52 sm:w-52 rounded-[1.1rem] sm:rounded-[1.4rem] overflow-hidden border border-white/20 bg-black/35 backdrop-blur-xl shadow-2xl transition-all duration-400 ${activeTile === 0 ? '-translate-x-1 sm:-translate-x-6 rotate-[-7deg] sm:rotate-[-14deg] scale-[1.04] sm:scale-[1.1]' : 'rotate-[-5deg] sm:rotate-[-8deg] hover:-translate-x-2 sm:hover:-translate-x-5 hover:rotate-[-8deg] sm:hover:rotate-[-12deg] hover:scale-[1.04] sm:hover:scale-[1.07]'}`}
             >
               <LazyImage src={stackedImages[0]} alt="Shop preview left one" className="h-full w-full object-cover" />
             </div>
@@ -213,7 +207,7 @@ export default function ShopSection() {
               onPointerDown={() => setActiveTile(1)}
               onPointerUp={(event) => clearActiveTileIfMouse(event.pointerType)}
               onPointerCancel={(event) => clearActiveTileIfMouse(event.pointerType)}
-              className={`absolute left-[20%] sm:left-[26%] top-[50%] -translate-y-1/2 h-44 w-44 sm:h-52 sm:w-52 rounded-[1.4rem] overflow-hidden border border-white/20 bg-black/35 backdrop-blur-xl shadow-2xl transition-all duration-400 ${activeTile === 1 ? '-translate-x-3 rotate-[-7deg] scale-[1.09]' : 'rotate-[-2deg] hover:-translate-x-2 hover:rotate-[-5deg] hover:scale-[1.06]'}`}
+              className={`absolute left-[22%] sm:left-[26%] top-[50%] -translate-y-1/2 h-32 w-32 sm:h-52 sm:w-52 rounded-[1.1rem] sm:rounded-[1.4rem] overflow-hidden border border-white/20 bg-black/35 backdrop-blur-xl shadow-2xl transition-all duration-400 ${activeTile === 1 ? '-translate-x-1 sm:-translate-x-3 rotate-[-5deg] sm:rotate-[-7deg] scale-[1.04] sm:scale-[1.09]' : 'rotate-[-1deg] sm:rotate-[-2deg] hover:-translate-x-1 sm:hover:-translate-x-2 hover:rotate-[-3deg] sm:hover:rotate-[-5deg] hover:scale-[1.03] sm:hover:scale-[1.06]'}`}
             >
               <LazyImage src={stackedImages[1]} alt="Shop preview left two" className="h-full w-full object-cover" />
             </div>
@@ -222,7 +216,7 @@ export default function ShopSection() {
               onPointerDown={() => setActiveTile(2)}
               onPointerUp={(event) => clearActiveTileIfMouse(event.pointerType)}
               onPointerCancel={(event) => clearActiveTileIfMouse(event.pointerType)}
-              className={`absolute right-[20%] sm:right-[26%] top-[50%] -translate-y-1/2 h-44 w-44 sm:h-52 sm:w-52 rounded-[1.4rem] overflow-hidden border border-white/20 bg-black/35 backdrop-blur-xl shadow-2xl transition-all duration-400 ${activeTile === 2 ? 'translate-x-3 rotate-[7deg] scale-[1.09]' : 'rotate-[2deg] hover:translate-x-2 hover:rotate-[5deg] hover:scale-[1.06]'}`}
+              className={`absolute right-[22%] sm:right-[26%] top-[50%] -translate-y-1/2 h-32 w-32 sm:h-52 sm:w-52 rounded-[1.1rem] sm:rounded-[1.4rem] overflow-hidden border border-white/20 bg-black/35 backdrop-blur-xl shadow-2xl transition-all duration-400 ${activeTile === 2 ? 'translate-x-1 sm:translate-x-3 rotate-[5deg] sm:rotate-[7deg] scale-[1.04] sm:scale-[1.09]' : 'rotate-[1deg] sm:rotate-[2deg] hover:translate-x-1 sm:hover:translate-x-2 hover:rotate-[3deg] sm:hover:rotate-[5deg] hover:scale-[1.03] sm:hover:scale-[1.06]'}`}
             >
               <LazyImage src={stackedImages[2]} alt="Shop preview right one" className="h-full w-full object-cover" />
             </div>
@@ -231,7 +225,7 @@ export default function ShopSection() {
               onPointerDown={() => setActiveTile(3)}
               onPointerUp={(event) => clearActiveTileIfMouse(event.pointerType)}
               onPointerCancel={(event) => clearActiveTileIfMouse(event.pointerType)}
-              className={`absolute right-[7%] sm:right-[12%] top-[54%] -translate-y-1/2 h-44 w-44 sm:h-52 sm:w-52 rounded-[1.4rem] overflow-hidden border border-white/20 bg-black/35 backdrop-blur-xl shadow-2xl transition-all duration-400 ${activeTile === 3 ? 'translate-x-6 rotate-[14deg] scale-[1.1]' : 'rotate-[8deg] hover:translate-x-5 hover:rotate-[12deg] hover:scale-[1.07]'}`}
+              className={`absolute right-[6%] sm:right-[12%] top-[54%] -translate-y-1/2 h-32 w-32 sm:h-52 sm:w-52 rounded-[1.1rem] sm:rounded-[1.4rem] overflow-hidden border border-white/20 bg-black/35 backdrop-blur-xl shadow-2xl transition-all duration-400 ${activeTile === 3 ? 'translate-x-1 sm:translate-x-6 rotate-[7deg] sm:rotate-[14deg] scale-[1.04] sm:scale-[1.1]' : 'rotate-[5deg] sm:rotate-[8deg] hover:translate-x-2 sm:hover:translate-x-5 hover:rotate-[8deg] sm:hover:rotate-[12deg] hover:scale-[1.04] sm:hover:scale-[1.07]'}`}
             >
               <LazyImage src={stackedImages[3]} alt="Shop preview right two" className="h-full w-full object-cover" />
             </div>
@@ -241,7 +235,7 @@ export default function ShopSection() {
               onPointerDown={() => setActiveTile(4)}
               onPointerUp={(event) => clearActiveTileIfMouse(event.pointerType)}
               onPointerCancel={(event) => clearActiveTileIfMouse(event.pointerType)}
-              className={`absolute left-1/2 top-[23%] -translate-x-1/2 h-48 w-48 sm:h-56 sm:w-56 rounded-[1.6rem] overflow-hidden border border-primary/40 bg-black/40 backdrop-blur-xl shadow-[0_20px_60px_rgba(249,115,22,0.35)] transition-all duration-400 ${activeTile === 4 ? '-translate-y-3 scale-[1.14] rotate-0' : 'hover:-translate-y-2 hover:scale-[1.1]'}`}
+              className={`absolute left-1/2 top-[23%] -translate-x-1/2 h-36 w-36 sm:h-56 sm:w-56 rounded-[1.25rem] sm:rounded-[1.6rem] overflow-hidden border border-primary/40 bg-black/40 backdrop-blur-xl shadow-[0_20px_60px_rgba(249,115,22,0.35)] transition-all duration-400 ${activeTile === 4 ? '-translate-y-2 sm:-translate-y-3 scale-[1.07] sm:scale-[1.14] rotate-0' : 'hover:-translate-y-1 sm:hover:-translate-y-2 hover:scale-[1.05] sm:hover:scale-[1.1]'}`}
             >
               <LazyImage src={stackedImages[4]} alt="Shop preview center" className="h-full w-full object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-transparent" />

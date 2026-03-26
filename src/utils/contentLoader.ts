@@ -11,16 +11,24 @@ export interface ContentData {
   about?: any;
 }
 
-async function fetchContentJson(): Promise<ContentData> {
-  const response = await fetch(`/content.json?v=${Date.now()}`, {
-    cache: 'no-store',
-    headers: {
-      'Cache-Control': 'no-cache',
-      Pragma: 'no-cache'
-    }
-  });
+// Module-level cache: all concurrent callers share one in-flight request.
+// Invalidated only when the live editor pushes an update.
+let _contentJsonPromise: Promise<ContentData> | null = null;
 
-  return response.json();
+export function invalidateContentCache() {
+  _contentJsonPromise = null;
+}
+
+async function fetchContentJson(): Promise<ContentData> {
+  if (!_contentJsonPromise) {
+    _contentJsonPromise = fetch('/content.json', { cache: 'no-cache' })
+      .then((r) => r.json())
+      .catch((err) => {
+        _contentJsonPromise = null; // allow retry on next call
+        return Promise.reject(err);
+      });
+  }
+  return _contentJsonPromise;
 }
 
 function mergeContentArrays(primary: any[], fallback: any[]) {
@@ -134,11 +142,10 @@ export async function loadContentWithLiveEditor(
  */
 export function useLiveEditorUpdates(callback: () => void) {
   React.useEffect(() => {
-    let lastSeenUpdate = parseInt(localStorage.getItem('contentLastUpdated') || '0', 10);
-
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === 'liveEditorContent' || e.key === 'contentLastUpdated') {
         console.log('🔄 Live editor content updated, refreshing...');
+        invalidateContentCache();
         callback();
       }
     };
@@ -146,6 +153,7 @@ export function useLiveEditorUpdates(callback: () => void) {
     const handleBroadcastUpdate = (event: MessageEvent) => {
       if (event?.data?.type === 'live-editor-updated') {
         console.log('🔄 Live editor broadcast received, refreshing...');
+        invalidateContentCache();
         callback();
       }
     };
@@ -161,23 +169,12 @@ export function useLiveEditorUpdates(callback: () => void) {
     // Listen for storage events (cross-tab updates)
     window.addEventListener('storage', handleStorageChange);
 
-    // Also check periodically for localStorage changes
-    const interval = setInterval(() => {
-      const nextUpdate = parseInt(localStorage.getItem('contentLastUpdated') || '0', 10);
-      if (nextUpdate > lastSeenUpdate) {
-        lastSeenUpdate = nextUpdate;
-        console.log('🔄 Detected new live editor timestamp, refreshing...');
-        callback();
-      }
-    }, 1000);
-
     return () => {
       window.removeEventListener('storage', handleStorageChange);
       if (liveEditorChannel) {
         liveEditorChannel.removeEventListener('message', handleBroadcastUpdate);
         liveEditorChannel.close();
       }
-      clearInterval(interval);
     };
   }, [callback]);
 }

@@ -21,33 +21,16 @@ const LazyImage: React.FC<LazyImageProps> = ({ src, alt, className, placeholder,
     const normalized = cleaned.startsWith('/') || cleaned.startsWith('http') ? cleaned : `/${cleaned}`;
     const filename = normalized.split('/').pop() || '';
 
-    const directories = [
-      '/images/slider',
-      '/images/portfolio',
-      '/images/products',
-      '/images/clothing',
-      '/images/liveupdates',
-      '/images/announce',
-      '/images'
-    ];
-
-    const extensions = ['.jpg', '.jpeg', '.png', '.jfif', '.webp'];
-    const baseName = filename.includes('.') ? filename.slice(0, filename.lastIndexOf('.')) : filename;
-
+    // Keep fallback attempts minimal to avoid expensive chains of failed requests.
     const generated = [normalized];
+    const hasExt = /\.[a-z0-9]+$/i.test(filename);
 
-    if (filename) {
-      directories.forEach((dir) => {
-        generated.push(`${dir}/${filename}`);
+    if (filename && !hasExt && !normalized.startsWith('http')) {
+      const currentDir = normalized.includes('/') ? normalized.slice(0, normalized.lastIndexOf('/')) : '';
+      const exts = ['.webp', '.jpg', '.jpeg', '.png', '.jfif'];
+      exts.forEach((ext) => {
+        generated.push(`${currentDir}/${filename}${ext}`);
       });
-
-      if (baseName) {
-        directories.forEach((dir) => {
-          extensions.forEach((ext) => {
-            generated.push(`${dir}/${baseName}${ext}`);
-          });
-        });
-      }
     }
 
     return Array.from(new Set(generated));
@@ -110,6 +93,7 @@ const LazyImage: React.FC<LazyImageProps> = ({ src, alt, className, placeholder,
           loading={eager ? "eager" : "lazy"}
           fetchPriority={eager ? "high" : "auto"}
           decoding="async"
+          sizes={eager ? "100vw" : "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"}
         />
       )}
     </div>
