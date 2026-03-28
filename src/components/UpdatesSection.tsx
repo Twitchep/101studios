@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { Bell, Newspaper, ExternalLink, Sparkles } from "lucide-react";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { loadContentWithLiveEditor, useLiveEditorUpdates } from "@/utils/contentLoader";
@@ -22,7 +22,13 @@ interface NewsArticle {
   news_site: string;
 }
 
+interface UpdatesSectionProps {
+  initialUpdates?: Update[];
+}
+
 const NEWS_API_URL = "/api/ghana-news?limit=4";
+const NEWS_SESSION_KEY = "ghana-news-cache-v1";
+const NEWS_SESSION_TTL_MS = 10 * 60 * 1000;
 const FALLBACK_NEWS_IMAGES = [
   "/images/liveupdates/1.jpg",
   "/images/liveupdates/2.jpg",
@@ -85,21 +91,36 @@ const getSourceIcon = (url: string) => {
   }
 };
 
-export default function UpdatesSection() {
+export default function UpdatesSection({ initialUpdates = [] }: UpdatesSectionProps) {
   const { ref, isVisible } = useScrollReveal();
-  const [updates, setUpdates] = useState<Update[]>([]);
+  const [updates, setUpdates] = useState<Update[]>(initialUpdates);
   const [news, setNews] = useState<NewsArticle[]>([]);
-  const [newsLoading, setNewsLoading] = useState(true);
+  const [newsLoading, setNewsLoading] = useState(false);
+  const [shouldLoadNews, setShouldLoadNews] = useState(false);
   const [activeMobileCard, setActiveMobileCard] = useState<"blog" | "news" | "site" | null>(null);
+  const newsLoadTriggerRef = useRef<HTMLDivElement | null>(null);
+  const newsRequestedRef = useRef(false);
 
   const fetchUpdates = useCallback(async () => {
-    const updateData = await loadContentWithLiveEditor("updates", "live_updates");
+    const updateData = await loadContentWithLiveEditor("updates", "live_updates", "created_at", {
+      skipSupabase: initialUpdates.length > 0,
+    });
     setUpdates(updateData);
-  }, []);
+  }, [initialUpdates.length]);
 
   const fetchNews = useCallback(async () => {
     try {
       setNewsLoading(true);
+      const cached = sessionStorage.getItem(NEWS_SESSION_KEY);
+      if (cached) {
+        const parsed = JSON.parse(cached) as { ts?: number; data?: NewsArticle[] };
+        if (parsed?.ts && parsed?.data && Date.now() - parsed.ts < NEWS_SESSION_TTL_MS) {
+          setNews(parsed.data);
+          setNewsLoading(false);
+          return;
+        }
+      }
+
       const response = await fetch(NEWS_API_URL);
       if (!response.ok) {
         throw new Error("Failed to fetch news");
@@ -118,7 +139,9 @@ export default function UpdatesSection() {
         news_site: item.news_site ?? "Live Source",
       }));
 
-      setNews((normalized.length > 0 ? normalized : FALLBACK_NEWS_ARTICLES).slice(0, 4));
+      const resolvedNews = (normalized.length > 0 ? normalized : FALLBACK_NEWS_ARTICLES).slice(0, 4);
+      setNews(resolvedNews);
+      sessionStorage.setItem(NEWS_SESSION_KEY, JSON.stringify({ ts: Date.now(), data: resolvedNews }));
     } catch (error) {
       setNews(FALLBACK_NEWS_ARTICLES);
       console.error("News API error:", error);
@@ -129,8 +152,31 @@ export default function UpdatesSection() {
 
   useEffect(() => {
     fetchUpdates();
+  }, [fetchUpdates]);
+
+  useEffect(() => {
+    if (!newsLoadTriggerRef.current) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShouldLoadNews(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "160px 0px" }
+    );
+
+    observer.observe(newsLoadTriggerRef.current);
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!shouldLoadNews || newsRequestedRef.current) return;
+    newsRequestedRef.current = true;
     fetchNews();
-  }, [fetchUpdates, fetchNews]);
+  }, [shouldLoadNews, fetchNews]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -258,6 +304,7 @@ export default function UpdatesSection() {
   return (
     <section id="updates" className="section-padding" ref={ref}>
       <div className="w-full">
+        <div ref={newsLoadTriggerRef} aria-hidden="true" className="h-px w-full" />
         <div className={`text-center mb-12 transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
           <p className="stitch-chip mb-4">Editorial</p>
           <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-balance font-orbitron text-foreground">Stories, Headlines & Moments</h2>

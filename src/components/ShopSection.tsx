@@ -21,13 +21,17 @@ interface Product {
   isNew?: boolean;
 }
 
+interface ShopSectionProps {
+  initialProducts?: Product[];
+}
+
 const WHATSAPP_NUMBER = "+233548656980"; // Replace with your number
 
-export default function ShopSection() {
+export default function ShopSection({ initialProducts = [] }: ShopSectionProps) {
   const { ref, isVisible } = useScrollReveal();
   const location = useLocation();
   const navigate = useNavigate();
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<Product[]>(initialProducts);
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const { cart, addToCart, getTotal } = useCart();
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -43,9 +47,11 @@ export default function ShopSection() {
   });
 
   const fetchProducts = useCallback(async () => {
-    const data = await loadContentWithLiveEditor('products', 'products');
+    const data = await loadContentWithLiveEditor('products', 'products', 'created_at', {
+      skipSupabase: initialProducts.length > 0,
+    });
     setProducts(data as Product[]);
-  }, []);
+  }, [initialProducts.length]);
 
   useEffect(() => {
     fetchProducts();
@@ -276,15 +282,14 @@ export default function ShopSection() {
               <p className="text-sm text-muted-foreground mt-2">Showing {displayedCount} of {totalCount} products</p>
             </div>
 
-            <div id="shop-catalog" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div id="shop-catalog" className="mx-auto grid w-full max-w-6xl grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-4 md:grid-cols-3 lg:grid-cols-4">
               {itemsToShow.map((product, i) => (
                 <div
                   key={product.id}
-                  className={`stitch-panel transition-all duration-500 hover:-translate-y-2 hover:border-primary/40 hover:shadow-[0_24px_70px_rgba(249,115,22,0.22)] fade-up-stagger ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
+                  className={`group relative flex flex-col overflow-hidden rounded-[10px] border border-slate-200/80 bg-slate-50/95 p-2.5 text-slate-900 shadow-[0px_10px_12px_rgba(15,23,42,0.08),-4px_-4px_12px_rgba(148,163,184,0.18)] transition-all duration-300 hover:-translate-y-2.5 hover:border-primary/40 hover:shadow-[0px_20px_20px_rgba(15,23,42,0.14),-4px_-4px_12px_rgba(148,163,184,0.2)] dark:border-white/10 dark:bg-slate-900/85 dark:text-slate-100 dark:shadow-[0px_10px_12px_rgba(0,0,0,0.35),-4px_-4px_12px_rgba(0,0,0,0.2)] dark:hover:shadow-[0px_20px_20px_rgba(0,0,0,0.45),-4px_-4px_12px_rgba(0,0,0,0.25)] fade-up-stagger ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
                   style={{ transitionDelay: `${150 + i * 80}ms`, animationDelay: `${150 + i * 80}ms` }}
                 >
-                  <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.18),transparent_32%),radial-gradient(circle_at_bottom_left,rgba(249,115,22,0.18),transparent_28%)]" />
-                  <div className="aspect-square bg-gradient-to-br from-primary/10 via-white/5 to-accent/10 flex items-center justify-center overflow-hidden relative">
+                  <div className="mb-3 aspect-square w-full rounded-[10px] bg-slate-200/80 dark:bg-slate-800/80 flex items-center justify-center overflow-hidden relative">
                     {product.image_url ? (
                       <LazyImage src={product.image_url} alt={product.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                     ) : (
@@ -308,35 +313,35 @@ export default function ShopSection() {
                         New
                       </div>
                     )}
-                    <div className="absolute inset-x-0 bottom-3 flex justify-center px-3 opacity-0 transition-all duration-300 group-hover:opacity-100">
+                    <div className="absolute inset-x-0 bottom-2 flex justify-center px-2 sm:bottom-3 sm:px-3 opacity-0 transition-all duration-300 group-hover:opacity-100">
                       <button
                         onClick={() => handleProductAction(product)}
-                        className="w-full max-w-[180px] rounded-2xl bg-gradient-to-r from-primary to-orange-400 px-4 py-2.5 text-sm font-medium text-primary-foreground shadow-lg shadow-primary/30 transition-all duration-300 hover:scale-[1.02] font-orbitron"
+                        className="w-full max-w-[140px] sm:max-w-[180px] rounded-xl sm:rounded-2xl bg-gradient-to-r from-primary to-orange-400 px-2.5 py-1.5 sm:px-4 sm:py-2.5 text-[11px] sm:text-sm font-medium text-primary-foreground shadow-lg shadow-primary/30 transition-all duration-300 hover:scale-[1.02] font-orbitron"
                       >
                         {product.category === 'Clothing' ? 'Choose Size' : 'Add to Cart'}
                       </button>
                     </div>
                   </div>
-                  <div className="relative p-5 text-left">
+                  <div className="relative px-1 pb-1 text-left">
                     <div className="mb-3 flex items-start justify-between gap-3">
-                      <h3 className="font-semibold text-sm line-clamp-2 font-rajdhani text-foreground">{product.title}</h3>
-                      <span className="shrink-0 rounded-full border border-primary/20 bg-primary/10 px-2.5 py-1 text-[11px] font-medium text-primary">
+                      <h3 className="font-semibold text-[11px] sm:text-sm line-clamp-2 font-rajdhani text-slate-900 dark:text-slate-100 group-hover:text-primary transition-colors duration-300">{product.title}</h3>
+                      <span className="shrink-0 rounded-full border border-primary/20 bg-primary/10 px-2 py-0.5 sm:px-2.5 sm:py-1 text-[10px] sm:text-[11px] font-medium text-primary">
                         {product.category}
                       </span>
                     </div>
-                    <p className="text-xs text-muted-foreground mb-4 text-pretty line-clamp-3">{product.description}</p>
+                    <p className="text-[10px] sm:text-xs text-slate-600 dark:text-slate-300 mb-3 sm:mb-4 text-pretty line-clamp-3">{product.description}</p>
                     <div className="flex items-center justify-between gap-3">
-                      <span className="text-lg font-bold text-primary tabular-nums font-space-mono">{formatPrice(product.price)}</span>
-                      <div className="flex items-center gap-2">
+                      <span className="text-sm sm:text-lg font-bold text-primary tabular-nums font-space-mono">{formatPrice(product.price)}</span>
+                      <div className="flex items-center gap-1.5 sm:gap-2">
                         <button
                           onClick={() => openProductModal(product)}
-                          className="rounded-xl border border-white/10 bg-white/10 px-3 py-2 text-xs font-medium text-foreground backdrop-blur-xl transition-all duration-300 hover:border-primary/30 hover:bg-white/15 hover:shadow-lg hover:shadow-primary/10 active:scale-95 font-rajdhani"
+                          className="rounded-lg sm:rounded-xl border border-slate-300 bg-slate-100 px-2 py-1.5 sm:px-3 sm:py-2 text-[10px] sm:text-xs font-medium text-slate-900 transition-all duration-300 hover:border-primary/40 hover:bg-slate-200 hover:text-primary hover:shadow-lg hover:shadow-primary/10 active:scale-95 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700 dark:hover:text-primary font-rajdhani"
                         >
                           View
                         </button>
                         <button
                           onClick={() => handleProductAction(product)}
-                          className="rounded-xl bg-gradient-to-r from-primary to-orange-400 px-3 py-2 text-xs font-medium text-primary-foreground shadow-lg shadow-primary/20 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-primary/40 active:scale-95 font-rajdhani"
+                          className="rounded-lg sm:rounded-xl bg-gradient-to-r from-primary to-orange-400 px-2 py-1.5 sm:px-3 sm:py-2 text-[10px] sm:text-xs font-medium text-primary-foreground shadow-lg shadow-primary/20 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-primary/40 active:scale-95 font-rajdhani"
                         >
                           {product.category === 'Clothing' ? 'Sizes' : 'Add'}
                         </button>

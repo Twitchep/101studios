@@ -3,6 +3,7 @@ import { ChevronDown, Menu, X } from "lucide-react";
 import { useTheme } from "@/hooks/useTheme";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ThemeSwitcher } from "./ThemeSwitcher";
+import SiteSearch from "./SiteSearch";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -33,6 +34,11 @@ export default function Navbar() {
     }
 
     navigate(href);
+  };
+
+  const handleSearchNavigate = () => {
+    setMobileOpen(false);
+    setMoreOpen(false);
   };
 
   return (
@@ -79,12 +85,21 @@ export default function Navbar() {
                 </div>
               )}
             </div>
+            <SiteSearch
+              onNavigate={handleSearchNavigate}
+              className="navbar-button inline-flex items-center gap-1 px-3 py-2 text-xs sm:text-sm uppercase tracking-wide font-medium text-white/85 transition-colors duration-200 rounded-lg hover:bg-white/15 hover:text-primary"
+            />
             <ThemeSwitcher />
           </div>
 
           {/* Mobile */}
           <div className="flex md:hidden items-center gap-2">
             <ThemeSwitcher />
+            <SiteSearch
+              compact
+              onNavigate={handleSearchNavigate}
+              className="navbar-button p-2 rounded-lg text-white hover:bg-white/15 transition-colors"
+            />
             <button onClick={() => setMobileOpen(!mobileOpen)} className="navbar-button p-2 rounded-lg text-white hover:bg-white/15 transition-colors" aria-label="Menu">
               {mobileOpen ? <X size={20} /> : <Menu size={20} />}
             </button>

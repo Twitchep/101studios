@@ -12,6 +12,10 @@ interface Video {
   platform: string | null;
 }
 
+interface VideosSectionProps {
+  initialVideos?: Video[];
+}
+
 function getEmbedUrl(url: string): string | null {
   // YouTube
   const ytMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/);
@@ -37,10 +41,16 @@ function getAutoplayLoopEmbedUrl(url: string): string | null {
   return null;
 }
 
-export default function VideosSection() {
+function getYoutubeId(url: string): string | null {
+  const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/);
+  return match ? match[1] : null;
+}
+
+export default function VideosSection({ initialVideos = [] }: VideosSectionProps) {
   const location = useLocation();
   const { ref, isVisible } = useScrollReveal();
-  const [videos, setVideos] = useState<Video[]>([]);
+  const [videos, setVideos] = useState<Video[]>(initialVideos);
+  const [activeEmbeds, setActiveEmbeds] = useState<Record<string, boolean>>({});
   const [videoGlow, setVideoGlow] = useState({ x: 50, y: 50 });
   const { displayedItems, hasMore, loadMore, totalCount, displayedCount } = useLazyLoad(videos, {
     initialCount: 2,
@@ -48,9 +58,15 @@ export default function VideosSection() {
   });
 
   const fetchVideos = useCallback(async () => {
-    const videos = await loadContentWithLiveEditor('videos', 'videos');
+    const videos = await loadContentWithLiveEditor('videos', 'videos', 'created_at', {
+      skipSupabase: initialVideos.length > 0,
+    });
     setVideos(videos);
-  }, []);
+  }, [initialVideos.length]);
+
+  const enableEmbed = (id: string) => {
+    setActiveEmbeds((prev) => ({ ...prev, [id]: true }));
+  };
 
   useEffect(() => {
     fetchVideos();
@@ -126,14 +142,41 @@ export default function VideosSection() {
               >
                 {embedUrl ? (
                   <div className="aspect-video">
-                    <iframe
-                      src={embedUrl}
-                      className="w-full h-full"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                      title={video.title}
-                      loading="lazy"
-                    />
+                    {activeEmbeds[video.id] ? (
+                      <iframe
+                        src={embedUrl}
+                        className="w-full h-full"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                        title={video.title}
+                        loading="lazy"
+                      />
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => enableEmbed(video.id)}
+                        className="group relative h-full w-full bg-black text-left"
+                        aria-label={`Load video: ${video.title}`}
+                      >
+                        {getYoutubeId(video.url) ? (
+                          <img
+                            src={`https://img.youtube.com/vi/${getYoutubeId(video.url)}/hqdefault.jpg`}
+                            alt={video.title}
+                            className="h-full w-full object-cover"
+                            loading="lazy"
+                          />
+                        ) : (
+                          <div className="h-full w-full bg-gradient-to-br from-slate-900 via-slate-800 to-black" />
+                        )}
+                        <div className="absolute inset-0 bg-black/35 transition-colors group-hover:bg-black/25" />
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <span className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-black/55 px-4 py-2 text-xs uppercase tracking-[0.12em] text-white">
+                            <Play size={16} />
+                            Load Video
+                          </span>
+                        </div>
+                      </button>
+                    )}
                   </div>
                 ) : (
                   <a href={video.url} target="_blank" rel="noopener noreferrer" className="aspect-video bg-gradient-to-br from-cyan-500/10 via-purple-500/10 to-pink-500/10 flex items-center justify-center group">

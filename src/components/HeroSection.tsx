@@ -10,8 +10,12 @@ interface SliderItem {
   image_url: string;
 }
 
-export default function HeroSection() {
-  const [slides, setSlides] = useState<SliderItem[]>([]);
+interface HeroSectionProps {
+  initialSlides?: SliderItem[];
+}
+
+export default function HeroSection({ initialSlides = [] }: HeroSectionProps) {
+  const [slides, setSlides] = useState<SliderItem[]>(initialSlides);
   const [activeIndex, setActiveIndex] = useState(0);
   const [heroImageIndex, setHeroImageIndex] = useState(0);
 
@@ -28,7 +32,9 @@ export default function HeroSection() {
   };
 
   const fetchSlider = useCallback(async () => {
-    const data = await loadContentWithLiveEditor('hero_slider');
+    const data = await loadContentWithLiveEditor('hero_slider', undefined, 'created_at', {
+      skipSupabase: initialSlides.length > 0,
+    });
     if (Array.isArray(data) && data.length > 0) {
       setSlides(data as SliderItem[]);
     } else {
@@ -45,7 +51,7 @@ export default function HeroSection() {
         { id: 'slide10', title: 'From Sketch to Screen',              subtitle: 'End-to-end design services that make your brand shine at every scale.',               image_url: '/images/slider/10.jpg' },
       ]);
     }
-  }, []);
+  }, [initialSlides.length]);
 
   useEffect(() => {
     fetchSlider();

@@ -11,24 +11,78 @@ export interface ContentData {
   about?: any;
 }
 
+const CONTENT_SESSION_KEY = 'content-json-cache-v1';
+const CONTENT_SESSION_TTL_MS = 10 * 60 * 1000;
+
 // Module-level cache: all concurrent callers share one in-flight request.
 // Invalidated only when the live editor pushes an update.
 let _contentJsonPromise: Promise<ContentData> | null = null;
 
 export function invalidateContentCache() {
   _contentJsonPromise = null;
+  try {
+    sessionStorage.removeItem(CONTENT_SESSION_KEY);
+  } catch {
+    // Ignore storage access errors in restricted contexts.
+  }
+}
+
+function readSessionContentCache(): ContentData | null {
+  try {
+    const raw = sessionStorage.getItem(CONTENT_SESSION_KEY);
+    if (!raw) return null;
+
+    const parsed = JSON.parse(raw) as { ts?: number; data?: ContentData };
+    if (!parsed?.ts || !parsed?.data) return null;
+    if (Date.now() - parsed.ts > CONTENT_SESSION_TTL_MS) return null;
+    return parsed.data;
+  } catch {
+    return null;
+  }
+}
+
+function writeSessionContentCache(data: ContentData) {
+  try {
+    sessionStorage.setItem(CONTENT_SESSION_KEY, JSON.stringify({ ts: Date.now(), data }));
+  } catch {
+    // Ignore storage write failures.
+  }
 }
 
 async function fetchContentJson(): Promise<ContentData> {
+  const sessionCached = readSessionContentCache();
+  if (sessionCached) {
+    return sessionCached;
+  }
+
   if (!_contentJsonPromise) {
     _contentJsonPromise = fetch('/content.json', { cache: 'no-cache' })
       .then((r) => r.json())
+      .then((data) => {
+        const typedData = data as ContentData;
+        writeSessionContentCache(typedData);
+        return typedData;
+      })
       .catch((err) => {
         _contentJsonPromise = null; // allow retry on next call
         return Promise.reject(err);
       });
   }
+
   return _contentJsonPromise;
+}
+
+export async function loadHomepageContentBundle(): Promise<
+  Pick<ContentData, 'hero_slider' | 'portfolio' | 'products' | 'updates' | 'videos'>
+> {
+  const content = await fetchContentJson();
+  return {
+    hero_slider: Array.isArray(content.hero_slider) ? content.hero_slider : [],
+    portfolio: Array.isArray(content.portfolio) ? content.portfolio : [],
+    products: Array.isArray(content.products) ? content.products : [],
+    updates: Array.isArray(content.updates) ? content.updates : [],
+    videos: Array.isArray(content.videos) ? content.videos : [],
+  };
 }
 
 function mergeContentArrays(primary: any[], fallback: any[]) {
@@ -78,7 +132,8 @@ function mergeContentArrays(primary: any[], fallback: any[]) {
 export async function loadContentWithLiveEditor(
   contentType: keyof ContentData,
   supabaseTable?: string,
-  supabaseOrderBy: string = 'created_at'
+  supabaseOrderBy: string = 'created_at',
+  options?: { skipSupabase?: boolean }
 ): Promise<any[]> {
   try {
     let fallbackContent: any[] = [];
@@ -94,13 +149,14 @@ export async function loadContentWithLiveEditor(
     const liveEditorContent = localStorage.getItem('liveEditorContent');
     const liveEditorLastUpdatedRaw = localStorage.getItem('contentLastUpdated');
     const liveEditorLastUpdated = liveEditorLastUpdatedRaw ? parseInt(liveEditorLastUpdatedRaw, 10) : 0;
-    const isLiveEditorContentFresh = !!liveEditorLastUpdated && (Date.now() - liveEditorLastUpdated) < (2 * 60 * 1000);
+    const isLiveEditorContentFresh =
+      !!liveEditorLastUpdated && (Date.now() - liveEditorLastUpdated) < 2 * 60 * 1000;
 
     if (liveEditorContent && isLiveEditorContentFresh) {
       try {
         const parsedContent = JSON.parse(liveEditorContent) as ContentData;
         if (parsedContent[contentType] && Array.isArray(parsedContent[contentType])) {
-          console.log(`📝 Using live editor content for ${contentType}`);
+          console.log(`Using live editor content for ${contentType}`);
           return mergeContentArrays(parsedContent[contentType], fallbackContent);
         }
       } catch (parseError) {
@@ -109,8 +165,8 @@ export async function loadContentWithLiveEditor(
     }
 
     // Then try Supabase if table is provided
-    if (supabaseTable) {
-      const { data, error } = await supabase
+    if (supabaseTable && !options?.skipSupabase) {
+      const { data } = await supabase
         .from(supabaseTable as any)
         .select("*")
         .order(supabaseOrderBy, { ascending: false });
@@ -122,7 +178,6 @@ export async function loadContentWithLiveEditor(
 
     // Fallback to content.json
     return fallbackContent;
-
   } catch (error) {
     console.error(`Error loading ${contentType}:`, error);
 
@@ -144,7 +199,7 @@ export function useLiveEditorUpdates(callback: () => void) {
   React.useEffect(() => {
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === 'liveEditorContent' || e.key === 'contentLastUpdated') {
-        console.log('🔄 Live editor content updated, refreshing...');
+        console.log('Live editor content updated, refreshing...');
         invalidateContentCache();
         callback();
       }
@@ -152,15 +207,14 @@ export function useLiveEditorUpdates(callback: () => void) {
 
     const handleBroadcastUpdate = (event: MessageEvent) => {
       if (event?.data?.type === 'live-editor-updated') {
-        console.log('🔄 Live editor broadcast received, refreshing...');
+        console.log('Live editor broadcast received, refreshing...');
         invalidateContentCache();
         callback();
       }
     };
 
-    const liveEditorChannel = typeof BroadcastChannel !== 'undefined'
-      ? new BroadcastChannel('live-editor-content')
-      : null;
+    const liveEditorChannel =
+      typeof BroadcastChannel !== 'undefined' ? new BroadcastChannel('live-editor-content') : null;
 
     if (liveEditorChannel) {
       liveEditorChannel.addEventListener('message', handleBroadcastUpdate);

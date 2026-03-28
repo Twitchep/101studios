@@ -21,38 +21,31 @@ const CartSidebar: React.FC<CartSidebarProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex">
-      {/* Backdrop */}
-      <div
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-        onClick={onClose}
-      />
-
-      {/* Sidebar */}
-      <div className="relative ml-auto w-full max-w-md bg-card border-l border-border shadow-xl">
-        <div className="flex items-center justify-between p-4 border-b border-border">
+    <div className="fixed bottom-24 left-5 z-[80] w-[22rem] max-w-[calc(100vw-2rem)] overflow-hidden rounded-[1.5rem] border border-white/20 bg-black/70 text-white shadow-[0_18px_70px_rgba(0,0,0,0.5)] backdrop-blur-2xl">
+      <div className="flex max-h-[70vh] flex-col">
+        <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
           <div className="flex items-center gap-2">
             <ShoppingCart size={20} className="text-primary" />
             <h2 className="text-lg font-semibold">Shopping Cart</h2>
           </div>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-muted rounded-lg transition-colors"
+            className="rounded-lg p-2 transition-colors hover:bg-white/10"
           >
             <X size={20} />
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-4 max-h-[calc(100vh-200px)]">
+        <div className="flex-1 overflow-y-auto px-4 py-3">
           {cart.length === 0 ? (
             <div className="text-center py-8">
-              <ShoppingCart size={48} className="mx-auto text-muted-foreground mb-4" />
-              <p className="text-muted-foreground">Your cart is empty</p>
+              <ShoppingCart size={48} className="mx-auto mb-4 text-white/40" />
+              <p className="text-white/65">Your cart is empty</p>
             </div>
           ) : (
             <div className="space-y-4">
               {cart.map((item, index) => (
-                <div key={item.cartItemId ?? `${item.id}-${index}`} className="flex gap-3 p-3 bg-muted/50 rounded-lg">
+                <div key={item.cartItemId ?? `${item.id}-${index}`} className="flex gap-3 rounded-xl border border-white/10 bg-white/5 p-3">
                   {item.image_url && (
                     <LazyImage
                       src={item.image_url}
@@ -65,13 +58,13 @@ const CartSidebar: React.FC<CartSidebarProps> = ({
                     {item.selectedSize && (
                       <p className="text-xs text-primary mt-1">Size: {item.selectedSize}</p>
                     )}
-                    <p className="text-sm text-muted-foreground mt-1">
+                    <p className="mt-1 text-sm text-white/70">
                       {formatPrice(item.price)}
                     </p>
                   </div>
                   <button
                     onClick={() => removeFromCart(item.cartItemId ?? item.id)}
-                    className="p-2 text-destructive hover:bg-destructive/10 rounded-lg transition-colors flex-shrink-0"
+                    className="flex-shrink-0 rounded-lg p-2 text-red-300 transition-colors hover:bg-red-500/15 hover:text-red-200"
                   >
                     <Trash2 size={16} />
                   </button>
@@ -82,7 +75,7 @@ const CartSidebar: React.FC<CartSidebarProps> = ({
         </div>
 
         {cart.length > 0 && (
-          <div className="border-t border-border p-4">
+          <div className="border-t border-white/10 p-4">
             <div className="flex items-center justify-between mb-4">
               <span className="font-semibold">Total:</span>
               <span className="font-bold text-lg text-primary">
@@ -91,7 +84,7 @@ const CartSidebar: React.FC<CartSidebarProps> = ({
             </div>
             <button
               onClick={onCheckout}
-              className="w-full bg-primary text-primary-foreground py-3 px-4 rounded-lg font-medium flex items-center justify-center gap-2 hover:bg-primary/90 transition-colors"
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 font-medium text-primary-foreground transition-colors hover:bg-primary/90"
             >
               <MessageCircle size={18} />
               Checkout via WhatsApp
